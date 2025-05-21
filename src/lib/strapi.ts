@@ -172,21 +172,6 @@ export async function getAllTags() {
 }
 
 /**
- * Get article years
- */
-export async function getArticleYears() {
-  const currentYear = new Date().getFullYear()
-  const startYear = 2010 // Assuming earliest articles start from 2010
-  const years = []
-
-  for (let year = currentYear; year >= startYear; year--) {
-    years.push(year)
-  }
-
-  return years
-}
-
-/**
  * Get a single article
  */
 export async function getArticle(slug: string) {
