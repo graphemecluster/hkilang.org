@@ -7,6 +7,8 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
+		"format": "dprint check",
+		"format:fix": "dprint fmt",
 		"knip": "knip"
 	},
 	"dependencies": {
