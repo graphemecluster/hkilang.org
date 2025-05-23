@@ -16,9 +16,6 @@ export default function LanguageMap({ language, distribution }: LanguageMapProps
 		<div className="rounded-lg overflow-hidden border border-gray-200">
 			<div className="relative h-64 w-full">
 				<Image src={mapImage || "/placeholder.svg?height=400&width=600"} alt={title} width={0} height={0} className="w-full h-full object-cover" />
-				<div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-					<h3 className="text-white text-xl font-bold">{title}</h3>
-				</div>
 			</div>
 			<div className="p-4 bg-white">
 				<p className="text-gray-600 mb-4">{distribution.heading?.summary}</p>
