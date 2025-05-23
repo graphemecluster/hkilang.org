@@ -20,7 +20,7 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const totalSlides = articles.length;
 
-	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ stopOnInteraction: true })]);
+	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 5000, stopOnMouseEnter: true })]);
 
 	// Slightly shrink the slides as they are on either side of the view
 	const tweenFactor = useRef(0);
@@ -137,7 +137,7 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 						return (
 							<div key={article.id} className="flex-shrink-0 basis-[75%] min-w-0">
 								<div>
-									<Link href={`/news/${article.slug}`}>
+									<Link href={`/news/${article.slug}`} className="group">
 										<Card className="h-full overflow-hidden hover:shadow-md transition-shadow relative">
 											<div className="aspect-video relative">
 												<Image
@@ -145,8 +145,9 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 													alt={article.heading.title}
 													width={0}
 													height={0}
-													className="w-full h-full max-h-[75vh] object-cover" />
-												<div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20 flex flex-col justify-end p-6">
+													className="w-full h-full object-cover" />
+												<div className="absolute inset-0 bg-transparent group-hover:bg-black/5 group-hover:backdrop-blur-sm transition-[background-color,backdrop-filter]"></div>
+												<div className="absolute inset-0 bg-translucent-gradient flex flex-col justify-end p-6">
 													<div className="text-sm lg:text-base xl:text-lg text-white/80 mb-2">{formatDate(article.publishDate)}</div>
 													<h3 className="text-xl lg:text-2xl xl:text-3xl font-medium text-white mb-2">{article.heading.title}</h3>
 													<p className="text-white/80 text-sm lg:text-base xl:text-lg line-clamp-2">{article.heading.summary || "香港本土語言保育協會"}</p>

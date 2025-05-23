@@ -90,4 +90,9 @@
 	.hide-scrollbar::-webkit-scrollbar {
 		display: none; /* Chrome, Safari, Opera */
 	}
+
+	.bg-translucent-gradient {
+		/* \frac{0.75}{1+e^{-14\left(x-0.5\right)}} */
+		background-image: linear-gradient(rgb(0 0 0 / 0.001), rgb(0 0 0 / 0.003), rgb(0 0 0 / 0.011), rgb(0 0 0 / 0.043), rgb(0 0 0 / 0.148), rgb(0 0 0 / 0.375), rgb(0 0 0 / 0.602), rgb(0 0 0 / 0.707), rgb(0 0 0 / 0.739), rgb(0 0 0 / 0.747), rgb(0 0 0 / 0.749));
+	}
 }

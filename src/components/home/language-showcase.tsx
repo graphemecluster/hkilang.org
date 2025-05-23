@@ -47,8 +47,7 @@ export default function LanguageShowcase() {
 							width={0}
 							height={0}
 							className="w-auto h-auto object-cover transition-transform duration-300 group-hover:scale-105" />
-						<div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
-						<div className="absolute inset-0 flex flex-col justify-end p-4">
+						<div className="absolute inset-0 bg-translucent-gradient flex flex-col justify-end p-4">
 							<h3 className="text-xl font-serif font-bold text-white">{language.name}</h3>
 							<p className="mt-2 text-sm text-gray-200 line-clamp-3">{language.description}</p>
 							<Link href={language.link} className="mt-4">
