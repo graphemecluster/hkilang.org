@@ -139,7 +139,7 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 								<div>
 									<Link href={`/news/${article.slug}`}>
 										<Card className="h-full overflow-hidden hover:shadow-md transition-shadow relative">
-											<div className="aspect-w-16 aspect-h-9 relative">
+											<div className="aspect-video relative">
 												<Image
 													src={imageUrl || "/placeholder.svg"}
 													alt={article.heading.title}

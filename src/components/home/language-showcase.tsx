@@ -40,7 +40,7 @@ export default function LanguageShowcase() {
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 			{languages.map(language => (
 				<div key={language.id} className="group relative overflow-hidden rounded-lg">
-					<div className="aspect-w-3 aspect-h-4 relative">
+					<div className="aspect-video relative">
 						<Image
 							src={language.image || "/placeholder.svg"}
 							alt={language.name}

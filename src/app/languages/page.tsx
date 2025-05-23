@@ -33,7 +33,7 @@ export default async function LanguagesPage() {
 								key={language.id}
 								className={`flex flex-col ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} gap-8 items-center`}>
 								<div className="w-full md:w-1/2">
-									<div className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
+									<div className="relative aspect-video rounded-lg overflow-hidden">
 										<Image
 											src={imageUrl || "/placeholder.svg"}
 											alt={language.heading.title}

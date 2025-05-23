@@ -22,7 +22,7 @@ export default async function LatestNews() {
 			return (
 				<Link key={article.id} href={`/news/${article.slug}`}>
 					<Card className="h-full overflow-hidden hover:shadow-md transition-shadow">
-						<div className="aspect-w-16 aspect-h-9 relative">
+						<div className="aspect-video relative">
 							<Image
 								src={imageUrl || "/placeholder.svg"}
 								alt={article.heading.title}

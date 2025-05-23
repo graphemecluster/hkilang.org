@@ -116,7 +116,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
 						{/* Cover Image */}
 						{imageUrl && (
-							<div className="relative aspect-w-16 aspect-h-9 mb-8 overflow-hidden rounded-lg">
+							<div className="relative aspect-video mb-8 overflow-hidden rounded-lg">
 								<Image
 									src={imageUrl || "/placeholder.svg"}
 									alt={article.heading.title}

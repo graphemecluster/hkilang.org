@@ -17,7 +17,7 @@ export default function NewsList({ articles, isLoading }: NewsListProps) {
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				{Array.from({ length: 6 }).map((_, index) => (
 					<Card key={index} className="overflow-hidden">
-						<Skeleton className="aspect-w-16 aspect-h-9 h-48 w-full" />
+						<Skeleton className="aspect-video h-48 w-full" />
 						<CardContent className="p-4">
 							<Skeleton className="h-4 w-1/3 mb-2" />
 							<Skeleton className="h-6 w-full mb-2" />
@@ -47,7 +47,7 @@ export default function NewsList({ articles, isLoading }: NewsListProps) {
 				return (
 					<Link key={article.id} href={`/news/${article.slug}`}>
 						<Card className="h-full overflow-hidden hover:shadow-md transition-shadow">
-							<div className="aspect-w-16 aspect-h-9 relative">
+							<div className="aspect-video relative">
 								{imageUrl
 									? <Image src={imageUrl || "/placeholder.svg"} alt={article.heading.title} width={0} height={0} className="w-full h-full object-cover" />
 									: <div className="w-full h-full bg-gray-200 flex items-center justify-center">
