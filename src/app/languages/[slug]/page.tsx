@@ -50,7 +50,7 @@ export default async function LanguageDetailPage({ params }: LanguageDetailPageP
 	const relatedResources = introPage.relatedResources || {} as never;
 
 	// Get cover image URL
-	const coverImageUrl = getStrapiMedia(heading.coverImage?.data?.url);
+	const coverImageUrl = getStrapiMedia(heading.coverImage?.url);
 
 	return (
 		<div className="bg-white">
@@ -150,7 +150,7 @@ export default async function LanguageDetailPage({ params }: LanguageDetailPageP
 
 					<div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3">
 						{relatedResources.resources?.map((resource, index) => {
-							const resourceImageUrl = getStrapiMedia(resource.heading?.coverImage?.data?.url);
+							const resourceImageUrl = getStrapiMedia(resource.heading?.coverImage?.url);
 
 							return (
 								<div key={index} className="flex flex-col overflow-hidden rounded-lg shadow-lg">

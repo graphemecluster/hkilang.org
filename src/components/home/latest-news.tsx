@@ -18,7 +18,7 @@ export default async function LatestNews() {
 
 	return <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 		{regularArticlesData.data?.map(article => {
-			const imageUrl = getStrapiMedia(article.heading?.coverImage?.data?.url);
+			const imageUrl = getStrapiMedia(article.heading?.coverImage?.url);
 			return (
 				<Link key={article.id} href={`/news/${article.slug}`}>
 					<Card className="h-full overflow-hidden hover:shadow-md transition-shadow">

@@ -133,7 +133,7 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 			<div className="mx-auto overflow-hidden" ref={emblaRef}>
 				<div className="flex touch-pan-y">
 					{articles.map(article => {
-						const imageUrl = getStrapiMedia(article.heading?.coverImage?.data?.url);
+						const imageUrl = getStrapiMedia(article.heading?.coverImage?.url);
 						return (
 							<div key={article.id} className="flex-shrink-0 basis-[75%] min-w-0">
 								<div>

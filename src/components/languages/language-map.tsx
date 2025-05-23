@@ -10,7 +10,7 @@ interface LanguageMapProps {
 
 export default function LanguageMap({ language, distribution }: LanguageMapProps) {
 	const title = distribution.heading?.title || "";
-	const mapImage = getStrapiMedia(distribution.heading?.coverImage?.data?.url) || "";
+	const mapImage = getStrapiMedia(distribution.heading?.coverImage?.url) || "";
 
 	return (
 		<div className="rounded-lg overflow-hidden border border-gray-200">

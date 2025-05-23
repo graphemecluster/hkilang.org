@@ -10,7 +10,7 @@ export default function AboutTimeline({ timeline }: { timeline: Data.Component<"
 
 			<div className="space-y-6">
 				{timeline.map((item, index) => {
-					const imageUrl = item.image?.data?.attributes?.url ? getStrapiMedia(item.image.data.attributes.url) : null;
+					const imageUrl = item.image?.url ? getStrapiMedia(item.image.url) : null;
 
 					return (
 						<div key={index} className="relative flex items-baseline gap-4">

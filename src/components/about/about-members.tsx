@@ -7,7 +7,7 @@ export default function AboutMembers({ members }: { members: Data.Component<"abo
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 			{members.map((member, index) => {
-				const imageUrl = member.image?.data?.attributes?.url ? getStrapiMedia(member.image.data.attributes.url) : null;
+				const imageUrl = member.image?.url ? getStrapiMedia(member.image.url) : null;
 
 				return (
 					<div key={index} className="flex flex-col items-center text-center">

@@ -25,7 +25,7 @@ export default async function LanguagesPage() {
 
 				<div className="mt-16 space-y-20">
 					{languagesData.data.map((language, index) => {
-						const coverImage = language?.heading?.coverImage?.data?.url;
+						const coverImage = language?.heading?.coverImage?.url;
 						const imageUrl = getStrapiMedia(coverImage) || "/placeholder.svg?height=400&width=600";
 
 						return (

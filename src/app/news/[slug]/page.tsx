@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: NewsDetailPageProps): Promise
 		openGraph: {
 			title: article.heading.title,
 			description: article.heading.summary || "",
-			images: article.heading.coverImage?.data?.url ? [getStrapiMedia(article.heading.coverImage.data.url) || ""] : [],
+			images: article.heading.coverImage?.url ? [getStrapiMedia(article.heading.coverImage.url) || ""] : [],
 		},
 	};
 }
@@ -43,7 +43,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 		notFound();
 	}
 
-	const imageUrl = getStrapiMedia(article.heading?.coverImage?.data?.url);
+	const imageUrl = getStrapiMedia(article.heading?.coverImage?.url);
 	const tags = article.tags || [];
 	const category = article.category;
 

@@ -18,8 +18,8 @@ export default function CulturalContext({ language, culturalContext }: CulturalC
 
 			<div className="space-y-12">
 				{culturalContext.sections?.map((section, index) => {
-					const imageUrl = section.coverImage?.data?.attributes?.url
-						? getStrapiMedia(section.coverImage.data.attributes.url)
+					const imageUrl = section.coverImage?.url
+						? getStrapiMedia(section.coverImage.url)
 						: null;
 
 					return (

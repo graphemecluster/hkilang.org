@@ -1,15 +1,17 @@
 import { strapi } from "@strapi/client";
 
+const STRAPI_URL = process.env["NEXT_PUBLIC_STRAPI_URL"] || "http://localhost:1337/api";
+
 // Initialize the Strapi client
 const strapiClient = strapi({
-	baseURL: process.env["NEXT_PUBLIC_STRAPI_URL"] || "http://localhost:1337/api",
+	baseURL: STRAPI_URL,
 	// auth: process.env.STRAPI_API_TOKEN,
 });
 
 export function getStrapiMedia(url: string | null) {
 	if (!url) return null;
-	if (url.startsWith("http") || url.startsWith("//")) return url;
-	return `${process.env["NEXT_PUBLIC_STRAPI_URL"]}${url}`;
+	// This automatically handles both relative and absolute URLs
+	return `${new URL(url, STRAPI_URL)}`;
 }
 
 export async function getAboutData() {

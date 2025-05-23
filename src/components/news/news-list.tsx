@@ -42,7 +42,7 @@ export default function NewsList({ articles, isLoading }: NewsListProps) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 			{articles.map(article => {
-				const imageUrl = getStrapiMedia(article.heading?.coverImage?.data?.url);
+				const imageUrl = getStrapiMedia(article.heading?.coverImage?.url);
 
 				return (
 					<Link key={article.id} href={`/news/${article.slug}`}>
