@@ -10,7 +10,7 @@ interface NewsPaginationProps {
 	isLoading?: boolean;
 }
 
-export default function NewsPagination({
+export default function Pagination({
 	currentPage,
 	totalPages,
 	onPageChange,
@@ -18,7 +18,7 @@ export default function NewsPagination({
 }: NewsPaginationProps) {
 	// Generate page number array
 	const getPageNumbers = () => {
-		const pageNumbers = [];
+		const pageNumbers: (number | "...")[] = [];
 		const maxPagesToShow = 5;
 
 		if (totalPages <= maxPagesToShow) {
@@ -37,11 +37,13 @@ export default function NewsPagination({
 				startPage = Math.max(1, endPage - maxPagesToShow + 1);
 			}
 
-			// Add first page
+			// Add first pages
 			if (startPage > 1) {
 				pageNumbers.push(1);
-				if (startPage > 2) {
-					pageNumbers.push("...");
+				if (startPage > 4) pageNumbers.push("...");
+				else {
+					if (startPage > 2) pageNumbers.push(2);
+					if (startPage > 3) pageNumbers.push(3);
 				}
 			}
 
@@ -50,10 +52,12 @@ export default function NewsPagination({
 				pageNumbers.push(i);
 			}
 
-			// Add last page
+			// Add last pages
 			if (endPage < totalPages) {
-				if (endPage < totalPages - 1) {
-					pageNumbers.push("...");
+				if (endPage < totalPages - 3) pageNumbers.push("...");
+				else {
+					if (endPage < totalPages - 2) pageNumbers.push(totalPages - 2);
+					if (endPage < totalPages - 1) pageNumbers.push(totalPages - 1);
 				}
 				pageNumbers.push(totalPages);
 			}
@@ -71,39 +75,35 @@ export default function NewsPagination({
 					<Button
 						variant="outline"
 						size="icon"
-						className="rounded-l-md"
+						className="rounded-l-md rounded-r-none"
 						disabled={currentPage === 1 || isLoading}
 						onClick={() => onPageChange(currentPage - 1)}>
-						<span className="sr-only">Previous page</span>
-						<ChevronLeft className="h-4 w-4" />
+						<span className="sr-only">上一頁</span>
+						<ChevronLeft className="!h-5 !w-5" />
 					</Button>
 				</li>
 				{pageNumbers.map((page, index) => (
 					<li key={index}>
 						{page === "..."
-							? (
-								<span className="px-3 py-2 border border-gray-300 bg-white text-gray-500">...</span>
-							)
-							: (
-								<Button
-									variant={currentPage === page ? "default" : "outline"}
-									className={`rounded-none ${currentPage === page ? "bg-red-800 hover:bg-red-700" : ""}`}
-									disabled={isLoading}
-									onClick={() => typeof page === "number" && onPageChange(page)}>
-									{page}
-								</Button>
-							)}
+							? <span className="inline-flex items-center justify-center text-base font-medium border border-input bg-background h-10 px-3 py-2 rounded-none text-foreground/60">…</span>
+							: <Button
+								variant={currentPage === page ? "default" : "outline"}
+								className={`text-base rounded-none ${currentPage === page ? "bg-red-800 hover:bg-red-700" : ""}`}
+								disabled={isLoading}
+								onClick={() => typeof page === "number" && onPageChange(page)}>
+								{page}
+							</Button>}
 					</li>
 				))}
 				<li>
 					<Button
 						variant="outline"
 						size="icon"
-						className="rounded-r-md"
+						className="rounded-l-none rounded-r-md"
 						disabled={currentPage === totalPages || isLoading}
 						onClick={() => onPageChange(currentPage + 1)}>
-						<span className="sr-only">Next page</span>
-						<ChevronRight className="h-4 w-4" />
+						<span className="sr-only">下一頁</span>
+						<ChevronRight className="!h-5 !w-5" />
 					</Button>
 				</li>
 			</ul>

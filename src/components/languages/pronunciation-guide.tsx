@@ -13,7 +13,8 @@ interface PronunciationGuideProps {
 export default function PronunciationGuide({ language }: PronunciationGuideProps) {
 	const [playingSound, setPlayingSound] = useState<string | null>(null);
 
-	// This would normally be fetched from Strapi, but we're inlining the content
+	// This is mock pronunciation data
+	// In a real application, this data should be fetched from Strapi CMS
 	const pronunciationData = {
 		waitau: {
 			introduction: "圍頭話的發音系統保留了許多古粵語的特點，與現代標準粵語有明顯差異。以下是圍頭話的基本發音指南。",
@@ -137,10 +138,10 @@ export default function PronunciationGuide({ language }: PronunciationGuideProps
 											onClick={() => playSound(`tone-${tone.number}`)}>
 											<Play
 												className={`h-4 w-4 ${playingSound === `tone-${tone.number}` ? "text-red-800" : "text-gray-600"}`} />
-											<span className="sr-only">Play tone {tone.number}</span>
+											<span className="sr-only">播放</span>
 										</Button>
 									</div>
-									<p className="mt-2 text-gray-600">例字: {tone.example}</p>
+									<p className="mt-2 text-gray-600">例字：{tone.example}</p>
 								</CardContent>
 							</Card>
 						))}

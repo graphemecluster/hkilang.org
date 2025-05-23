@@ -1,10 +1,11 @@
-import type React from "react";
-import type { Metadata } from "next";
 import { Noto_Sans_HK, Noto_Serif_HK } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { ThemeProvider } from "@/components/theme-provider";
+
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 const notoSans = Noto_Sans_HK({
 	subsets: ["latin"],
@@ -21,14 +22,9 @@ const notoSerif = Noto_Serif_HK({
 export const metadata: Metadata = {
 	title: "香港本土語言保育協會",
 	description: "致力於保育香港本土語言，包括圍頭話、客家話、汀角話及東平洲話",
-	generator: "v0.dev",
 };
 
-export default function RootLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="zh-HK" suppressHydrationWarning>
 			<body className={`${notoSans.variable} ${notoSerif.variable} font-sans`}>

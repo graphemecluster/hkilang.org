@@ -12,7 +12,8 @@ interface AudioPhrasesProps {
 export default function AudioPhrases({ language }: AudioPhrasesProps) {
 	const [playingPhrase, setPlayingPhrase] = useState<string | null>(null);
 
-	// This would normally be fetched from Strapi, but we're inlining the content
+	// This is mock phrase data
+	// In a real application, this data should be fetched from Strapi CMS
 	const phrasesData = {
 		waitau: {
 			introduction: "以下是一些圍頭話的常用語句，點擊播放按鈕可以聆聽發音。",
@@ -190,14 +191,10 @@ export default function AudioPhrases({ language }: AudioPhrasesProps) {
 														className="h-8 w-8 p-0 ml-2"
 														onClick={() => playPhrase(phrase.phrase)}>
 														{playingPhrase === phrase.phrase
-															? (
-																<Pause className="h-4 w-4 text-red-800" />
-															)
-															: (
-																<Play className="h-4 w-4 text-gray-600 hover:text-red-800" />
-															)}
+															? <Pause className="h-4 w-4 text-red-800" />
+															: <Play className="h-4 w-4 text-gray-600 hover:text-red-800" />}
 														<span className="sr-only">
-															{playingPhrase === phrase.phrase ? "Pause" : "Play"} {phrase.phrase}
+															{playingPhrase === phrase.phrase ? "暫停" : "播放"}
 														</span>
 													</Button>
 												</div>

@@ -5,22 +5,23 @@ import { notFound } from "next/navigation";
 import { getArticle, getStrapiMedia, getRelatedArticles } from "@/lib/strapi";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Calendar, Clock, Bookmark, Eye } from "lucide-react";
+import { ChevronLeft, Calendar, Clock } from "lucide-react";
 import ShareButtons from "@/components/news/share-buttons";
 import RelatedArticles from "@/components/news/related-articles";
+import { formatDate } from "@/lib/utils";
 
 interface NewsDetailPageProps {
-	params: {
+	params: Promise<{
 		slug: string;
-	};
+	}>;
 }
 
 export async function generateMetadata({ params }: NewsDetailPageProps): Promise<Metadata> {
-	const article = await getArticle(params.slug);
+	const article = await getArticle((await params).slug);
 
 	if (!article) {
 		return {
-			title: "文章未找到 - 香港本土語言保育協會",
+			title: "找不到文章 - 香港本土語言保育協會",
 		};
 	}
 
@@ -36,34 +37,30 @@ export async function generateMetadata({ params }: NewsDetailPageProps): Promise
 }
 
 export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
-	const article = await getArticle(params.slug);
+	const article = await getArticle((await params).slug);
 
 	if (!article) {
 		notFound();
 	}
 
-	const imageUrl = getStrapiMedia(article.heading.coverImage?.data?.url);
+	const imageUrl = getStrapiMedia(article.heading?.coverImage?.data?.url);
 	const tags = article.tags || [];
-	const publishDate = new Date(article.publishDate);
 	const category = article.category;
 
-	// Format reading time (assuming 200 words per minute)
-	const wordCount = article.content.split(/\s+/).length;
-	const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+	// Format reading time (assuming 100 words per minute)
+	const wordCount = [...new Intl.Segmenter("zh-HK", { granularity: "word" }).segment(article.content || "")].filter(({ isWordLike }) => isWordLike).length;
+	const readingTime = Math.max(1, Math.ceil(wordCount / 100));
 
 	// Get related articles
-	const relatedArticles = await getRelatedArticles(
-		article.id,
-		tags.map((tag: any) => tag.id),
-	);
+	const relatedArticles = await getRelatedArticles(article.id, tags.map(tag => tag.id));
 
 	return (
 		<div className="bg-white">
 			<div className="mx-auto max-w-4xl px-6 py-16 sm:py-24 lg:px-8">
 				<div className="mb-8">
 					<Link href="/news">
-						<Button variant="ghost" className="text-gray-600 hover:text-red-800">
-							<ChevronLeft className="mr-2 h-4 w-4" />
+						<Button variant="ghost" className="text-gray-600 hover:text-red-800 flex items-center text-base">
+							<ChevronLeft className="!h-5 !w-5 -mx-1" />
 							返回最新消息
 						</Button>
 					</Link>
@@ -87,22 +84,24 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 						<div className="flex flex-wrap items-center text-sm text-gray-500 mb-4 gap-4">
 							<div className="flex items-center">
 								<Calendar className="mr-1 h-4 w-4" />
-								{publishDate.toLocaleDateString("zh-HK")}
+								{formatDate(article.publishDate)}
 							</div>
 							<div className="flex items-center">
 								<Clock className="mr-1 h-4 w-4" />
 								閱讀時間：約 {readingTime} 分鐘
 							</div>
-							<div className="flex items-center">
-								<Eye className="mr-1 h-4 w-4" />
-								瀏覽次數：{article.viewCount || 0}
-							</div>
+							{
+								/* <div className="flex items-center">
+									<Eye className="mr-1 h-4 w-4" />
+									瀏覽次數：{article.viewCount || 0}
+								</div> */
+							}
 						</div>
 
 						{/* Tags */}
 						{tags.length > 0 && (
 							<div className="flex flex-wrap gap-2 mb-6">
-								{tags.map((tag: any) => (
+								{tags.map(tag => (
 									<Link key={tag.id} href={`/news?tags=${tag.id}`}>
 										<Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200">{tag.name}</Badge>
 									</Link>
@@ -121,8 +120,9 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 								<Image
 									src={imageUrl || "/placeholder.svg"}
 									alt={article.heading.title}
-									fill
-									className="object-cover"
+									width={0}
+									height={0}
+									className="w-full h-full object-cover"
 									priority />
 							</div>
 						)}
@@ -140,10 +140,12 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 						<div className="flex flex-wrap justify-between items-center">
 							<ShareButtons title={article.heading.title} />
 
-							<Button variant="outline" size="sm" className="text-gray-600">
-								<Bookmark className="mr-2 h-4 w-4" />
-								收藏文章
-							</Button>
+							{
+								/* <Button variant="outline" size="sm" className="text-gray-600">
+									<Bookmark className="mr-2 h-4 w-4" />
+									收藏文章
+								</Button> */
+							}
 						</div>
 					</div>
 				</article>

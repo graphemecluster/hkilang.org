@@ -12,7 +12,9 @@ import { searchDictionary } from "@/lib/strapi";
 import DictionaryCharacterResult from "./dictionary-character-result";
 import DictionaryWordResult from "./dictionary-word-result";
 import { Skeleton } from "@/components/ui/skeleton";
-import NewsPagination from "@/components/news/news-pagination";
+import Pagination from "@/components/pagination";
+
+import type { Data } from "@strapi/strapi";
 
 export default function DictionarySearch() {
 	const router = useRouter();
@@ -20,55 +22,52 @@ export default function DictionarySearch() {
 	const searchParams = useSearchParams();
 
 	// Get initial values from URL parameters
-	const initialQuery = searchParams.get("q") || "";
-	const initialPage = searchParams.get("page") ? Number.parseInt(searchParams.get("page") as string, 10) : 1;
+	const initialQuery = searchParams.get("query") || "";
+	const initialPage = searchParams.get("page") ? Number.parseInt(searchParams.get("page")!, 10) : 1;
 
 	const [searchTerm, setSearchTerm] = useState(initialQuery);
 	const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(initialQuery);
 	const [isSearching, setIsSearching] = useState(false);
 	const [hasSearched, setHasSearched] = useState(!!initialQuery);
-	const [characterResults, setCharacterResults] = useState<any[]>([]);
-	const [wordResults, setWordResults] = useState<any[]>([]);
+	const [characterResults, setCharacterResults] = useState<Data.ContentType<"api::listed-character.listed-character">[]>([]);
+	const [wordResults, setWordResults] = useState<Data.ContentType<"api::surveyed-lexical-item.surveyed-lexical-item">[]>([]);
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(1);
-	const [totalResults, setTotalResults] = useState(0);
+	const [totalResults, setTotalResults] = useState({ characters: 0, words: 0 });
 
 	const PAGE_SIZE = 10;
 
 	// Create a function to update URL query parameters
-	const createQueryString = useCallback(
-		(params: Record<string, string | number | null>) => {
-			const newSearchParams = new URLSearchParams(searchParams.toString());
+	const createQueryString = useCallback((params: Record<string, string | number | null>) => {
+		const newSearchParams = new URLSearchParams();
 
-			Object.entries(params).forEach(([key, value]) => {
-				if (value === null) {
-					newSearchParams.delete(key);
-				}
-				else {
-					newSearchParams.set(key, String(value));
-				}
-			});
-
-			// Always preserve the tab parameter
-			if (!newSearchParams.has("tab")) {
-				newSearchParams.set("tab", "search");
+		Object.entries(params).forEach(([key, value]) => {
+			if (value === null) {
+				newSearchParams.delete(key);
 			}
+			else {
+				newSearchParams.set(key, String(value));
+			}
+		});
 
-			return newSearchParams.toString();
-		},
-		[searchParams],
-	);
+		return newSearchParams.toString();
+	}, []);
 
 	// Update URL when search term or page changes
 	useEffect(() => {
-		if (debouncedSearchTerm || currentPage > 1) {
-			const queryString = createQueryString({
-				q: debouncedSearchTerm || null,
-				page: currentPage === 1 ? null : currentPage,
-			});
-			router.push(`${pathname}?${queryString}`, { scroll: false });
-		}
+		const queryString = createQueryString({
+			query: debouncedSearchTerm || null,
+			page: debouncedSearchTerm && currentPage > 1 ? currentPage : null,
+			// tab: null,
+			// category: null,
+		});
+		router.push(`${pathname}${queryString && "?"}${queryString}`, { scroll: false });
 	}, [debouncedSearchTerm, currentPage, createQueryString, pathname, router]);
+
+	useEffect(() => {
+		setSearchTerm(searchParams.get("query") || "");
+		setCurrentPage(searchParams.get("page") ? Number.parseInt(searchParams.get("page")!, 10) : 1);
+	}, [searchParams]);
 
 	// Debounce search term
 	useEffect(() => {
@@ -91,23 +90,23 @@ export default function DictionarySearch() {
 			setWordResults([]);
 			setHasSearched(false);
 			setTotalPages(1);
-			setTotalResults(0);
+			setTotalResults({ characters: 0, words: 0 });
 			return;
 		}
 
 		setIsSearching(true);
 		try {
-			const results = await searchDictionary(debouncedSearchTerm, currentPage, PAGE_SIZE);
-			setCharacterResults(results.characters?.data || []);
-			setWordResults(results.words?.data || []);
+			const results = await searchDictionary(debouncedSearchTerm.trim(), currentPage, PAGE_SIZE);
+			setCharacterResults(results.characters.data);
+			setWordResults(results.words.data);
 
 			// Calculate total pages and results
 			const characterTotal = results.characters?.meta?.pagination?.total || 0;
 			const wordTotal = results.words?.meta?.pagination?.total || 0;
-			const totalItems = characterTotal + wordTotal;
-			setTotalResults(totalItems);
+			setTotalResults({ characters: characterTotal, words: wordTotal });
 
 			// Calculate total pages based on combined results
+			const totalItems = characterTotal + wordTotal;
 			const calculatedTotalPages = Math.ceil(totalItems / PAGE_SIZE);
 			setTotalPages(calculatedTotalPages > 0 ? calculatedTotalPages : 1);
 
@@ -125,32 +124,30 @@ export default function DictionarySearch() {
 		performSearch();
 	}, [performSearch]);
 
-	// Handle form submission
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		setCurrentPage(1); // Reset to first page on manual search
 		performSearch();
 	};
 
-	// Handle page change
 	const handlePageChange = (page: number) => {
 		setCurrentPage(page);
-		window.scrollTo({ top: 0, behavior: "smooth" });
+		document.querySelector("[role=tablist]")?.scrollIntoView({ behavior: "smooth" });
 	};
 
-	const hasResults = characterResults.length > 0 || wordResults.length > 0;
+	const totalItems = totalResults.characters + totalResults.words;
 
 	return (
 		<div>
 			<form onSubmit={handleSubmit} className="flex gap-2">
 				<Input
 					type="text"
-					placeholder="輸入字符或詞語進行搜尋..."
+					placeholder="輸入漢字或詞語進行搜尋……"
 					value={searchTerm}
 					onChange={e => setSearchTerm(e.target.value)}
 					className="flex-1" />
 				<Button type="submit" disabled={isSearching || !searchTerm.trim()}>
-					{isSearching ? "搜尋中..." : "搜尋"}
+					{isSearching ? "搜尋中……" : "搜尋"}
 					{!isSearching && <Search className="ml-2 h-4 w-4" />}
 				</Button>
 			</form>
@@ -165,53 +162,56 @@ export default function DictionarySearch() {
 			{hasSearched && !isSearching && (
 				<div className="mt-6">
 					<h3 className="text-lg font-medium text-gray-900 mb-4">
-						搜尋結果 {totalResults > 0 && <span className="text-gray-500 text-sm">（共 {totalResults} 項）</span>}
+						搜尋結果{totalItems && <span className="text-gray-500 text-sm">
+							（顯示第 {(currentPage - 1) * PAGE_SIZE + 1}
+							{currentPage * PAGE_SIZE === totalItems ? "" : ` ~ ${Math.min(currentPage * PAGE_SIZE, totalItems)}`} 項，共 {totalItems} 項）
+						</span>}
 					</h3>
 
-					{hasResults
-						? (
-							<div className="space-y-6">
-								{characterResults.length > 0 && (
-									<div>
-										<h4 className="text-md font-medium text-gray-700 mb-3">字符 ({characterResults.length})</h4>
-										<div className="space-y-4">
-											{characterResults.map(character => (
-												<DictionaryCharacterResult key={character.id} character={character} />
-											))}
-										</div>
+					{totalItems
+						? <div className="space-y-6">
+							{totalResults.characters && (
+								<div>
+									<h4 className="font-medium text-gray-700 mb-3">
+										漢字<span className="text-gray-500 text-sm">（{totalResults.characters}）</span>
+									</h4>
+									<div className="space-y-4">
+										{characterResults.map(character => (
+											<DictionaryCharacterResult key={character.id} character={character} />
+										))}
 									</div>
-								)}
+								</div>
+							)}
 
-								{wordResults.length > 0 && (
-									<div>
-										<h4 className="text-md font-medium text-gray-700 mb-3">詞語 ({wordResults.length})</h4>
-										<div className="space-y-4">
-											{wordResults.map(word => (
-												<DictionaryWordResult key={word.id} word={word} />
-											))}
-										</div>
+							{totalResults.words && (
+								<div>
+									<h4 className="font-medium text-gray-700 mb-3">
+										詞語<span className="text-gray-500 text-sm">（{totalResults.words}）</span>
+									</h4>
+									<div className="space-y-4">
+										{wordResults.map(word => (
+											<DictionaryWordResult key={word.id} word={word} />
+										))}
 									</div>
-								)}
+								</div>
+							)}
 
-								{/* Pagination */}
-								{totalPages > 1 && (
-									<div className="mt-8">
-										<NewsPagination
-											currentPage={currentPage}
-											totalPages={totalPages}
-											onPageChange={handlePageChange}
-											isLoading={isSearching} />
-									</div>
-								)}
-							</div>
-						)
-						: (
-							<Card>
-								<CardContent className="p-6 text-center text-gray-500">
-									找不到與「{debouncedSearchTerm}」相關的字符或詞語。請嘗試其他關鍵詞。
-								</CardContent>
-							</Card>
-						)}
+							{/* Pagination */}
+							{totalPages > 1 && (
+								<div className="mt-8">
+									<Pagination
+										currentPage={currentPage}
+										totalPages={totalPages}
+										onPageChange={handlePageChange}
+										isLoading={isSearching} />
+								</div>
+							)}
+						</div>
+						: <Card>
+							<CardContent className="p-6 text-center text-gray-500">
+								找不到與「{debouncedSearchTerm}」相關的漢字或詞語。請嘗試其他關鍵詞。
+							</CardContent>
+						</Card>}
 				</div>
 			)}
 		</div>

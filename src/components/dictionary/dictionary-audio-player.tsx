@@ -50,14 +50,10 @@ export default function DictionaryAudioPlayer({ src, language, small = false }: 
 			size={small ? "sm" : "default"}
 			className={`${small ? "h-6 w-6 p-0" : "h-8 w-8 p-0"} rounded-full`}
 			onClick={togglePlay}
-			aria-label={isPlaying ? `Pause ${language} audio` : `Play ${language} audio`}>
+			aria-label={isPlaying ? "暫停" : "播放"}>
 			{isPlaying
-				? (
-					<Pause className={`${small ? "h-3 w-3" : "h-4 w-4"} text-red-800`} />
-				)
-				: (
-					<Play className={`${small ? "h-3 w-3" : "h-4 w-4"} text-gray-600 hover:text-red-800`} />
-				)}
+				? <Pause className={`${small ? "!h-3 !w-3" : "!h-4 !w-4"} text-red-800`} />
+				: <Play className={`${small ? "!h-3 !w-3" : "!h-4 !w-4"} text-gray-600 hover:text-red-800`} />}
 		</Button>
 	);
 }

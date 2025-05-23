@@ -15,7 +15,8 @@ export default function VocabularyList({ language }: VocabularyListProps) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [playingWord, setPlayingWord] = useState<string | null>(null);
 
-	// This would normally be fetched from Strapi, but we're inlining the content
+	// This is mock vocabulary data
+	// In a real application, this data should be fetched from Strapi CMS
 	const vocabularyData = {
 		waitau: {
 			categories: [
@@ -71,14 +72,32 @@ export default function VocabularyList({ language }: VocabularyListProps) {
 							english: "yesterday",
 							audio: "/audio/sample.mp3",
 						},
-						{ word: "今日", pronunciation: "gam1 jat6", meaning: "今天", english: "today", audio: "/audio/sample.mp3" },
+						{
+							word: "今日",
+							pronunciation: "gam1 jat6",
+							meaning: "今天",
+							english: "today",
+							audio: "/audio/sample.mp3",
+						},
 					],
 				},
 				{
 					name: "家庭稱謂",
 					words: [
-						{ word: "阿爸", pronunciation: "aa3 baa1", meaning: "爸爸", english: "father", audio: "/audio/sample.mp3" },
-						{ word: "阿媽", pronunciation: "aa3 maa1", meaning: "媽媽", english: "mother", audio: "/audio/sample.mp3" },
+						{
+							word: "阿爸",
+							pronunciation: "aa3 baa1",
+							meaning: "爸爸",
+							english: "father",
+							audio: "/audio/sample.mp3",
+						},
+						{
+							word: "阿媽",
+							pronunciation: "aa3 maa1",
+							meaning: "媽媽",
+							english: "mother",
+							audio: "/audio/sample.mp3",
+						},
 						{
 							word: "阿公",
 							pronunciation: "aa3 gung1",
@@ -162,8 +181,20 @@ export default function VocabularyList({ language }: VocabularyListProps) {
 							english: "harvest",
 							audio: "/audio/sample.mp3",
 						},
-						{ word: "犁頭", pronunciation: "lai4 tau4", meaning: "犁", english: "plow", audio: "/audio/sample.mp3" },
-						{ word: "鋤頭", pronunciation: "co4 tau4", meaning: "鋤頭", english: "hoe", audio: "/audio/sample.mp3" },
+						{
+							word: "犁頭",
+							pronunciation: "lai4 tau4",
+							meaning: "犁",
+							english: "plow",
+							audio: "/audio/sample.mp3",
+						},
+						{
+							word: "鋤頭",
+							pronunciation: "co4 tau4",
+							meaning: "鋤頭",
+							english: "hoe",
+							audio: "/audio/sample.mp3",
+						},
 						{
 							word: "水牛",
 							pronunciation: "seoi2 ngau4",
@@ -190,7 +221,13 @@ export default function VocabularyList({ language }: VocabularyListProps) {
 				{
 					name: "特色詞彙",
 					words: [
-						{ word: "冇", pronunciation: "mou5", meaning: "沒有", english: "don't have", audio: "/audio/sample.mp3" },
+						{
+							word: "冇",
+							pronunciation: "mou5",
+							meaning: "沒有",
+							english: "don't have",
+							audio: "/audio/sample.mp3",
+						},
 						{
 							word: "唔使",
 							pronunciation: "m4 sai2",
@@ -275,7 +312,7 @@ export default function VocabularyList({ language }: VocabularyListProps) {
 					</div>
 					<Input
 						type="search"
-						placeholder="搜尋詞彙..."
+						placeholder="搜尋詞彙……"
 						value={searchTerm}
 						onChange={e => setSearchTerm(e.target.value)}
 						className="pl-10" />
@@ -283,13 +320,48 @@ export default function VocabularyList({ language }: VocabularyListProps) {
 			</div>
 
 			{searchTerm
-				? (
-					<div>
-						<h3 className="text-xl font-serif font-bold text-gray-900 mb-4">搜尋結果</h3>
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							{data.categories.flatMap(category =>
-								filterWords(category.words).map((word, index) => (
-									<Card key={`search-${index}`}>
+				? <div>
+					<h3 className="text-xl font-serif font-bold text-gray-900 mb-4">搜尋結果</h3>
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						{data.categories.flatMap(category =>
+							filterWords(category.words).map((word, index) => (
+								<Card key={`search-${index}`}>
+									<CardContent className="p-4">
+										<div className="flex items-center justify-between">
+											<div>
+												<span className="text-lg font-medium text-gray-900">{word.word}</span>
+												<span className="ml-2 text-gray-500">[{word.pronunciation}]</span>
+											</div>
+											<Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => playWord(word.word)}>
+												<Play className={`h-4 w-4 ${playingWord === word.word ? "text-red-800" : "text-gray-600"}`} />
+												<span className="sr-only">播放</span>
+											</Button>
+										</div>
+										<div className="mt-2">
+											<p className="text-gray-600">
+												{word.meaning} / {word.english}
+											</p>
+										</div>
+									</CardContent>
+								</Card>
+							))
+						)}
+					</div>
+				</div>
+				: <Tabs defaultValue={data.categories[0].name} className="w-full">
+					<TabsList className="flex flex-wrap">
+						{data.categories.map((category, index) => (
+							<TabsTrigger key={index} value={category.name} className="mb-2">
+								{category.name}
+							</TabsTrigger>
+						))}
+					</TabsList>
+
+					{data.categories.map((category, categoryIndex) => (
+						<TabsContent key={categoryIndex} value={category.name} className="mt-6">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								{category.words.map((word, wordIndex) => (
+									<Card key={wordIndex}>
 										<CardContent className="p-4">
 											<div className="flex items-center justify-between">
 												<div>
@@ -298,7 +370,7 @@ export default function VocabularyList({ language }: VocabularyListProps) {
 												</div>
 												<Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => playWord(word.word)}>
 													<Play className={`h-4 w-4 ${playingWord === word.word ? "text-red-800" : "text-gray-600"}`} />
-													<span className="sr-only">Play {word.word}</span>
+													<span className="sr-only">播放</span>
 												</Button>
 											</div>
 											<div className="mt-2">
@@ -308,50 +380,11 @@ export default function VocabularyList({ language }: VocabularyListProps) {
 											</div>
 										</CardContent>
 									</Card>
-								))
-							)}
-						</div>
-					</div>
-				)
-				: (
-					<Tabs defaultValue={data.categories[0].name} className="w-full">
-						<TabsList className="flex flex-wrap">
-							{data.categories.map((category, index) => (
-								<TabsTrigger key={index} value={category.name} className="mb-2">
-									{category.name}
-								</TabsTrigger>
-							))}
-						</TabsList>
-
-						{data.categories.map((category, categoryIndex) => (
-							<TabsContent key={categoryIndex} value={category.name} className="mt-6">
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-									{category.words.map((word, wordIndex) => (
-										<Card key={wordIndex}>
-											<CardContent className="p-4">
-												<div className="flex items-center justify-between">
-													<div>
-														<span className="text-lg font-medium text-gray-900">{word.word}</span>
-														<span className="ml-2 text-gray-500">[{word.pronunciation}]</span>
-													</div>
-													<Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => playWord(word.word)}>
-														<Play className={`h-4 w-4 ${playingWord === word.word ? "text-red-800" : "text-gray-600"}`} />
-														<span className="sr-only">Play {word.word}</span>
-													</Button>
-												</div>
-												<div className="mt-2">
-													<p className="text-gray-600">
-														{word.meaning} / {word.english}
-													</p>
-												</div>
-											</CardContent>
-										</Card>
-									))}
-								</div>
-							</TabsContent>
-						))}
-					</Tabs>
-				)}
+								))}
+							</div>
+						</TabsContent>
+					))}
+				</Tabs>}
 		</div>
 	);
 }

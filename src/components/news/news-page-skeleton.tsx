@@ -3,12 +3,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function NewsPageSkeleton() {
 	return (
 		<div className="mt-12">
-			{/* 搜索欄骨架 */}
+			{/* Search field skeleton */}
 			<div className="mb-8">
 				<Skeleton className="h-12 w-full" />
 			</div>
 
-			{/* 過濾器骨架 */}
+			{/* Filters skeleton */}
 			<div className="mb-8">
 				<Skeleton className="h-6 w-32 mb-4" />
 				<div className="flex flex-wrap gap-2 mb-4">
@@ -22,12 +22,12 @@ export default function NewsPageSkeleton() {
 				</div>
 			</div>
 
-			{/* 結果計數骨架 */}
+			{/* Result count skeleton */}
 			<div className="mb-6">
 				<Skeleton className="h-5 w-32" />
 			</div>
 
-			{/* 文章列表骨架 */}
+			{/* Article list skeleton */}
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				{Array.from({ length: 6 }).map((_, index) => (
 					<div key={index} className="overflow-hidden">
@@ -40,7 +40,7 @@ export default function NewsPageSkeleton() {
 				))}
 			</div>
 
-			{/* 分頁骨架 */}
+			{/* Pagination skeleton */}
 			<div className="mt-10 flex justify-center">
 				<div className="flex gap-1">
 					<Skeleton className="h-10 w-10" />

@@ -22,17 +22,11 @@ export default function ShareButtons({ title }: ShareButtonsProps) {
 	};
 
 	const shareOnTwitter = () => {
-		window.open(
-			`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(window.location.href)}`,
-			"_blank",
-		);
+		window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(window.location.href)}`, "_blank");
 	};
 
 	const shareOnLinkedIn = () => {
-		window.open(
-			`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`,
-			"_blank",
-		);
+		window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, "_blank");
 	};
 
 	return (

@@ -2,22 +2,16 @@ import { strapi } from "@strapi/client";
 
 // Initialize the Strapi client
 const strapiClient = strapi({
-	baseURL: process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337/api",
+	baseURL: process.env["NEXT_PUBLIC_STRAPI_URL"] || "http://localhost:1337/api",
 	// auth: process.env.STRAPI_API_TOKEN,
 });
 
-/**
- * Get the URL for Strapi media
- */
 export function getStrapiMedia(url: string | null) {
 	if (!url) return null;
 	if (url.startsWith("http") || url.startsWith("//")) return url;
-	return `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
+	return `${process.env["NEXT_PUBLIC_STRAPI_URL"]}${url}`;
 }
 
-/**
- * Get about page data
- */
 export async function getAboutData() {
 	const data = await strapiClient.single("about-page").find({
 		populate: {
@@ -35,32 +29,23 @@ export async function getAboutData() {
 	return data;
 }
 
-/**
- * Get FAQ data
- */
 export async function getFAQData() {
 	return strapiClient.single("faq-page").find({
 		populate: ["heading", "questions"],
 	});
 }
 
-/**
- * Get contact information
- */
 export async function getContactData() {
 	return strapiClient.single("contact-section").find();
 }
 
-/**
- * Get news articles
- */
 export async function getNewsArticles({
 	page = 1,
 	pageSize = 9,
 	search = "",
-	tags = [],
-	year,
-	month,
+	tags = [] as string[],
+	year = "",
+	month = "",
 	sort = ["publishDate:desc"],
 	filters: customFilters = {},
 } = {}) {
@@ -95,7 +80,7 @@ export async function getNewsArticles({
 	// Add tag filters
 	if (tags && tags.length > 0) {
 		filters.tags = {
-			id: {
+			slug: {
 				$in: tags,
 			},
 		};
@@ -103,10 +88,10 @@ export async function getNewsArticles({
 
 	// Add date filters
 	if (year) {
-		const startDate = new Date(Number.parseInt(year), month ? Number.parseInt(month) - 1 : 0, 1);
+		const startDate = new Date(Date.UTC(Number.parseInt(year, 10), month ? Number.parseInt(month, 10) - 1 : 0, 1));
 		const endDate = month
-			? new Date(Number.parseInt(year), Number.parseInt(month), 0)
-			: new Date(Number.parseInt(year) + 1, 0, 0);
+			? new Date(Date.UTC(Number.parseInt(year, 10), Number.parseInt(month, 10), 0))
+			: new Date(Date.UTC(Number.parseInt(year, 10) + 1, 0, 0));
 
 		filters.publishDate = {
 			$gte: startDate.toISOString(),
@@ -131,9 +116,6 @@ export async function getNewsArticles({
 	});
 }
 
-/**
- * Get priority news articles for the home page
- */
 export async function getPriorityNewsArticles() {
 	return strapiClient.collection("articles").find({
 		filters: {
@@ -143,7 +125,8 @@ export async function getPriorityNewsArticles() {
 				},
 			},
 			priority: {
-				$gt: 0,
+				// TODO uncomment after demo
+				// $gt: 0,
 			},
 		},
 		sort: ["priority:desc", "publishDate:desc"],
@@ -160,9 +143,6 @@ export async function getPriorityNewsArticles() {
 	});
 }
 
-/**
- * Get all tags
- */
 export async function getAllTags() {
 	return strapiClient.collection("tags").find({
 		pagination: {
@@ -171,9 +151,6 @@ export async function getAllTags() {
 	});
 }
 
-/**
- * Get a single article
- */
 export async function getArticle(slug: string) {
 	const data = await strapiClient.collection("articles").find({
 		filters: {
@@ -193,9 +170,6 @@ export async function getArticle(slug: string) {
 	return data?.data?.[0] || null;
 }
 
-/**
- * Get related articles
- */
 export async function getRelatedArticles(articleId: string, tagIds: string[], limit = 3) {
 	// Get articles with the same tags, excluding the current article
 	const data = await strapiClient.collection("articles").find({
@@ -227,39 +201,31 @@ export async function getRelatedArticles(articleId: string, tagIds: string[], li
 		},
 	});
 
-	return data?.data || [];
+	return data?.data;
 }
 
-/**
- * Get all languages
- */
-export async function getLanguages() {
-	return strapiClient.collection("languages").find({
-		populate: ["introPage"],
-	});
-}
-
-/**
- * Get language by slug
- */
-export async function getLanguageBySlug(slug: string) {
-	const data = await strapiClient.collection("languages").find({
-		filters: {
-			slug: {
-				$eq: slug,
+export async function getLanguageIntroPages() {
+	return strapiClient.collection("language-intro-pages").find({
+		populate: {
+			heading: {
+				populate: ["coverImage"],
+			},
+			lang: {
+				fields: ["slug"],
 			},
 		},
-		populate: ["introPage"],
 	});
-
-	return data?.data?.[0] || null;
 }
 
-/**
- * Get language intro page
- */
-export async function getLanguageIntroPage(id: number) {
-	return strapiClient.collection("language-intro-pages").findOne(id, {
+export async function getLanguageIntroPage(slug: string) {
+	const data = await strapiClient.collection("language-intro-pages").find({
+		filters: {
+			lang: {
+				slug: {
+					$eq: slug,
+				},
+			},
+		},
 		populate: {
 			heading: {
 				populate: ["coverImage"],
@@ -297,15 +263,14 @@ export async function getLanguageIntroPage(id: number) {
 			},
 		},
 	});
+
+	return data?.data?.[0] || null;
 }
 
-/**
- * Get word of the day
- */
 export async function getWordOfTheDay() {
 	const data = await strapiClient.collection("word-of-the-days").find({
 		filters: {
-			date: { $lte: new Date().toISOString().split("T")[0] },
+			date: { $lte: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0] },
 		},
 		sort: ["date:desc"],
 		pagination: {
@@ -314,6 +279,7 @@ export async function getWordOfTheDay() {
 		populate: {
 			item: {
 				populate: {
+					domain: true,
 					words: {
 						populate: ["lang", "audio", "examples"],
 					},
@@ -338,7 +304,11 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 				{ codepoint: { $containsi: query } },
 				{
 					chars: {
-						$or: [{ glyph: { $containsi: query } }, { pron: { $containsi: query } }, { notes: { $containsi: query } }],
+						$or: [
+							{ glyph: { $containsi: query } },
+							{ pron: { $containsi: query } },
+							{ notes: { $containsi: query } },
+						],
 					},
 				},
 				{ notes: { $containsi: query } },
@@ -352,6 +322,7 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 			chars: {
 				populate: ["lang", "audio", "examples"],
 			},
+			collocation: true,
 		},
 	});
 
@@ -363,7 +334,11 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 				{ enGloss: { $containsi: query } },
 				{
 					words: {
-						$or: [{ glyph: { $containsi: query } }, { pron: { $containsi: query } }, { notes: { $containsi: query } }],
+						$or: [
+							{ glyph: { $containsi: query } },
+							{ pron: { $containsi: query } },
+							{ notes: { $containsi: query } },
+						],
 					},
 				},
 				{ notes: { $containsi: query } },
@@ -387,9 +362,6 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 	};
 }
 
-/**
- * Get lexical domains
- */
 export async function getLexicalDomains() {
 	return strapiClient.collection("surveyed-lexical-domains").find({
 		pagination: {
@@ -399,10 +371,7 @@ export async function getLexicalDomains() {
 	});
 }
 
-/**
- * Get lexical items by domain
- */
-export async function getLexicalItemsByDomain(domainId: number) {
+export async function getLexicalItemsByDomain(domainId: number, page = 1, pageSize = 10) {
 	return strapiClient.collection("surveyed-lexical-items").find({
 		filters: {
 			domain: {
@@ -410,6 +379,10 @@ export async function getLexicalItemsByDomain(domainId: number) {
 					$eq: domainId,
 				},
 			},
+		},
+		pagination: {
+			page,
+			pageSize,
 		},
 		populate: {
 			domain: true,
@@ -420,11 +393,10 @@ export async function getLexicalItemsByDomain(domainId: number) {
 	});
 }
 
-// Add this function to get news categories
 export async function getNewsCategories() {
 	return strapiClient.collection("categories").find({
 		filters: {
-			type: {
+			slug: {
 				$eq: "news",
 			},
 		},

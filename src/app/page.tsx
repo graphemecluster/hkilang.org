@@ -1,11 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import WordOfTheDay from "@/components/home/word-of-the-day";
+import WordOfTheDay from "@/components/dictionary/word-of-the-day";
 import LatestNews from "@/components/home/latest-news";
 import LanguageShowcase from "@/components/home/language-showcase";
+import NewsCarousel from "@/components/home/news-carousel";
+import { getPriorityNewsArticles } from "@/lib/strapi";
 
-export default function Home() {
+export default async function Home() {
+	// Fetch priority articles for the carousel
+	const priorityArticlesData = await getPriorityNewsArticles();
+	const articles = priorityArticlesData.data;
+
 	return (
 		<div className="bg-white">
 			{/* Hero Section */}
@@ -21,7 +27,9 @@ export default function Home() {
 							香港本土語言保育協會致力於保育香港本土語言，包括圍頭話、客家話、汀角話及東平洲話， 透過研究、記錄和教育活動，推廣本土語言文化，防止珍貴的語言遺產消失。
 						</p>
 						<div className="mt-10 flex items-center gap-x-6">
-							<Button className="bg-red-800 hover:bg-red-700">了解更多</Button>
+							<Link href="/about">
+								<Button className="bg-red-800 hover:bg-red-700">了解更多</Button>
+							</Link>
 							<Link href="/languages" className="text-sm font-semibold leading-6 text-gray-900">
 								瀏覽語言介紹 <span aria-hidden="true">→</span>
 							</Link>
@@ -40,21 +48,11 @@ export default function Home() {
 				</div>
 			</div>
 
-			{/* Word of the Day Section */}
-			<div className="bg-white py-16">
-				<div className="mx-auto max-w-7xl px-6 lg:px-8">
-					<div className="mx-auto max-w-2xl text-center">
-						<h2 className="text-3xl font-serif font-bold tracking-tight text-gray-900 sm:text-4xl">每日一詞</h2>
-						<p className="mt-2 text-lg leading-8 text-gray-600">每天學習一個本土語言詞彙，逐步認識香港獨特的語言文化</p>
-					</div>
-					<div className="mx-auto mt-10 max-w-2xl">
-						<WordOfTheDay />
-					</div>
-				</div>
-			</div>
+			{/* News Carousel Section */}
+			<NewsCarousel articles={articles} />
 
 			{/* Latest News Section */}
-			<div className="bg-gray-50 py-16">
+			<div className="bg-white py-16">
 				<div className="mx-auto max-w-7xl px-6 lg:px-8">
 					<div className="mx-auto max-w-2xl text-center">
 						<h2 className="text-3xl font-serif font-bold tracking-tight text-gray-900 sm:text-4xl">最新消息</h2>
@@ -69,6 +67,19 @@ export default function Home() {
 								查看更多消息
 							</Button>
 						</Link>
+					</div>
+				</div>
+			</div>
+
+			{/* Word of the Day Section */}
+			<div className="bg-gray-50 py-16">
+				<div className="mx-auto max-w-7xl px-6 lg:px-8">
+					<div className="mx-auto max-w-2xl text-center">
+						<h2 className="text-3xl font-serif font-bold tracking-tight text-gray-900 sm:text-4xl">每日一詞</h2>
+						<p className="mt-2 text-lg leading-8 text-gray-600">每日學習一個本土語言詞彙，逐步認識香港獨特的語言文化</p>
+					</div>
+					<div className="mx-auto mt-10 max-w-2xl">
+						<WordOfTheDay />
 					</div>
 				</div>
 			</div>
@@ -97,7 +108,9 @@ export default function Home() {
 							無論您是語言學者、本土語言使用者，還是對香港本土文化感興趣的人士，都歡迎加入我們的行列。
 						</p>
 						<div className="mt-10 flex items-center justify-center gap-x-6">
-							<Button className="bg-white text-red-800 hover:bg-red-50">聯絡我們</Button>
+							<Link href="https://www.hkilang.org/v2/wp-content/uploads/2015/01/%E9%A6%99%E6%B8%AF%E6%9C%AC%E5%9C%9F%E8%AA%9E%E8%A8%80%E4%BF%9D%E8%82%B2%E5%8D%94%E6%9C%83_%E5%85%A5%E6%9C%83%E7%94%B3%E8%AB%8B%E8%A1%A81.docx">
+								<Button className="bg-white text-red-800 hover:bg-red-50">加入我們</Button>
+							</Link>
 							<Link href="/languages" className="text-sm font-semibold leading-6 text-white">
 								瀏覽語言介紹 <span aria-hidden="true">→</span>
 							</Link>

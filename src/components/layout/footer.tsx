@@ -1,34 +1,20 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Facebook, Youtube, Mail, MapPin, Phone } from "lucide-react";
 import { getContactData } from "@/lib/strapi";
+import Logo from "@/components/logo";
 
 export default async function Footer() {
-	// Fetch contact data
 	const contactData = await getContactData();
-	const contactInfo = contactData?.data || {
-		address: "香港新界",
-		phone: "+852 XXXX XXXX",
-		facebookLink: "#",
-		youtubeLink: "#",
-	};
+	const contactInfo = contactData?.data;
 
 	return (
 		<footer className="bg-gray-50 border-t border-gray-200" id="contact">
 			<div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-					<div>
-						<div className="flex items-center">
-							<Image
-								src="/placeholder.svg?height=40&width=40"
-								alt="香港本土語言保育協會標誌"
-								width={40}
-								height={40}
-								className="h-10 w-auto" />
-							<span className="ml-3 text-xl font-serif font-bold text-gray-900">香港本土語言保育協會</span>
-						</div>
+				<div className="flex flex-col md:flex-row items-start justify-between gap-8">
+					<div className="md:flex-grow md:basis-1/3">
+						<Logo />
 						<p className="mt-4 text-sm text-gray-600">
-							致力於保育香港本土語言，包括圍頭話、客家話、汀角話及東平洲話，推廣本土語言文化。
+							{contactInfo.summary}
 						</p>
 						<div className="mt-6 flex space-x-4">
 							<Link href={contactInfo.facebookLink} className="text-gray-500 hover:text-red-800">
@@ -47,16 +33,16 @@ export default async function Footer() {
 							</Link>
 						</div>
 					</div>
-					<div>
+					<div className="md:flex-grow md:basis-[calc(65%-28rem)]">
 						<h3 className="text-base font-medium text-gray-900">網站連結</h3>
 						<ul className="mt-4 space-y-2">
 							{[
 								{ name: "首頁", href: "/" },
 								{ name: "關於我們", href: "/about" },
 								{ name: "最新消息", href: "/news" },
-								{ name: "語言資源", href: "/resources" },
-								{ name: "語言字典", href: "/dictionary" },
-								{ name: "常見問題", href: "/faq" },
+								{ name: "語言介紹", href: "/languages" },
+								{ name: "語言辭典", href: "/dictionary" },
+								{ name: "你問我答", href: "/faq" },
 							].map(item => (
 								<li key={item.name}>
 									<Link href={item.href} className="text-sm text-gray-600 hover:text-red-800">
@@ -66,7 +52,7 @@ export default async function Footer() {
 							))}
 						</ul>
 					</div>
-					<div>
+					<div className="md:flex-grow md:basis-[30%]">
 						<h3 className="text-base font-medium text-gray-900">聯絡資訊</h3>
 						<ul className="mt-4 space-y-2">
 							<li className="flex items-start">

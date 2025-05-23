@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getLanguages } from "@/lib/strapi";
+import { getLanguageIntroPages } from "@/lib/strapi";
 import { getStrapiMedia } from "@/lib/strapi";
 
 export const metadata: Metadata = {
@@ -11,9 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function LanguagesPage() {
-	// Fetch languages from Strapi
-	const languagesData = await getLanguages();
-	const languages = languagesData.data || [];
+	const languagesData = await getLanguageIntroPages();
 
 	return (
 		<div className="bg-white">
@@ -26,8 +24,8 @@ export default async function LanguagesPage() {
 				</div>
 
 				<div className="mt-16 space-y-20">
-					{languages.map((language, index) => {
-						const coverImage = language.introPage?.data?.heading?.coverImage?.data?.url;
+					{languagesData.data.map((language, index) => {
+						const coverImage = language?.heading?.coverImage?.data?.url;
 						const imageUrl = getStrapiMedia(coverImage) || "/placeholder.svg?height=400&width=600";
 
 						return (
@@ -38,14 +36,15 @@ export default async function LanguagesPage() {
 									<div className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
 										<Image
 											src={imageUrl || "/placeholder.svg"}
-											alt={language.zhName}
-											fill
-											className="object-cover" />
+											alt={language.heading.title}
+											width={0}
+											height={0}
+											className="w-full h-full object-cover" />
 									</div>
 								</div>
 								<div className="w-full md:w-1/2">
 									<h2 className="text-3xl font-serif font-bold text-gray-900">
-										{language.zhName}
+										{language.heading.title}
 										<span className="ml-3 text-xl text-gray-500">{language.enName}</span>
 									</h2>
 									<div className="mt-4 flex flex-wrap gap-4">
@@ -59,10 +58,10 @@ export default async function LanguagesPage() {
 											保育狀況: {language.status || "資料更新中"}
 										</span>
 									</div>
-									<p className="mt-4 text-lg text-gray-600">{language.description}</p>
+									<p className="mt-4 text-lg text-gray-600">{language.heading.summary}</p>
 									<div className="mt-6">
 										<Button className="bg-red-800 hover:bg-red-700">
-											<Link href={`/languages/${language.slug}`}>了解更多</Link>
+											<Link href={`/languages/${language.lang.slug}`}>了解更多</Link>
 										</Button>
 									</div>
 								</div>

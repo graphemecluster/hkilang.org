@@ -10,28 +10,28 @@ const languages = [
 		name: "圍頭話",
 		description: "圍頭話是香港新界西北部原居民的方言，屬於粵語的一個分支。",
 		image: "/placeholder.svg?height=300&width=400",
-		link: "/resources/waitau",
+		link: "/languages/waitau",
 	},
 	{
 		id: "hakka",
 		name: "客家話",
 		description: "客家話是客家人使用的漢語方言，在香港新界地區有著悠久的歷史。",
 		image: "/placeholder.svg?height=300&width=400",
-		link: "/resources/hakka",
+		link: "/languages/hakka",
 	},
 	{
 		id: "tingkok",
 		name: "汀角話",
 		description: "汀角話是香港東北部汀角村的方言，具有獨特的語音和詞彙特點。",
 		image: "/placeholder.svg?height=300&width=400",
-		link: "/resources/tingkok",
+		link: "/languages/ting-kok",
 	},
 	{
 		id: "tungpingchau",
 		name: "東平洲話",
 		description: "東平洲話是香港東平洲島上居民使用的方言，現已瀕臨消失。",
 		image: "/placeholder.svg?height=300&width=400",
-		link: "/resources/tungpingchau",
+		link: "/languages/tung-ping-chau",
 	},
 ];
 
@@ -44,8 +44,9 @@ export default function LanguageShowcase() {
 						<Image
 							src={language.image || "/placeholder.svg"}
 							alt={language.name}
-							fill
-							className="object-cover transition-transform duration-300 group-hover:scale-105" />
+							width={0}
+							height={0}
+							className="w-auto h-auto object-cover transition-transform duration-300 group-hover:scale-105" />
 						<div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
 						<div className="absolute inset-0 flex flex-col justify-end p-4">
 							<h3 className="text-xl font-serif font-bold text-white">{language.name}</h3>

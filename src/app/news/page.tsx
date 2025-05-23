@@ -10,21 +10,15 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function NewsPage({
-	searchParams,
-}: {
-	searchParams: { [key: string]: string | string[] | undefined };
-}) {
-	const search = typeof searchParams.search === "string" ? searchParams.search : "";
-	const page = typeof searchParams.page === "string" ? Number.parseInt(searchParams.page) : 1;
-	const tags = Array.isArray(searchParams.tags)
-		? searchParams.tags
-		: typeof searchParams.tags === "string"
-		? [searchParams.tags]
-		: [];
-	const startDate = typeof searchParams.startDate === "string" ? searchParams.startDate : null;
-	const endDate = typeof searchParams.endDate === "string" ? searchParams.endDate : null;
-	const category = typeof searchParams.category === "string" ? searchParams.category : null;
+export default async function NewsPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+	const params = await searchParams;
+
+	const search = typeof params["query"] === "string" ? params["query"] : "";
+	const page = typeof params["page"] === "string" ? Number.parseInt(params["page"], 10) : 1;
+	const tags = Array.isArray(params["tags"]) ? params["tags"].sort() : typeof params["tags"] === "string" ? [params["tags"]] : [];
+	const startDate = typeof params["startDate"] === "string" ? params["startDate"] : null;
+	const endDate = typeof params["endDate"] === "string" ? params["endDate"] : null;
+	const category = typeof params["category"] === "string" ? params["category"] : null;
 
 	return (
 		<div className="bg-white">
