@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import DictionaryPageContent from "@/components/dictionary/dictionary-page-content";
+import DictionaryPageSkeleton from "@/components/dictionary/dictionary-page-skeleton";
 import WordOfTheDay from "@/components/dictionary/word-of-the-day";
 
 export const metadata: Metadata = {
@@ -8,5 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function DictionaryPage() {
-	return <DictionaryPageContent wordOfTheDayComponent={<WordOfTheDay />} />;
+	return <Suspense fallback={<DictionaryPageSkeleton wordOfTheDayComponent={<WordOfTheDay />} />}>
+		<DictionaryPageContent wordOfTheDayComponent={<WordOfTheDay />} />
+	</Suspense>;
 }
