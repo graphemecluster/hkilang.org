@@ -90,9 +90,7 @@ export default async function LanguageDetailPage({ params }: LanguageDetailPageP
 				<Tabs defaultValue="overview" className="w-full">
 					<TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
 						<TabsTrigger value="overview">概述</TabsTrigger>
-						<TabsTrigger value="pronunciation" id="pronunciation">
-							發音
-						</TabsTrigger>
+						<TabsTrigger value="pronunciation" id="pronunciation">發音</TabsTrigger>
 						<TabsTrigger value="vocabulary">詞彙</TabsTrigger>
 						<TabsTrigger value="phrases">常用語句</TabsTrigger>
 						<TabsTrigger value="culture">文化背景</TabsTrigger>
@@ -131,7 +129,7 @@ export default async function LanguageDetailPage({ params }: LanguageDetailPageP
 
 					{/* Culture Tab */}
 					<TabsContent value="culture" className="mt-6">
-						<CulturalContext language={lang.slug} culturalContext={culturalContext} />
+						<CulturalContext language={lang.zhName} culturalContext={culturalContext} />
 					</TabsContent>
 				</Tabs>
 			</div>
