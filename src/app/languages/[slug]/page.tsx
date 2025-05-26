@@ -191,7 +191,7 @@ export default async function LanguageDetailPage({ params }: LanguageDetailPageP
 						</p>
 						<div className="mt-10 flex items-center justify-center gap-x-6">
 							<Button className="bg-white text-red-800 hover:bg-red-50">
-								<Link href="#contact">聯絡我們</Link>
+								<Link href="https://www.hkilang.org/v2/wp-content/uploads/2015/01/%E9%A6%99%E6%B8%AF%E6%9C%AC%E5%9C%9F%E8%AA%9E%E8%A8%80%E4%BF%9D%E8%82%B2%E5%8D%94%E6%9C%83_%E5%85%A5%E6%9C%83%E7%94%B3%E8%AB%8B%E8%A1%A81.docx">加入我們</Link>
 							</Button>
 							<Link href="/news" className="text-sm font-semibold leading-6 text-white">
 								參加活動 <span aria-hidden="true">→</span>
