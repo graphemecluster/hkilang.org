@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import WordOfTheDay from "@/components/dictionary/word-of-the-day";
-import LatestNews from "@/components/home/latest-news";
 import LanguageShowcase from "@/components/home/language-showcase";
 import NewsCarousel from "@/components/home/news-carousel";
 import { getPriorityNewsArticles } from "@/lib/strapi";
@@ -26,50 +25,12 @@ export default async function Home() {
 						<p className="mt-6 text-lg leading-8 text-gray-600">
 							香港本土語言保育協會致力於保育香港本土語言，包括圍頭話、客家話、汀角話及東平洲話， 透過研究、記錄和教育活動，推廣本土語言文化，防止珍貴的語言遺產消失。
 						</p>
-						<div className="mt-10 flex items-center gap-x-6">
-							<Link href="/about">
-								<Button className="bg-red-800 hover:bg-red-700">了解更多</Button>
-							</Link>
-							<Link href="/languages" className="text-sm font-semibold leading-6 text-gray-900">
-								瀏覽語言介紹 <span aria-hidden="true">→</span>
-							</Link>
-						</div>
-					</div>
-				</div>
-				<div className="absolute inset-0 -z-10 overflow-hidden">
-					<div className="absolute right-0 top-0 -translate-y-12 translate-x-1/2 transform">
-						<Image
-							src="/placeholder.svg?height=600&width=600"
-							alt="傳統紙張紋理"
-							width={600}
-							height={600}
-							className="opacity-20" />
 					</div>
 				</div>
 			</div>
 
 			{/* News Carousel Section */}
 			<NewsCarousel articles={articles} />
-
-			{/* Latest News Section */}
-			<div className="bg-white py-16">
-				<div className="mx-auto max-w-7xl px-6 lg:px-8">
-					<div className="mx-auto max-w-2xl text-center">
-						<h2 className="text-3xl font-serif font-bold tracking-tight text-gray-900 sm:text-4xl">最新消息</h2>
-						<p className="mt-2 text-lg leading-8 text-gray-600">了解協會的最新活動和資訊</p>
-					</div>
-					<div className="mx-auto mt-10 max-w-7xl">
-						<LatestNews />
-					</div>
-					<div className="mt-10 text-center">
-						<Link href="/news">
-							<Button variant="outline" className="text-red-800 border-red-800 hover:bg-red-50">
-								查看更多消息
-							</Button>
-						</Link>
-					</div>
-				</div>
-			</div>
 
 			{/* Word of the Day Section */}
 			<div className="bg-gray-50 py-16">
@@ -110,9 +71,6 @@ export default async function Home() {
 						<div className="mt-10 flex items-center justify-center gap-x-6">
 							<Link href="https://www.hkilang.org/v2/wp-content/uploads/2015/01/%E9%A6%99%E6%B8%AF%E6%9C%AC%E5%9C%9F%E8%AA%9E%E8%A8%80%E4%BF%9D%E8%82%B2%E5%8D%94%E6%9C%83_%E5%85%A5%E6%9C%83%E7%94%B3%E8%AB%8B%E8%A1%A81.docx">
 								<Button className="bg-white text-red-800 hover:bg-red-50">加入我們</Button>
-							</Link>
-							<Link href="/languages" className="text-sm font-semibold leading-6 text-white">
-								瀏覽語言介紹 <span aria-hidden="true">→</span>
 							</Link>
 						</div>
 					</div>
