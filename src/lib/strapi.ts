@@ -1,6 +1,6 @@
 import { strapi } from "@strapi/client";
 
-const STRAPI_URL = process.env["NEXT_PUBLIC_STRAPI_URL"] || "http://localhost:1337/api";
+const STRAPI_URL = process.env["VERCEL_PROJECT_PRODUCTION_URL"] ? `https://${process.env["VERCEL_PROJECT_PRODUCTION_URL"]}/api` : "http://localhost:3000/api";
 
 // Initialize the Strapi client
 const strapiClient = strapi({
@@ -9,9 +9,11 @@ const strapiClient = strapi({
 });
 
 export function getStrapiMedia(url: string | null) {
-	if (!url) return null;
+	// The URL is rewritten by the `rewrites` function in `next.config.ts`
+	return url;
+	// if (!url) return null;
 	// This automatically handles both relative and absolute URLs
-	return `${new URL(url, STRAPI_URL)}`;
+	// return `${new URL(url, STRAPI_URL)}`;
 }
 
 export async function getAboutData() {
