@@ -1,6 +1,6 @@
 import { strapi } from "@strapi/client";
 
-const STRAPI_URL = process.env["VERCEL_PROJECT_PRODUCTION_URL"] ? `https://${process.env["VERCEL_PROJECT_PRODUCTION_URL"]}/api` : "http://localhost:3000/api";
+const STRAPI_URL = process.env["VERCEL_PROJECT_PRODUCTION_URL"] ? `https://${process.env["VERCEL_PROJECT_PRODUCTION_URL"]}/api` : typeof location === "undefined" ? "http://localhost:3000/api" : `${location.origin}/api`;
 
 // Initialize the Strapi client
 const strapiClient = strapi({
