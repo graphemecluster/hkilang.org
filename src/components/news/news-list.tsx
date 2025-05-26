@@ -58,7 +58,7 @@ export default function NewsList({ articles, isLoading }: NewsListProps) {
 								<div className="text-sm text-gray-500 mb-2">{formatDate(article.publishDate)}</div>
 								<h3 className="text-lg font-medium text-gray-900 mb-2">{article.heading.title}</h3>
 								<p className="text-gray-600 text-sm line-clamp-3">{article.heading.summary || ""}</p>
-								{article.tags?.length && (
+								{!!article.tags?.length && (
 									<div className="mt-3 flex flex-wrap gap-1">
 										{article.tags.slice(0, 3).map(tag => (
 											<span

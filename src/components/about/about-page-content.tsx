@@ -42,7 +42,7 @@ export default async function AboutPageContent() {
 			))}
 
 			{/* Members Section */}
-			{data.members?.length && (
+			{!!data.members?.length && (
 				<div className="mb-16">
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
 						<div className="md:sticky md:top-24">
@@ -57,7 +57,7 @@ export default async function AboutPageContent() {
 			)}
 
 			{/* Timeline Section */}
-			{data.timeline?.length && (
+			{!!data.timeline?.length && (
 				<div className="mb-16">
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
 						<div className="md:sticky md:top-24">
