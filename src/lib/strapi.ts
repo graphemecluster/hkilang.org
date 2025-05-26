@@ -270,10 +270,12 @@ export async function getLanguageIntroPage(slug: string) {
 	return data?.data?.[0] || null;
 }
 
+const TIMEZONE_OFFSET = -480;
+
 export async function getWordOfTheDay() {
 	const data = await strapiClient.collection("word-of-the-days").find({
 		filters: {
-			date: { $lte: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0] },
+			date: { $lte: new Date(Date.now() - TIMEZONE_OFFSET * 60000).toISOString().split("T")[0]! },
 		},
 		sort: ["date:desc"],
 		pagination: {
