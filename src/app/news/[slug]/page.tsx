@@ -6,6 +6,7 @@ import { getArticle, getStrapiMedia, getRelatedArticles } from "@/lib/strapi";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Calendar, Clock } from "lucide-react";
+import Markdown from "@/components/markdown";
 import ShareButtons from "@/components/news/share-buttons";
 import RelatedArticles from "@/components/news/related-articles";
 import { formatDate } from "@/lib/utils";
@@ -129,11 +130,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 					</header>
 
 					{/* Article Content */}
-					<div className="prose prose-lg max-w-none">
-						<div
-							dangerouslySetInnerHTML={{ __html: article.content }}
-							className="prose prose-red prose-img:rounded-lg prose-headings:font-serif max-w-none" />
-					</div>
+					<Markdown className="prose-lg prose-img:rounded-lg prose-headings:font-serif">{article.content}</Markdown>
 
 					{/* Share and Bookmark */}
 					<div className="mt-12 pt-6 border-t border-gray-200">

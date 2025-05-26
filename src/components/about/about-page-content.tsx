@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getAboutData } from "@/lib/strapi";
 import AboutTimeline from "@/components/about/about-timeline";
 import AboutMembers from "@/components/about/about-members";
+import Markdown from "@/components/markdown";
 
 export default async function AboutPageContent() {
 	const aboutData = await getAboutData();
@@ -29,13 +30,7 @@ export default async function AboutPageContent() {
 									</div>
 								</div>
 							)}
-							{section.content && (
-								<div className="md:col-span-2 prose prose-lg max-w-none">
-									<div
-										dangerouslySetInnerHTML={{ __html: section.content }}
-										className="prose prose-red prose-img:rounded-lg prose-headings:font-serif max-w-none" />
-								</div>
-							)}
+							<Markdown className="md:col-span-2 prose-lg prose-img:rounded-lg prose-headings:font-serif">{section.content}</Markdown>
 						</div>
 					</div>
 				</div>

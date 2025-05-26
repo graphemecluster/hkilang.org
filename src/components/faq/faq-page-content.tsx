@@ -1,4 +1,5 @@
 import { getFAQData } from "@/lib/strapi";
+import Markdown from "@/components/markdown";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export default async function FAQPageContent() {
@@ -12,9 +13,7 @@ export default async function FAQPageContent() {
 					<AccordionItem key={index} value={`item-${index}`}>
 						<AccordionTrigger className="text-left font-medium text-lg">{question.question}</AccordionTrigger>
 						<AccordionContent>
-							<div className="pt-2 pb-4 text-gray-600">
-								<div dangerouslySetInnerHTML={{ __html: question.answer }} className="prose prose-red max-w-none" />
-							</div>
+							<Markdown className="pt-2 pb-4 text-gray-600">{question.answer}</Markdown>
 						</AccordionContent>
 					</AccordionItem>
 				))}

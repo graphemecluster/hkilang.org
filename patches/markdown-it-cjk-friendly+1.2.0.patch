@@ -1,0 +1,13 @@
+diff --git a/node_modules/markdown-it-cjk-friendly/dist/index.js b/node_modules/markdown-it-cjk-friendly/dist/index.js
+index af59d0b..b92ccc4 100644
+--- a/node_modules/markdown-it-cjk-friendly/dist/index.js
++++ b/node_modules/markdown-it-cjk-friendly/dist/index.js
+@@ -4,7 +4,7 @@ import {
+   isMdAsciiPunct,
+   isPunctChar,
+   isWhiteSpace
+-} from "markdown-it/lib/common/utils.mjs";
++} from "markdown-it/lib/common/utils.js";
+ var isEmoji = function(uc) {
+   if (this.fn !== null) {
+     return this.fn(uc);

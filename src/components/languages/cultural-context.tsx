@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Markdown from "@/components/markdown";
 import { Card, CardContent } from "@/components/ui/card";
 import { getStrapiMedia } from "@/lib/strapi";
 
@@ -53,9 +54,7 @@ export default function CulturalContext({ language, culturalContext }: CulturalC
 							className="grid grid-cols-1 md:grid-cols-2 gap-8 odd:md:flex-row-reverse">
 							<div className={`${index % 2 === 1 ? "md:order-2" : ""}`}>
 								<h3 className="text-xl font-serif font-bold text-gray-900 mb-4">{section.title}</h3>
-								<div className="prose prose-red max-w-none">
-									<div dangerouslySetInnerHTML={{ __html: section.summary || "" }} />
-								</div>
+								<Markdown>{section.summary}</Markdown>
 							</div>
 							<div className="relative h-64 rounded-lg overflow-hidden odd:md:order-1">
 								<Image

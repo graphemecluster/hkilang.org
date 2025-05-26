@@ -11,6 +11,7 @@ import PronunciationGuide from "@/components/languages/pronunciation-guide";
 import VocabularyList from "@/components/languages/vocabulary-list";
 import AudioPhrases from "@/components/languages/audio-phrases";
 import CulturalContext from "@/components/languages/cultural-context";
+import Markdown from "@/components/markdown";
 
 interface LanguageDetailPageProps {
 	params: Promise<{
@@ -102,9 +103,7 @@ export default async function LanguageDetailPage({ params }: LanguageDetailPageP
 							{overview.map(section => (
 								<div key={section.id} className="break-inside-avoid">
 									<h2 className="text-2xl font-serif font-bold text-gray-900 mb-4">{section.subtitle}</h2>
-									<div className="prose prose-red max-w-none mb-4">
-										<div dangerouslySetInnerHTML={{ __html: section.content || "" }} />
-									</div>
+									<Markdown className="mb-4">{section.content}</Markdown>
 								</div>
 							))}
 

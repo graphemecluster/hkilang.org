@@ -18,6 +18,10 @@
 		"@radix-ui/react-slot": "^1.2.3",
 		"@radix-ui/react-tabs": "^1.1.12",
 		"@strapi/client": "^1.4.0",
+		"@types/markdown-it": "^13.0.9",
+		"@types/markdown-it-container": "^2.0.9",
+		"@types/markdown-it-emoji": "^2.0.5",
+		"@types/markdown-it-footnote": "^3.0.3",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"embla-carousel-autoplay": "^8.6.0",
@@ -27,21 +31,35 @@
 		"next-themes": "^0.4.6",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
+		"sanitize-html": "^2.17.0",
 		"tailwind-merge": "^2.6.0",
 		"tailwindcss-animate": "^1.0.7"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.1",
 		"@strapi/strapi": "^5.13.1",
+		"@tailwindcss/typography": "^0.5.16",
 		"@types/node": "^22.15.21",
 		"@types/react": "^19.1.5",
 		"@types/react-dom": "^19.1.5",
+		"@types/sanitize-html": "^2.16.0",
 		"autoprefixer": "^10.4.21",
 		"dprint": "^0.50.0",
 		"eslint": "^9.27.0",
 		"eslint-config-next": "^15.3.2",
 		"eslint-plugin-no-array-concat": "^0.1.2",
 		"knip": "^5.57.1",
+		"markdown-it": "^13.0.2",
+		"markdown-it-abbr": "^1.0.4",
+		"markdown-it-cjk-friendly": "^1.2.0",
+		"markdown-it-container": "^3.0.0",
+		"markdown-it-deflist": "^2.1.0",
+		"markdown-it-emoji": "^2.0.2",
+		"markdown-it-footnote": "^3.0.3",
+		"markdown-it-ins": "^3.0.1",
+		"markdown-it-mark": "^3.0.1",
+		"markdown-it-sub": "^1.0.0",
+		"markdown-it-sup": "1.0.0",
 		"postcss": "^8.5.3",
 		"postcss-nesting": "^13.0.1",
 		"tailwindcss": "^3.4.17",
@@ -49,7 +67,8 @@
 		"typescript-eslint": "^8.32.1"
 	},
 	"patchedDependencies": {
-		"@strapi/client": "patches/@strapi+client+1.4.0.patch"
+		"@strapi/client": "patches/@strapi+client+1.4.0.patch",
+		"markdown-it-cjk-friendly": "patches/markdown-it-cjk-friendly+1.2.0.patch"
 	},
 	"trustedDependencies": [
 		"unrs-resolver"
