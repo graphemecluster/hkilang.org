@@ -173,6 +173,7 @@ export async function getArticle(slug: string) {
 }
 
 export async function getRelatedArticles(articleId: string, tagIds: string[], limit = 3) {
+	if (!tagIds.length) return [];
 	// Get articles with the same tags, excluding the current article
 	const data = await strapiClient.collection("articles").find({
 		filters: {
