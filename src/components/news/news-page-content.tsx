@@ -284,7 +284,7 @@ export default function NewsPageContent({
 				{isLoading
 					? <Skeleton className="h-5 w-32" />
 					: totalArticles
-					? `顯示第 ${(page - 1) * PAGE_SIZE + 1}${page * PAGE_SIZE === totalArticles ? "" : ` ~ ${Math.min(page * PAGE_SIZE, totalArticles)}`} 項，共 ${totalArticles} 項）`
+					? `顯示第 ${(page - 1) * PAGE_SIZE + 1}${page * PAGE_SIZE === totalArticles ? "" : ` ~ ${Math.min(page * PAGE_SIZE, totalArticles)}`} 項，共 ${totalArticles} 項`
 					: undefined}
 			</div>
 
