@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 export default async function NewsPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
 	const params = await searchParams;
 
-	const search = typeof params["query"] === "string" ? params["query"] : "";
+	const query = typeof params["query"] === "string" ? params["query"] : "";
 	const page = typeof params["page"] === "string" ? Number.parseInt(params["page"], 10) : 1;
 	const tags = Array.isArray(params["tags"]) ? params["tags"].sort() : typeof params["tags"] === "string" ? [params["tags"]] : [];
 	const startDate = typeof params["startDate"] === "string" ? params["startDate"] : null;
@@ -30,7 +30,7 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
 
 				<Suspense fallback={<NewsPageSkeleton />}>
 					<NewsPageContent
-						initialSearch={search}
+						initialQuery={query}
 						initialPage={page}
 						initialTags={tags}
 						initialStartDate={startDate}
