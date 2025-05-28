@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getLanguageIntroPage } from "@/lib/strapi";
 import { getStrapiMedia } from "@/lib/strapi";
-import LanguageMap from "@/components/languages/language-map";
 import PronunciationGuide from "@/components/languages/pronunciation-guide";
 import VocabularyList from "@/components/languages/vocabulary-list";
 import AudioPhrases from "@/components/languages/audio-phrases";
@@ -46,7 +45,6 @@ export default async function LanguageDetailPage({ params }: LanguageDetailPageP
 	const lang = introPage.lang || {} as never;
 	const heading = introPage.heading || {} as never;
 	const overview = introPage.overview || {} as never;
-	const distribution = introPage.distribution || {} as never;
 	const culturalContext = introPage.culturalContext || {} as never;
 	const relatedResources = introPage.relatedResources || {} as never;
 
@@ -106,8 +104,6 @@ export default async function LanguageDetailPage({ params }: LanguageDetailPageP
 									<Markdown className="mb-4">{section.content}</Markdown>
 								</div>
 							))}
-
-							<LanguageMap language={lang.slug} distribution={distribution} />
 						</div>
 					</TabsContent>
 

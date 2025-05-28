@@ -237,14 +237,6 @@ export async function getLanguageIntroPage(slug: string) {
 			},
 			lang: true,
 			overview: true,
-			distribution: {
-				populate: {
-					heading: {
-						populate: ["coverImage"],
-					},
-					villages: true,
-				},
-			},
 			culturalContext: {
 				populate: {
 					sections: {
