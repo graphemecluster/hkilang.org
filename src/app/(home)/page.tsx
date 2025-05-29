@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import WordOfTheDay from "../dictionary/word-of-the-day";
@@ -15,7 +14,7 @@ export default async function Home() {
 		<div>
 			{/* Hero Section */}
 			<div className="relative isolate overflow-hidden bg-gradient-to-b from-red-50 to-white">
-				<div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+				<div className="mx-auto max-w-7xl px-6 pt-6 sm:pt-8">
 					<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-3xl">
 						<h1 className="mt-2 text-4xl font-serif font-bold text-gray-900 sm:text-5xl/[3.25rem]">
 							保育香港本土語言
