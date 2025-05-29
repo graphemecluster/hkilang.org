@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Facebook, Youtube, Mail, MapPin, Phone } from "lucide-react";
 import { getContactData } from "@/lib/strapi";
 import Logo from "@/components/logo";
+import { navigationItems } from "@/lib/consts";
 
 export default async function Footer() {
 	const contactData = await getContactData();
@@ -36,14 +37,7 @@ export default async function Footer() {
 					<div className="md:flex-grow md:basis-[calc(65%-28rem)]">
 						<h3 className="text-base font-medium text-gray-900">網站連結</h3>
 						<ul className="mt-4 space-y-2">
-							{[
-								{ name: "首頁", href: "/" },
-								{ name: "關於我們", href: "/about" },
-								{ name: "最新消息", href: "/news" },
-								{ name: "語言介紹", href: "/languages" },
-								{ name: "語言辭典", href: "/dictionary" },
-								{ name: "你問我答", href: "/faq" },
-							].map(item => (
+							{navigationItems.map(item => (
 								<li key={item.name}>
 									<Link href={item.href} className="text-sm text-gray-600 hover:text-red-800">
 										{item.name}

@@ -9,16 +9,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, X, Search } from "lucide-react";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import Logo from "@/components/logo";
-
-const navigation = [
-	{ name: "首頁", href: "/" },
-	{ name: "關於我們", href: "/about" },
-	{ name: "最新消息", href: "/news" },
-	{ name: "語言介紹", href: "/languages" },
-	{ name: "語言辭典", href: "/dictionary" },
-	{ name: "你問我答", href: "/faq" },
-	{ name: "聯絡我們", href: "#contact" },
-];
+import { navigationItems } from "@/lib/consts";
 
 export default function Header() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -61,7 +52,7 @@ export default function Header() {
 							<div className="mt-6 flow-root">
 								<div className="-my-6 divide-y divide-gray-200">
 									<div className="space-y-2 py-6">
-										{navigation.map(item => (
+										{navigationItems.map(item => (
 											<Link
 												key={item.name}
 												href={item.href}
@@ -80,7 +71,7 @@ export default function Header() {
 												variant="outline"
 												className="w-full text-red-800 border-red-800 hover:bg-red-50">
 												<Search className="h-4 w-4" />
-												辭典搜尋
+												綜合辭典
 											</Button>
 										</Link>
 									</div>
@@ -90,7 +81,7 @@ export default function Header() {
 					</Sheet>
 				</div>
 				<div className="hidden lg:flex lg:gap-x-8">
-					{navigation.map(item => (
+					{navigationItems.map(item => (
 						<Link
 							key={item.name}
 							href={item.href}
@@ -110,7 +101,7 @@ export default function Header() {
 							variant="outline"
 							className="text-sm font-medium text-red-800 border-red-800 hover:bg-red-50">
 							<Search className="h-4 w-4" />
-							辭典搜尋
+							綜合辭典
 						</Button>
 					</Link>
 				</div>

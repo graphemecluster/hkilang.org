@@ -24,7 +24,8 @@ export default function RelatedArticles({ articles }: RelatedArticlesProps) {
 							</div>
 							<CardContent className="p-4">
 								<div className="text-sm text-gray-500 mb-2">{formatDate(article.publishDate)}</div>
-								<h3 className="text-base font-medium text-gray-900 mb-2 line-clamp-2">{article.heading.title}</h3>
+								<h3 className="text-base font-medium text-gray-900 mb-2">{article.heading.title}</h3>
+								<p className="text-gray-600 text-sm line-clamp-3">{article.heading.summary}</p>
 							</CardContent>
 						</Card>
 					</Link>

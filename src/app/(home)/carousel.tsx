@@ -17,7 +17,7 @@ import type { Data } from "@strapi/strapi";
 const SCALE_REDUCE_FACTOR = 0.1;
 const OPACITY_REDUCE_FACTOR = 0.3;
 
-export default function NewsCarousel({ articles }: { articles: Data.ContentType<"api::article.article">[] }) {
+export default function Carousel({ articles }: { articles: Data.ContentType<"api::article.article">[] }) {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const totalSlides = articles.length;
 
@@ -147,7 +147,7 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 						return (
 							<div key={article.id} className="flex-shrink-0 basis-[calc(65%+4rem)] min-w-0">
 								<div>
-									<Link href={`/news/${article.slug}`} className="group">
+									<Link href={`/${article.category!.slug}/${article.slug}`} className="group">
 										<Card className="h-full overflow-hidden hover:shadow-md transition-shadow duration-300 relative">
 											<div className="h-[calc(100vh-24rem)] relative">
 												<Image

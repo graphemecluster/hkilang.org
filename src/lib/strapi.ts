@@ -1,5 +1,7 @@
 import { strapi } from "@strapi/client";
 
+import type { Data } from "@strapi/strapi";
+
 const STRAPI_URL = process.env["VERCEL_PROJECT_PRODUCTION_URL"] ? `https://${process.env["VERCEL_PROJECT_PRODUCTION_URL"]}/api` : typeof location === "undefined" ? "http://localhost:3000/api" : `${location.origin}/api`;
 
 // Initialize the Strapi client
@@ -43,36 +45,29 @@ export async function getContactData() {
 	return strapiClient.single("contact-section").find();
 }
 
-export async function getNewsArticles({
-	page = 1,
-	pageSize = 9,
-	search = "",
-	tag = null as string | null,
-	month = null as string | null,
-} = {}) {
+export async function getArticles({ category, page, pageSize, query, tag, month }: { category: string; page: number; pageSize: number; query: string; tag: string | null; month: string | null }) {
 	// Build filters
 	const filters: any = {
 		category: {
 			slug: {
-				$eq: "news",
+				$eq: category,
 			},
 		},
 	};
 
 	// Add search condition
-	if (search) {
+	if (query) {
 		filters.$or = [
 			{
 				heading: {
-					title: {
-						$containsi: search,
-					},
+					$or: [
+						{ title: { $containsi: query } },
+						{ summary: { $containsi: query } },
+					],
 				},
 			},
 			{
-				content: {
-					$containsi: search,
-				},
+				content: { $containsi: query },
 			},
 		];
 	}
@@ -109,18 +104,15 @@ export async function getNewsArticles({
 				populate: ["coverImage"],
 			},
 			tags: true,
-			category: true,
 		},
 	});
 }
 
-export async function getPriorityNewsArticles() {
+export async function getCarouselArticles() {
 	return strapiClient.collection("articles").find({
 		filters: {
 			category: {
-				slug: {
-					$eq: "news",
-				},
+				$notNull: true,
 			},
 			priority: {
 				// TODO uncomment after demo
@@ -129,24 +121,53 @@ export async function getPriorityNewsArticles() {
 		},
 		sort: ["priority:desc", "publishDate:desc"],
 		pagination: {
-			limit: 10,
+			limit: 100,
 		},
 		populate: {
 			heading: {
 				populate: ["coverImage"],
 			},
-			tags: true,
 			category: true,
 		},
 	});
 }
 
-export async function getAllTags() {
-	return strapiClient.collection("tags").find({
-		pagination: {
-			limit: 100,
+export async function getCategory(slug: string) {
+	const data = await strapiClient.collection("categories").find({
+		filters: {
+			slug: {
+				$eq: slug,
+			},
 		},
 	});
+
+	return data?.data?.[0] || null;
+}
+
+export async function getTags(category: string) {
+	// TODO Use strapiClient.collection("tags")
+	const articles = await strapiClient.collection("articles").find({
+		filters: {
+			category: {
+				slug: {
+					$eq: category,
+				},
+			},
+		},
+		pagination: {
+			limit: 100000, // TODO this is useless, limit is clamped to 100
+		},
+		populate: ["tags"],
+	});
+
+	const tags = new Map<string, Data.ContentType<"api::tag.tag">>();
+	for (const article of articles?.data || []) {
+		for (const tag of article.tags || []) {
+			tags.set(tag.slug!, tag);
+		}
+	}
+
+	return [...tags.values()].sort((a, b) => +(a.slug! > b.slug!) || -(a.slug! < b.slug!));
 }
 
 export async function getArticle(slug: string) {
@@ -168,7 +189,7 @@ export async function getArticle(slug: string) {
 	return data?.data?.[0] || null;
 }
 
-export async function getRelatedArticles(articleId: string, tagIds: string[], limit = 3) {
+export async function getRelatedArticles(articleId: string, category: string, tagIds: string[], limit = 3) {
 	if (!tagIds.length) return [];
 	// Get articles with the same tags, excluding the current article
 	const data = await strapiClient.collection("articles").find({
@@ -176,14 +197,14 @@ export async function getRelatedArticles(articleId: string, tagIds: string[], li
 			id: {
 				$ne: articleId,
 			},
+			category: {
+				slug: {
+					$eq: category,
+				},
+			},
 			tags: {
 				id: {
 					$in: tagIds,
-				},
-			},
-			category: {
-				slug: {
-					$eq: "news",
 				},
 			},
 		},
@@ -195,8 +216,6 @@ export async function getRelatedArticles(articleId: string, tagIds: string[], li
 			heading: {
 				populate: ["coverImage"],
 			},
-			tags: true,
-			category: true,
 		},
 	});
 

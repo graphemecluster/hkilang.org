@@ -4,21 +4,43 @@ import PageContent from "./page-content";
 import PageSkeleton from "./page-skeleton";
 import type { PageProps } from "@/lib/types";
 import { notFound } from "next/navigation";
+import { getCategory } from "@/lib/strapi";
+import { articleCategories } from "@/lib/consts";
 
-export const metadata: Metadata = {
-	title: "最新消息 - 香港本土語言保育協會",
-	description: "了解香港本土語言保育協會的最新活動、研討會和出版物",
-};
+export async function generateMetadata({ params }: PageProps<"category">): Promise<Metadata> {
+	const { category: categorySlug } = await params;
 
-export const dynamic = "force-dynamic";
+	if (!articleCategories.has(categorySlug)) {
+		notFound();
+	}
 
-const ALLOWED_CATEGORIES = new Set(["news"]);
+	const category = await getCategory(categorySlug);
+
+	if (!category) {
+		throw new Error("Category not found in CMS");
+	}
+
+	return {
+		title: `${category.name} - 香港本土語言保育協會`,
+		description: category.description || "",
+		openGraph: {
+			title: category.name || "",
+			description: category.description || "",
+		},
+	};
+}
 
 export default async function ArticlesPage({ params, searchParams }: PageProps<"category">) {
-	const { category } = await params;
+	const { category: categorySlug } = await params;
 
-	if (!ALLOWED_CATEGORIES.has(category)) {
+	if (!articleCategories.has(categorySlug)) {
 		notFound();
+	}
+
+	const category = await getCategory(categorySlug);
+
+	if (!category) {
+		throw new Error("Category not found in CMS");
 	}
 
 	const search = await searchParams;
@@ -32,12 +54,13 @@ export default async function ArticlesPage({ params, searchParams }: PageProps<"
 		<div>
 			<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
 				<div className="mx-auto max-w-2xl text-center">
-					<h1 className="text-4xl font-serif font-bold text-gray-900 sm:text-5xl">最新消息</h1>
-					<p className="mt-4 text-lg text-gray-600">了解香港本土語言保育協會的最新活動、研討會和出版物</p>
+					<h1 className="text-4xl font-serif font-bold text-gray-900 sm:text-5xl">{category.name}</h1>
+					<p className="mt-4 text-lg text-gray-600">{category.description}</p>
 				</div>
 
 				<Suspense fallback={<PageSkeleton />}>
 					<PageContent
+						category={category!.slug!}
 						initialQuery={query}
 						initialPage={page}
 						initialTag={tag}

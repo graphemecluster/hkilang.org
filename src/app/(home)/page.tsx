@@ -2,13 +2,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import WordOfTheDay from "../dictionary/word-of-the-day";
 import LanguageShowcase from "./language-showcase";
-import NewsCarousel from "./news-carousel";
-import { getPriorityNewsArticles } from "@/lib/strapi";
+import Carousel from "./carousel";
+import { getCarouselArticles } from "@/lib/strapi";
 
 export default async function Home() {
-	// Fetch priority articles for the carousel
-	const priorityArticlesData = await getPriorityNewsArticles();
-	const articles = priorityArticlesData.data;
+	const articles = (await getCarouselArticles()).data;
 
 	return (
 		<div>
@@ -28,8 +26,8 @@ export default async function Home() {
 				</div>
 			</div>
 
-			{/* News Carousel Section */}
-			<NewsCarousel articles={articles} />
+			{/* Carousel Section */}
+			<Carousel articles={articles} />
 
 			{/* Word of the Day Section */}
 			<div className="bg-gray-50 py-16">

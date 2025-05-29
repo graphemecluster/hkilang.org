@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import ArticleList from "./article-list";
 import Pagination from "@/components/pagination";
-import { getAllTags, getNewsArticles } from "@/lib/strapi";
+import { getTags, getArticles } from "@/lib/strapi";
 import { Search } from "lucide-react";
 import MonthPicker from "./month-picker";
 import TagFilter from "./tag-filter";
@@ -15,6 +15,7 @@ import TagFilter from "./tag-filter";
 import type { Data } from "@strapi/strapi";
 
 interface NewsPageContentProps {
+	category: string;
 	initialQuery?: string;
 	initialPage?: number;
 	initialTag?: string | null;
@@ -22,6 +23,7 @@ interface NewsPageContentProps {
 }
 
 export default function PageContent({
+	category,
 	initialQuery = "",
 	initialPage = 1,
 	initialTag = null,
@@ -126,10 +128,11 @@ export default function PageContent({
 	const fetchArticles = useCallback(async () => {
 		setIsLoading(true);
 		try {
-			const response = await getNewsArticles({
+			const response = await getArticles({
+				category,
 				page,
 				pageSize: PAGE_SIZE,
-				search: debouncedSearchTerm.trim(),
+				query: debouncedSearchTerm.trim(),
 				tag,
 				month,
 			});
@@ -148,8 +151,7 @@ export default function PageContent({
 
 	const fetchTags = useCallback(async () => {
 		try {
-			const response = await getAllTags();
-			setTags([{ slug: null, name: "全部" }, ...response.data]);
+			setTags([{ slug: null, name: "全部" }, ...(await getTags(category))]);
 		}
 		catch (error) {
 			console.error("Failed to fetch categories:", error);
@@ -194,9 +196,9 @@ export default function PageContent({
 			</div>
 
 			{/* Tag Filter */}
-			<div className="mb-8">
+			{tags.length > 1 && <div className="mb-8">
 				<TagFilter tags={tags} selectedTag={tag} onChange={handleTagChange} />
-			</div>
+			</div>}
 
 			{/* Result count */}
 			<div className="mb-6 text-sm text-gray-500">
