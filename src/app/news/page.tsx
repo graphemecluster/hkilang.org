@@ -16,8 +16,7 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
 	const query = typeof params["query"] === "string" ? params["query"] : "";
 	const page = typeof params["page"] === "string" ? Number.parseInt(params["page"], 10) : 1;
 	const tag = typeof params["tag"] === "string" ? params["tag"] : null;
-	const startDate = typeof params["startDate"] === "string" ? params["startDate"] : null;
-	const endDate = typeof params["endDate"] === "string" ? params["endDate"] : null;
+	const month = typeof params["month"] === "string" ? params["month"] : null;
 
 	return (
 		<div className="bg-white">
@@ -32,8 +31,7 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
 						initialQuery={query}
 						initialPage={page}
 						initialTag={tag}
-						initialStartDate={startDate}
-						initialEndDate={endDate} />
+						initialMonth={month} />
 				</Suspense>
 			</div>
 		</div>

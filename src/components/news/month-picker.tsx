@@ -5,46 +5,37 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
-import { formatYearMonth } from "@/lib/utils";
 
-interface DatePickerProps {
-	startDate: string | null;
-	endDate: string | null;
-	onChange: (startDate: Date | null, endDate: Date | null) => void;
+interface MonthPickerProps {
+	month: string | null;
+	onChange: (month: string | null) => void;
 }
 
-export default function DatePicker({ startDate, endDate, onChange }: DatePickerProps) {
+export default function MonthPicker({ month, onChange }: MonthPickerProps) {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	useLayoutEffect(() => {
 		setView("hidden");
 		setSelectedYear(null);
-		setSelectedMonth(null);
 		setYearRange([2020, 2029]);
 	}, [pathname, searchParams]);
 
 	const [view, setView] = useState<"hidden" | "years" | "months">("hidden");
 	const [selectedYear, setSelectedYear] = useState<number | null>(null);
-	const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
 	const [yearRange, setYearRange] = useState<[number, number]>([2020, 2029]);
 	const [displayValue, setDisplayValue] = useState("");
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
-	// Update display value when dates change
+	// Update display value when month changes
 	useEffect(() => {
-		if (startDate && endDate) {
-			setDisplayValue(`${formatYearMonth(startDate)} – ${formatYearMonth(endDate)}`);
-		}
-		else if (startDate) {
-			setDisplayValue(`${formatYearMonth(startDate)}之後`);
-		}
-		else if (endDate) {
-			setDisplayValue(`${formatYearMonth(endDate)}之前`);
+		if (month) {
+			const [y, m] = month.split(/-0?/);
+			setDisplayValue(`${y}年${m}月`);
 		}
 		else {
 			setDisplayValue("");
 		}
-	}, [startDate, endDate]);
+	}, [month]);
 
 	// Close dropdown when clicking outside
 	useEffect(() => {
@@ -52,7 +43,6 @@ export default function DatePicker({ startDate, endDate, onChange }: DatePickerP
 			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
 				setView("hidden");
 				setSelectedYear(null);
-				setSelectedMonth(null);
 				setYearRange([2020, 2029]);
 			}
 		}
@@ -67,18 +57,11 @@ export default function DatePicker({ startDate, endDate, onChange }: DatePickerP
 	const generateYearsGrid = () => {
 		const [startYear, endYear] = yearRange;
 		const years = [];
-
-		// Add years before current decade
 		years.push(startYear - 1);
-
-		// Add current decade
 		for (let year = startYear; year <= endYear; year++) {
 			years.push(year);
 		}
-
-		// Add year after current decade
 		years.push(endYear + 1);
-
 		return years;
 	};
 
@@ -96,31 +79,12 @@ export default function DatePicker({ startDate, endDate, onChange }: DatePickerP
 
 	// Handle month selection
 	const handleMonthClick = (monthIndex: number) => {
-		setSelectedYear(null);
-		setSelectedMonth(monthIndex);
-
 		if (selectedYear) {
-			// Format date as YYYY-MM-DD
-			const date = new Date(Date.UTC(selectedYear, monthIndex, 1));
-
-			// Set as either start or end date based on current selection
-			if (!startDate || (startDate && endDate)) {
-				onChange(date, null);
-			}
-			else {
-				// If the selected date is before the start date, swap them
-				const oldStartDate = new Date(startDate);
-				const newEndDate = date;
-				if (newEndDate < oldStartDate) {
-					onChange(newEndDate, new Date(Date.UTC(oldStartDate.getFullYear(), oldStartDate.getMonth() + 1, 0)));
-				}
-				else {
-					onChange(new Date(Date.UTC(oldStartDate.getFullYear(), oldStartDate.getMonth(), 1)), new Date(Date.UTC(selectedYear, monthIndex + 1, 0)));
-				}
-			}
+			const m = String(monthIndex + 1).padStart(2, "0");
+			onChange(`${selectedYear}-${m}`);
 		}
-
 		setView("hidden");
+		setSelectedYear(null);
 	};
 
 	// Navigate to previous decade
@@ -149,17 +113,15 @@ export default function DatePicker({ startDate, endDate, onChange }: DatePickerP
 		else {
 			setView("hidden");
 			setSelectedYear(null);
-			setSelectedMonth(null);
 			setYearRange([2020, 2029]);
 		}
 	};
 
-	// Clear selected dates
-	const clearDates = () => {
+	// Clear selected month
+	const clearMonth = () => {
 		setView("hidden");
-		onChange(null, null);
+		onChange(null);
 		setSelectedYear(null);
-		setSelectedMonth(null);
 		setYearRange([2020, 2029]);
 		setDisplayValue("");
 	};
@@ -167,7 +129,6 @@ export default function DatePicker({ startDate, endDate, onChange }: DatePickerP
 	// Navigate back to years view
 	const backToYears = () => {
 		setSelectedYear(null);
-		setSelectedMonth(null);
 		setView("years");
 	};
 
@@ -176,7 +137,7 @@ export default function DatePicker({ startDate, endDate, onChange }: DatePickerP
 			<div className="relative">
 				<Input
 					type="text"
-					placeholder="選擇日期範圍"
+					placeholder="選擇月份"
 					value={displayValue}
 					readOnly
 					onClick={toggleView}
@@ -208,7 +169,7 @@ export default function DatePicker({ startDate, endDate, onChange }: DatePickerP
 								</div>
 								<div className="grid grid-cols-4 gap-1">
 									{generateYearsGrid().map(year => {
-										const isSelectedYear = startDate && !endDate && year === new Date(startDate).getFullYear();
+										const isSelectedYear = month && year === Number.parseInt(month.split("-")[0]!, 10);
 										const isCurrentYear = year === new Date().getFullYear();
 
 										return (
@@ -238,8 +199,8 @@ export default function DatePicker({ startDate, endDate, onChange }: DatePickerP
 									</Button>
 								</div>
 								<div className="grid grid-cols-4 gap-1">
-									{generateMonthsGrid().map((month, index) => {
-										const isSelectedMonth = startDate && !endDate && selectedYear === new Date(startDate).getFullYear() && index === new Date(startDate).getMonth();
+									{generateMonthsGrid().map((monthLabel, index) => {
+										const isSelectedMonth = month && selectedYear === Number.parseInt(month.split("-")[0]!, 10) && index + 1 === Number.parseInt(month.split("-")[1]!, 10);
 										const isCurrentMonth = selectedYear === new Date().getFullYear() && index === new Date().getMonth();
 
 										return (
@@ -249,7 +210,7 @@ export default function DatePicker({ startDate, endDate, onChange }: DatePickerP
 												size="sm"
 												className={`text-sm ${isSelectedMonth ? "bg-red-100 text-red-800" : isCurrentMonth ? "text-red-800" : ""}`}
 												onClick={() => handleMonthClick(index)}>
-												{month}
+												{monthLabel}
 											</Button>
 										);
 									})}
@@ -258,7 +219,7 @@ export default function DatePicker({ startDate, endDate, onChange }: DatePickerP
 						)}
 
 						<div className="mt-2 flex flex-row-reverse justify-between">
-							<Button variant="ghost" size="sm" onClick={clearDates}>
+							<Button variant="ghost" size="sm" onClick={clearMonth}>
 								清除
 							</Button>
 							{view === "months" && selectedYear && <Button variant="ghost" size="sm" onClick={backToYears}>

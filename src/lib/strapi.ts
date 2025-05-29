@@ -47,11 +47,8 @@ export async function getNewsArticles({
 	page = 1,
 	pageSize = 9,
 	search = "",
-	tags = [] as string[],
-	year = "",
-	month = "",
-	sort = ["publishDate:desc"],
-	filters: customFilters = {},
+	tag = null as string | null,
+	month = null as string | null,
 } = {}) {
 	// Build filters
 	const filters: any = {
@@ -60,7 +57,6 @@ export async function getNewsArticles({
 				$eq: "news",
 			},
 		},
-		...customFilters,
 	};
 
 	// Add search condition
@@ -81,31 +77,29 @@ export async function getNewsArticles({
 		];
 	}
 
-	// Add tag filters
-	if (tags && tags.length > 0) {
+	// Add tag filter
+	if (tag) {
 		filters.tags = {
 			slug: {
-				$in: tags,
+				$eq: tag,
 			},
 		};
 	}
 
-	// Add date filters
-	if (year) {
-		const startDate = new Date(Date.UTC(Number.parseInt(year, 10), month ? Number.parseInt(month, 10) - 1 : 0, 1));
-		const endDate = month
-			? new Date(Date.UTC(Number.parseInt(year, 10), Number.parseInt(month, 10), 0))
-			: new Date(Date.UTC(Number.parseInt(year, 10) + 1, 0, 0));
-
+	// Add month filter
+	if (month) {
+		const [y, m] = month.split("-");
+		const start = `${month}-01`;
+		const end = new Date(Date.UTC(Number.parseInt(y!, 10), Number.parseInt(m!, 10), 0));
 		filters.publishDate = {
-			$gte: startDate.toISOString(),
-			$lte: endDate.toISOString(),
+			$gte: start,
+			$lte: end.toISOString().split("T")[0],
 		};
 	}
 
 	return strapiClient.collection("articles").find({
 		filters,
-		sort,
+		sort: ["publishDate:desc"],
 		pagination: {
 			page,
 			pageSize,

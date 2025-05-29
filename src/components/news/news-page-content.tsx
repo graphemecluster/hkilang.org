@@ -9,7 +9,7 @@ import NewsList from "@/components/news/news-list";
 import Pagination from "@/components/pagination";
 import { getAllTags, getNewsArticles } from "@/lib/strapi";
 import { Search } from "lucide-react";
-import DatePicker from "./date-picker";
+import MonthPicker from "./month-picker";
 import TagFilter from "./tag-filter";
 
 import type { Data } from "@strapi/strapi";
@@ -18,16 +18,14 @@ interface NewsPageContentProps {
 	initialQuery?: string;
 	initialPage?: number;
 	initialTag?: string | null;
-	initialStartDate?: string | null;
-	initialEndDate?: string | null;
+	initialMonth?: string | null;
 }
 
 export default function NewsPageContent({
 	initialQuery = "",
 	initialPage = 1,
 	initialTag = null,
-	initialStartDate = null,
-	initialEndDate = null,
+	initialMonth = null,
 }: NewsPageContentProps) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -38,8 +36,7 @@ export default function NewsPageContent({
 	const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(initialQuery);
 	const [page, setPage] = useState(initialPage);
 	const [tag, setTag] = useState<string | null>(initialTag);
-	const [startDate, setStartDate] = useState<string | null>(initialStartDate);
-	const [endDate, setEndDate] = useState<string | null>(initialEndDate);
+	const [month, setMonth] = useState<string | null>(initialMonth);
 
 	const [articles, setArticles] = useState<Data.ContentType<"api::article.article">[]>([]);
 	const [totalArticles, setTotalArticles] = useState(0);
@@ -70,13 +67,12 @@ export default function NewsPageContent({
 		return newSearchParams.toString();
 	}, []);
 
-	const updateFilters = useCallback((newFilters: { query: string; page: number; startDate: string | null; endDate: string | null; tag: string | null }) => {
+	const updateFilters = useCallback((newFilters: { query: string; page: number; month: string | null; tag: string | null }) => {
 		startTransition(() => {
 			const queryString = createQueryString({
 				query: newFilters.query,
 				tag: newFilters.tag,
-				startDate: newFilters.startDate,
-				endDate: newFilters.endDate,
+				month: newFilters.month,
 				page: newFilters.page === 1 ? null : newFilters.page,
 			});
 			router.push(`${pathname}${queryString && "?"}${queryString}`, { scroll: false });
@@ -87,8 +83,7 @@ export default function NewsPageContent({
 		setSearchTerm(searchParams.get("query") || "");
 		setPage(searchParams.get("page") ? Number.parseInt(searchParams.get("page")!, 10) : 1);
 		setTag(searchParams.get("tag"));
-		setStartDate(searchParams.get("startDate"));
-		setEndDate(searchParams.get("endDate"));
+		setMonth(searchParams.get("month"));
 	}, [searchParams]);
 
 	useEffect(() => {
@@ -107,51 +102,36 @@ export default function NewsPageContent({
 	const handleSearch = (value: string) => {
 		setSearchTerm(value);
 		setPage(1);
-		updateFilters({ query: value, page: 1, tag, startDate, endDate });
+		updateFilters({ query: value, page: 1, tag, month });
 	};
 
-	const handleDateChange = (startDate: Date | null, endDate: Date | null) => {
-		const newStartDate = startDate?.toISOString().split("T")[0]!;
-		const newEndDate = endDate?.toISOString().split("T")[0]!;
-		setStartDate(newStartDate);
-		setEndDate(newEndDate);
+	const handleMonthChange = (selectedMonth: string | null) => {
+		setMonth(selectedMonth);
 		setPage(1);
-		updateFilters({ query: debouncedSearchTerm, page: 1, tag, startDate: newStartDate, endDate: newEndDate });
+		updateFilters({ query: debouncedSearchTerm, page: 1, tag, month: selectedMonth });
 	};
 
 	const handleTagChange = (newTag: string | null) => {
 		setTag(newTag);
 		setPage(1);
-		updateFilters({ query: debouncedSearchTerm, page: 1, tag: newTag, startDate, endDate });
+		updateFilters({ query: debouncedSearchTerm, page: 1, tag: newTag, month });
 	};
 
 	const handlePageChange = (newPage: number) => {
 		setPage(newPage);
-		updateFilters({ query: debouncedSearchTerm, page: newPage, tag, startDate, endDate });
+		updateFilters({ query: debouncedSearchTerm, page: newPage, tag, month });
 		document.querySelector("input")?.scrollIntoView({ behavior: "smooth" });
 	};
 
 	const fetchArticles = useCallback(async () => {
 		setIsLoading(true);
 		try {
-			const dateFilters: { $gte?: string; $lte?: string } = {};
-			if (startDate) {
-				dateFilters.$gte = startDate;
-			}
-			if (endDate) {
-				dateFilters.$lte = endDate;
-			}
-
-			const tagFilter = tag ? { slug: { $eq: tag } } : undefined;
-
 			const response = await getNewsArticles({
 				page,
 				pageSize: PAGE_SIZE,
 				search: debouncedSearchTerm.trim(),
-				filters: {
-					...(Object.keys(dateFilters).length > 0 ? { publishDate: dateFilters } : {}),
-					...(tagFilter ? { tag: tagFilter } : {}),
-				},
+				tag,
+				month,
 			});
 
 			setArticles(response.data);
@@ -164,7 +144,7 @@ export default function NewsPageContent({
 		finally {
 			setIsLoading(false);
 		}
-	}, [page, debouncedSearchTerm, tag, startDate, endDate]);
+	}, [page, debouncedSearchTerm, tag, month]);
 
 	const fetchTags = useCallback(async () => {
 		try {
@@ -186,9 +166,9 @@ export default function NewsPageContent({
 
 	return (
 		<div className="mt-12">
-			{/* Search and Date Range */}
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-				<div>
+			{/* Search and Month Picker */}
+			<div className="flex flex-col sm:flex-row items-stretch justify-stretch gap-4 mb-8">
+				<div className="sm:flex-1">
 					<h3 className="text-sm font-medium text-gray-700 mb-2">關鍵字</h3>
 					<div className="relative">
 						<Input
@@ -207,9 +187,9 @@ export default function NewsPageContent({
 						</Button>
 					</div>
 				</div>
-				<div>
-					<h3 className="text-sm font-medium text-gray-700 mb-2">日期區間</h3>
-					<DatePicker startDate={startDate} endDate={endDate} onChange={handleDateChange} />
+				<div className="sm:basis-[calc(5rem+30%)]">
+					<h3 className="text-sm font-medium text-gray-700 mb-2">月份</h3>
+					<MonthPicker month={month} onChange={handleMonthChange} />
 				</div>
 			</div>
 
