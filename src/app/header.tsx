@@ -46,7 +46,7 @@ export default function Header() {
 								<Menu className="h-6 w-6" aria-hidden="true" />
 							</Button>
 						</SheetTrigger>
-						<SheetContent side="right" className="w-full sm:max-w-sm">
+						<SheetContent side="right" className="w-full sm:max-w-sm overflow-y-auto">
 							<div className="flex items-center justify-between border-b border-gray-200 pb-4">
 								<Link href="/" className="-m-1.5 p-1.5" onClick={closeMobileMenu}>
 									<DialogTitle>
