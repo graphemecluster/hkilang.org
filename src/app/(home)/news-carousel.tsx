@@ -188,7 +188,7 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 			{/* Pagination indicators */}
 			{totalSlides > 1 && (
 				<div className="flex justify-center mt-4 gap-2">
-					{Array.from({ length: totalSlides }).map((_, idx) => (
+					{Array.from({ length: totalSlides }, (_, idx) => (
 						<button
 							key={idx}
 							className={`h-2 rounded-full transition-all ${idx === currentIndex ? "w-6 bg-red-800" : "w-2 bg-gray-300"}`}

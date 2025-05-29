@@ -136,7 +136,7 @@ export default function CategoriesTab() {
 
 				{isLoading
 					? <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-						{Array.from({ length: 9 }).map((_, index) => (
+						{Array.from({ length: 9 }, (_, index) => (
 							<Skeleton key={index} className="h-24 w-full" />
 						))}
 					</div>

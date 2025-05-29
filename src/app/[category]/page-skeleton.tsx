@@ -12,7 +12,7 @@ export default function PageSkeleton() {
 			<div className="mb-8">
 				<Skeleton className="h-6 w-32 mb-4" />
 				<div className="flex flex-wrap gap-2 mb-4">
-					{Array.from({ length: 6 }).map((_, index) => (
+					{Array.from({ length: 6 }, (_, index) => (
 						<Skeleton key={index} className="h-8 w-20" />
 					))}
 				</div>
@@ -29,7 +29,7 @@ export default function PageSkeleton() {
 
 			{/* Article list skeleton */}
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				{Array.from({ length: 6 }).map((_, index) => (
+				{Array.from({ length: 6 }, (_, index) => (
 					<div key={index} className="overflow-hidden">
 						<Skeleton className="h-48 w-full mb-4" />
 						<Skeleton className="h-4 w-1/3 mb-2" />
@@ -43,11 +43,9 @@ export default function PageSkeleton() {
 			{/* Pagination skeleton */}
 			<div className="mt-10 flex justify-center">
 				<div className="flex gap-1">
-					<Skeleton className="h-10 w-10" />
-					{Array.from({ length: 3 }).map((_, index) => (
+					{Array.from({ length: 5 }, (_, index) => (
 						<Skeleton key={index} className="h-10 w-10" />
 					))}
-					<Skeleton className="h-10 w-10" />
 				</div>
 			</div>
 		</div>

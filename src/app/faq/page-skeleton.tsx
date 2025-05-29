@@ -5,7 +5,7 @@ export default function PageSkeleton() {
 	return (
 		<div className="mt-12 mx-auto max-w-3xl">
 			<Accordion type="single" collapsible className="w-full">
-				{Array.from({ length: 5 }).map((_, index) => (
+				{Array.from({ length: 5 }, (_, index) => (
 					<AccordionItem key={index} value={`item-${index}`}>
 						<AccordionTrigger className="text-left">
 							<Skeleton className="h-6 w-full" />
