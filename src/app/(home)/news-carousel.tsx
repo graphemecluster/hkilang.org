@@ -148,15 +148,15 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 							<div key={article.id} className="flex-shrink-0 basis-[calc(65%+4rem)] min-w-0">
 								<div>
 									<Link href={`/news/${article.slug}`} className="group">
-										<Card className="h-full overflow-hidden hover:shadow-md transition-shadow relative">
+										<Card className="h-full overflow-hidden hover:shadow-md transition-shadow duration-300 relative">
 											<div className="h-[calc(100vh-24rem)] relative">
 												<Image
 													src={imageUrl || "/placeholder.svg"}
 													alt={article.heading.title}
 													width={0}
 													height={0}
-													className="w-full h-full object-cover" />
-												<div className="absolute inset-0 bg-transparent group-hover:bg-black/5 group-hover:backdrop-blur-sm transition-[background-color,backdrop-filter]"></div>
+													className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+												<div className="absolute inset-0 bg-transparent group-hover:bg-white/25 transition-colors duration-300"></div>
 												<div className="absolute inset-0 bg-translucent-gradient flex flex-col justify-end gap-1 lg:gap-2 p-6">
 													<div className="text-sm lg:text-base xl:text-lg text-white/80">{formatDate(article.publishDate)}</div>
 													<h3 className="text-xl lg:text-2xl xl:text-3xl font-medium text-white">{article.heading.title}</h3>
