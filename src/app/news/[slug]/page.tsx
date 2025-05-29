@@ -10,14 +10,9 @@ import Markdown from "@/components/markdown";
 import ShareButtons from "@/components/news/share-buttons";
 import RelatedArticles from "@/components/news/related-articles";
 import { formatDate } from "@/lib/utils";
+import type { PageProps } from "@/lib/types";
 
-interface NewsDetailPageProps {
-	params: Promise<{
-		slug: string;
-	}>;
-}
-
-export async function generateMetadata({ params }: NewsDetailPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"slug">): Promise<Metadata> {
 	const article = await getArticle((await params).slug);
 
 	if (!article) {
@@ -37,7 +32,7 @@ export async function generateMetadata({ params }: NewsDetailPageProps): Promise
 	};
 }
 
-export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
+export default async function NewsDetailPage({ params }: PageProps<"slug">) {
 	const article = await getArticle((await params).slug);
 
 	if (!article) {

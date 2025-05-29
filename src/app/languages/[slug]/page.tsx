@@ -11,14 +11,9 @@ import VocabularyList from "@/components/languages/vocabulary-list";
 import AudioPhrases from "@/components/languages/audio-phrases";
 import CulturalContext from "@/components/languages/cultural-context";
 import Markdown from "@/components/markdown";
+import type { PageProps } from "@/lib/types";
 
-interface LanguageDetailPageProps {
-	params: Promise<{
-		slug: string;
-	}>;
-}
-
-export async function generateMetadata({ params }: LanguageDetailPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"slug">): Promise<Metadata> {
 	const introPage = await getLanguageIntroPage((await params).slug);
 
 	if (!introPage) {
@@ -35,7 +30,7 @@ export async function generateMetadata({ params }: LanguageDetailPageProps): Pro
 	};
 }
 
-export default async function LanguageDetailPage({ params }: LanguageDetailPageProps) {
+export default async function LanguageDetailPage({ params }: PageProps<"slug">) {
 	const introPage = await getLanguageIntroPage((await params).slug);
 
 	if (!introPage) {
