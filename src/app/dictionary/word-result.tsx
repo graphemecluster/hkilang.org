@@ -49,21 +49,10 @@ export default function WordResult({ date, word }: { date?: string; word: Data.C
 					</div>
 					<div>
 						<div className="space-y-4">
-							<div>
-								{/* <h3 className="text-lg font-medium text-gray-900 mb-2">翻譯</h3> */}
-								<div className="space-y-2">
-									<div>
-										<span className="text-sm font-medium text-gray-500">普通話</span>
-										<div>{zhGloss}</div>
-									</div>
-									{enGloss && (
-										<div>
-											<span className="text-sm font-medium text-gray-500">英文</span>
-											<div>{enGloss}</div>
-										</div>
-									)}
-								</div>
-							</div>
+							{enGloss && <div>
+								<span className="text-sm font-medium text-gray-500">英文</span>
+								<div>{enGloss}</div>
+							</div>}
 
 							{/* TODO: Remove `date ||` after demo */}
 							{(date || words?.some(form => form?.examples?.length)) && (
