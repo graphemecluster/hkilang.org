@@ -106,7 +106,7 @@ export default async function ArticleDetailPage({ params }: PageProps<"category"
 						</div>
 
 						{/* Tags */}
-						{tags.length > 0 && (
+						{!!tags.length && (
 							<div className="flex flex-wrap gap-2 mb-6">
 								{tags.map(tag => (
 									<Link key={tag.id} href={`/${article.category.slug}?tag=${tag.slug}`}>
@@ -154,7 +154,7 @@ export default async function ArticleDetailPage({ params }: PageProps<"category"
 				</article>
 
 				{/* Related Articles */}
-				{relatedArticles.length > 0 && (
+				{!!relatedArticles.length && (
 					<div className="mt-16">
 						<h2 className="text-2xl font-serif font-bold text-gray-900 mb-6">相關文章</h2>
 						<RelatedArticles articles={relatedArticles} />

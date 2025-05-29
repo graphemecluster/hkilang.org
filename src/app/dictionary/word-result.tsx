@@ -75,7 +75,7 @@ export default function WordResult({ date, word }: { date?: string; word: Data.C
 											<div key={langName}>
 												<div className="text-sm font-medium text-gray-500 mb-1">{langName}</div>
 												{forms!.map(form =>
-													form?.examples?.length! > 0 && (
+													!!form?.examples?.length && (
 														<div key={form.id} className="space-y-2">
 															{form!.examples!.map((example, idx) => (
 																<div key={idx} className="pl-3 border-l-2 border-gray-200">

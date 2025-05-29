@@ -39,7 +39,7 @@ export default function CharacterResult({ character }: { character: Data.Content
 											<span>{form.notes}</span>
 										</div>
 									)}
-									{form.examples && form.examples.length > 0 && (
+									{!!form.examples?.length && (
 										<div>
 											<span className="text-sm font-medium text-gray-500">配詞：</span>
 											<div className="mt-1 space-y-2">
@@ -68,7 +68,7 @@ export default function CharacterResult({ character }: { character: Data.Content
 						</div>
 					))}
 
-					{character.collocation && character.collocation.length > 0 && (
+					{!!character.collocation?.length && (
 						<div>
 							<span className="text-sm font-medium text-gray-500">配詞：</span>
 							<div className="mt-1 space-y-2">

@@ -167,7 +167,7 @@ export default function CategoriesTab() {
 				</Button>
 				<h3 className="text-xl font-medium text-gray-900 mt-3">
 					類別：{selectedCategoryName}
-					{totalResults && <span className="text-gray-500 text-sm">
+					{!!totalResults && <span className="text-gray-500 text-sm">
 						（顯示第 {(currentPage - 1) * PAGE_SIZE + 1}
 						{currentPage * PAGE_SIZE === totalResults ? "" : ` ~ ${Math.min(currentPage * PAGE_SIZE, totalResults)}`} 項，共 {totalResults} 項）
 					</span>}
@@ -180,7 +180,7 @@ export default function CategoriesTab() {
 					<Skeleton className="h-64 w-full" />
 				</div>
 				: <div className="space-y-6">
-					{wordResults.length > 0
+					{wordResults.length
 						? <>
 							<div className="space-y-4">
 								{wordResults.map(word => (

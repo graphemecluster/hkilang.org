@@ -109,7 +109,7 @@ export default function SearchTab({ wordOfTheDayComponent }: { wordOfTheDayCompo
 			// Calculate total pages based on combined results
 			const totalItems = characterTotal + wordTotal;
 			const calculatedTotalPages = Math.ceil(totalItems / PAGE_SIZE);
-			setTotalPages(calculatedTotalPages > 0 ? calculatedTotalPages : 1);
+			setTotalPages(calculatedTotalPages || 1);
 
 			setHasSearched(true);
 		}
@@ -163,7 +163,7 @@ export default function SearchTab({ wordOfTheDayComponent }: { wordOfTheDayCompo
 			{hasSearched && !isSearching && (
 				<div className="mt-6">
 					<h3 className="text-lg font-medium text-gray-900 mb-4">
-						搜尋結果{totalItems && <span className="text-gray-500 text-sm">
+						搜尋結果{!!totalItems && <span className="text-gray-500 text-sm">
 							（顯示第 {(currentPage - 1) * PAGE_SIZE + 1}
 							{currentPage * PAGE_SIZE === totalItems ? "" : ` ~ ${Math.min(currentPage * PAGE_SIZE, totalItems)}`} 項，共 {totalItems} 項）
 						</span>}
@@ -171,7 +171,7 @@ export default function SearchTab({ wordOfTheDayComponent }: { wordOfTheDayCompo
 
 					{totalItems
 						? <div className="space-y-6">
-							{totalResults.characters && (
+							{!!totalResults.characters && (
 								<div>
 									<h4 className="font-medium text-gray-700 mb-3">
 										漢字<span className="text-gray-500 text-sm">（{totalResults.characters}）</span>
@@ -184,7 +184,7 @@ export default function SearchTab({ wordOfTheDayComponent }: { wordOfTheDayCompo
 								</div>
 							)}
 
-							{totalResults.words && (
+							{!!totalResults.words && (
 								<div>
 									<h4 className="font-medium text-gray-700 mb-3">
 										詞語<span className="text-gray-500 text-sm">（{totalResults.words}）</span>
