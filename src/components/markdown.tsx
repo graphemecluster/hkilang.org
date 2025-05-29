@@ -1,9 +1,9 @@
 // Code modified from: https://github.com/strapi/strapi/blob/c72b48da735f44a3ccafb7a6dc9ba5213f3844db/packages/core/content-manager/admin/src/pages/EditView/components/FormInputs/Wysiwyg/PreviewWysiwyg.tsx
 
-import clsx from "clsx";
 import { useMemo } from "react";
 import sanitizeHtml from "sanitize-html";
 import md from "@/lib/markdown";
+import { cn } from "@/lib/utils";
 
 import type { ComponentPropsWithRef } from "react";
 
@@ -20,5 +20,5 @@ export default function Markdown({ children, className, ref }: Omit<ComponentPro
 			},
 		}), [children]);
 
-	return <div ref={ref} className={clsx("prose prose-red max-w-none", className)} dangerouslySetInnerHTML={{ __html: html }} />;
+	return <div ref={ref} className={cn("prose prose-red max-w-none", className)} dangerouslySetInnerHTML={{ __html: html }} />;
 }
