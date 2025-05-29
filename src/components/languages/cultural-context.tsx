@@ -51,12 +51,12 @@ export default function CulturalContext({ language, culturalContext }: CulturalC
 					return (
 						<div
 							key={index}
-							className="grid grid-cols-1 md:grid-cols-2 gap-8 odd:md:flex-row-reverse">
-							<div className={`${index % 2 === 1 ? "md:order-2" : ""}`}>
+							className="flex items-stretch md:even:flex-row-reverse gap-8">
+							<div className="flex-1">
 								<h3 className="text-xl font-serif font-bold text-gray-900 mb-4">{section.title}</h3>
 								<Markdown>{section.summary}</Markdown>
 							</div>
-							<div className="relative h-64 rounded-lg overflow-hidden odd:md:order-1">
+							<div className="flex-1 relative h-64 rounded-lg overflow-hidden">
 								<Image
 									src={imageUrl || "/placeholder.svg?height=300&width=500"}
 									alt={section.title}

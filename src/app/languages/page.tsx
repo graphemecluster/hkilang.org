@@ -24,14 +24,14 @@ export default async function LanguagesPage() {
 				</div>
 
 				<div className="mt-16 space-y-20">
-					{languagesData.data.map((language, index) => {
+					{languagesData.data.map(language => {
 						const coverImage = language?.heading?.coverImage?.url;
 						const imageUrl = getStrapiMedia(coverImage) || "/placeholder.svg?height=400&width=600";
 
 						return (
 							<div
 								key={language.id}
-								className={`flex flex-col ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} gap-8 items-center`}>
+								className="flex flex-col md:flex-row md:even:flex-row-reverse gap-8 items-center">
 								<div className="w-full md:w-1/2">
 									<div className="relative aspect-video rounded-lg overflow-hidden">
 										<Image
