@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
 					<div className="flex min-h-screen flex-col">
 						<Header />
-						<main className="flex-1">{children}</main>
+						<main className="flex-1 grid">{children}</main>
 						<Footer />
 					</div>
 				</ThemeProvider>
