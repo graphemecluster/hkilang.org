@@ -17,12 +17,12 @@ export default async function Home() {
 			<div className="relative isolate overflow-hidden bg-gradient-to-b from-red-50 to-white">
 				<div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
 					<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-3xl">
-						<h1 className="mt-2 text-4xl font-serif font-bold tracking-tight text-gray-900 sm:text-5xl">
+						<h1 className="mt-2 text-4xl font-serif font-bold text-gray-900 sm:text-5xl/[3.25rem]">
 							保育香港本土語言
 							<br />
 							傳承珍貴文化遺產
 						</h1>
-						<p className="mt-6 text-lg leading-8 text-gray-600">
+						<p className="mt-6 text-lg/8 text-gray-600">
 							香港本土語言保育協會致力於保育香港本土語言，包括圍頭話、客家話、汀角話及東平洲話， 透過研究、記錄和教育活動，推廣本土語言文化，防止珍貴的語言遺產消失。
 						</p>
 					</div>
@@ -36,8 +36,8 @@ export default async function Home() {
 			<div className="bg-gray-50 py-16">
 				<div className="mx-auto max-w-7xl px-6 lg:px-8">
 					<div className="mx-auto max-w-2xl text-center">
-						<h2 className="text-3xl font-serif font-bold tracking-tight text-gray-900 sm:text-4xl">每日一詞</h2>
-						<p className="mt-2 text-lg leading-8 text-gray-600">每日學習一個本土語言詞彙，逐步認識香港獨特的語言文化</p>
+						<h2 className="text-3xl font-serif font-bold text-gray-900 sm:text-4xl">每日一詞</h2>
+						<p className="mt-2 text-lg/8 text-gray-600">每日學習一個本土語言詞彙，逐步認識香港獨特的語言文化</p>
 					</div>
 					<div className="mx-auto mt-10 max-w-2xl">
 						<WordOfTheDay />
@@ -49,8 +49,8 @@ export default async function Home() {
 			<div className="bg-white py-16">
 				<div className="mx-auto max-w-7xl px-6 lg:px-8">
 					<div className="mx-auto max-w-2xl text-center">
-						<h2 className="text-3xl font-serif font-bold tracking-tight text-gray-900 sm:text-4xl">本土語言</h2>
-						<p className="mt-2 text-lg leading-8 text-gray-600">探索香港豐富多元的本土語言</p>
+						<h2 className="text-3xl font-serif font-bold text-gray-900 sm:text-4xl">本土語言</h2>
+						<p className="mt-2 text-lg/8 text-gray-600">探索香港豐富多元的本土語言</p>
 					</div>
 					<div className="mx-auto mt-10">
 						<LanguageShowcase />
@@ -62,10 +62,10 @@ export default async function Home() {
 			<div className="bg-red-800">
 				<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
 					<div className="mx-auto max-w-2xl text-center">
-						<h2 className="text-3xl font-serif font-bold tracking-tight text-white sm:text-4xl">
+						<h2 className="text-3xl font-serif font-bold text-white sm:text-4xl">
 							加入我們，共同保育香港本土語言
 						</h2>
-						<p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-red-100">
+						<p className="mx-auto mt-6 max-w-xl text-lg/8 text-red-100">
 							無論您是語言學者、本土語言使用者，還是對香港本土文化感興趣的人士，都歡迎加入我們的行列。
 						</p>
 						<div className="mt-10 flex items-center justify-center gap-x-6">

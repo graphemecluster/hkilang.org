@@ -90,6 +90,14 @@ export default {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
 			},
+			fontSize: {
+				// Add missing line height
+				"5xl": ["3rem", "3.25rem"],
+				"6xl": ["3.75rem", "4.25rem"],
+				"7xl": ["4.5rem", "5rem"],
+				"8xl": ["6rem", "6.75rem"],
+				"9xl": ["8rem", "9rem"],
+			},
 		},
 	},
 	plugins: [

@@ -17,7 +17,7 @@ export default async function LanguagesPage() {
 		<div>
 			<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
 				<div className="mx-auto max-w-2xl text-center">
-					<h1 className="text-4xl font-serif font-bold tracking-tight text-gray-900 sm:text-5xl">語言介紹</h1>
+					<h1 className="text-4xl font-serif font-bold text-gray-900 sm:text-5xl">語言介紹</h1>
 					<p className="mt-4 text-lg text-gray-600">
 						探索香港本土語言的豐富資源，了解這些珍貴語言的特點、歷史和文化背景
 					</p>
@@ -73,7 +73,7 @@ export default async function LanguagesPage() {
 				{/* Additional Resources Section */}
 				<div className="mt-24">
 					<div className="mx-auto max-w-2xl text-center">
-						<h2 className="text-3xl font-serif font-bold tracking-tight text-gray-900 sm:text-4xl">其他語言資源</h2>
+						<h2 className="text-3xl font-serif font-bold text-gray-900 sm:text-4xl">其他語言資源</h2>
 						<p className="mt-4 text-lg text-gray-600">除了上述主要語言外，我們還提供以下資源</p>
 					</div>
 

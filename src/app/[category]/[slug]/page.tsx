@@ -72,7 +72,7 @@ export default async function ArticleDetailPage({ params }: PageProps<"slug">) {
 						)}
 
 						{/* Title */}
-						<h1 className="text-3xl font-serif font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">
+						<h1 className="text-3xl font-serif font-bold text-gray-900 sm:text-4xl mb-4">
 							{article.heading.title}
 						</h1>
 

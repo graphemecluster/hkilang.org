@@ -32,7 +32,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps<"
 		<div>
 			<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
 				<div className="mx-auto max-w-2xl text-center">
-					<h1 className="text-4xl font-serif font-bold tracking-tight text-gray-900 sm:text-5xl">最新消息</h1>
+					<h1 className="text-4xl font-serif font-bold text-gray-900 sm:text-5xl">最新消息</h1>
 					<p className="mt-4 text-lg text-gray-600">了解香港本土語言保育協會的最新活動、研討會和出版物</p>
 				</div>
 

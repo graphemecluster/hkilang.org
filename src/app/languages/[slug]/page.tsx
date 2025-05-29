@@ -52,16 +52,16 @@ export default async function LanguageDetailPage({ params }: PageProps<"slug">) 
 			<div className="relative isolate overflow-hidden bg-gradient-to-b from-red-50 to-white">
 				<div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
 					<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-3xl">
-						<h1 className="mt-2 text-4xl font-serif font-bold tracking-tight text-gray-900 sm:text-5xl">
+						<h1 className="mt-2 text-4xl font-serif font-bold text-gray-900 sm:text-5xl">
 							{heading.title}
 							<span className="text-2xl ml-3 text-gray-600">{lang.enName}</span>
 						</h1>
-						<p className="mt-6 text-lg leading-8 text-gray-600">{heading.summary}</p>
+						<p className="mt-6 text-lg/8 text-gray-600">{heading.summary}</p>
 						<div className="mt-10 flex items-center gap-x-6">
 							<Button className="bg-red-800 hover:bg-red-700">
 								<Link href={`/dictionary?language=${lang.slug}`}>查詢{lang.zhName}辭典</Link>
 							</Button>
-							<Link href="#pronunciation" className="text-sm font-semibold leading-6 text-gray-900">
+							<Link href="#pronunciation" className="text-sm font-semibold text-gray-900">
 								學習發音 <span aria-hidden="true">→</span>
 							</Link>
 						</div>
@@ -128,10 +128,10 @@ export default async function LanguageDetailPage({ params }: PageProps<"slug">) 
 			<div className="bg-gray-50 py-16">
 				<div className="mx-auto max-w-7xl px-6 lg:px-8">
 					<div className="mx-auto max-w-2xl text-center">
-						<h2 className="text-3xl font-serif font-bold tracking-tight text-gray-900 sm:text-4xl">
+						<h2 className="text-3xl font-serif font-bold text-gray-900 sm:text-4xl">
 							{relatedResources.heading?.title || "相關資源"}
 						</h2>
-						<p className="mt-2 text-lg leading-8 text-gray-600">
+						<p className="mt-2 text-lg/8 text-gray-600">
 							{relatedResources.heading?.summary || `探索更多關於${lang.zhName}的學習資源和研究材料`}
 						</p>
 					</div>
@@ -172,10 +172,10 @@ export default async function LanguageDetailPage({ params }: PageProps<"slug">) 
 			<div className="bg-red-800">
 				<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
 					<div className="mx-auto max-w-2xl text-center">
-						<h2 className="text-3xl font-serif font-bold tracking-tight text-white sm:text-4xl">
+						<h2 className="text-3xl font-serif font-bold text-white sm:text-4xl">
 							參與{lang.zhName}保育工作
 						</h2>
-						<p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-red-100">
+						<p className="mx-auto mt-6 max-w-xl text-lg/8 text-red-100">
 							無論您是語言學者、本土語言使用者，還是對香港本土文化感興趣的人士，都歡迎加入我們的行列，共同保育
 							{lang.zhName}這一珍貴的語言遺產。
 						</p>
@@ -183,7 +183,7 @@ export default async function LanguageDetailPage({ params }: PageProps<"slug">) 
 							<Button className="bg-white text-red-800 hover:bg-red-50">
 								<Link href="https://www.hkilang.org/v2/wp-content/uploads/2015/01/%E9%A6%99%E6%B8%AF%E6%9C%AC%E5%9C%9F%E8%AA%9E%E8%A8%80%E4%BF%9D%E8%82%B2%E5%8D%94%E6%9C%83_%E5%85%A5%E6%9C%83%E7%94%B3%E8%AB%8B%E8%A1%A81.docx">加入我們</Link>
 							</Button>
-							<Link href="/news" className="text-sm font-semibold leading-6 text-white">
+							<Link href="/news" className="text-sm font-semibold text-white">
 								參加活動 <span aria-hidden="true">→</span>
 							</Link>
 						</div>
