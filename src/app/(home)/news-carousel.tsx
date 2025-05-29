@@ -14,7 +14,8 @@ import { formatDate } from "@/lib/utils";
 import type { EmblaCarouselType, EmblaEventType } from "embla-carousel";
 import type { Data } from "@strapi/strapi";
 
-const TWEEN_FACTOR_BASE = 0.1;
+const SCALE_REDUCE_FACTOR = 0.1;
+const OPACITY_REDUCE_FACTOR = 0.3;
 
 export default function NewsCarousel({ articles }: { articles: Data.ContentType<"api::article.article">[] }) {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,12 +27,12 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 	const tweenFactor = useRef(0);
 	const tweenNodes = useRef<HTMLElement[]>([]);
 
-	const setTweenNodes = useCallback((emblaApi: EmblaCarouselType): void => {
+	const setTweenNodes = useCallback((emblaApi: EmblaCarouselType) => {
 		tweenNodes.current = emblaApi.slideNodes().map(slideNode => slideNode.firstElementChild as HTMLElement);
 	}, []);
 
 	const setTweenFactor = useCallback((emblaApi: EmblaCarouselType) => {
-		tweenFactor.current = TWEEN_FACTOR_BASE * emblaApi.scrollSnapList().length;
+		tweenFactor.current = emblaApi.scrollSnapList().length;
 	}, []);
 
 	const tweenScale = useCallback((emblaApi: EmblaCarouselType, eventName?: EmblaEventType) => {
@@ -48,7 +49,7 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 				if (isScrollEvent && !slidesInView.includes(slideIndex)) return;
 
 				if (engine.options.loop) {
-					engine.slideLooper.loopPoints.forEach(loopItem => {
+					for (const loopItem of engine.slideLooper.loopPoints) {
 						const target = loopItem.target();
 
 						if (slideIndex === loopItem.index && target !== 0) {
@@ -61,13 +62,13 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 								diffToTarget = scrollSnap + (1 - scrollProgress);
 							}
 						}
-					});
+					}
 				}
 
-				const tweenValue = 1 - Math.abs(diffToTarget * tweenFactor.current);
-				const scale = Math.min(Math.max(tweenValue, 0), 1);
+				const tweenValue = Math.min(Math.max(Math.abs(diffToTarget * tweenFactor.current), 0), 1);
 				const tweenNode = tweenNodes.current[slideIndex]!;
-				tweenNode.style.transform = `scale(${scale})`;
+				tweenNode.style.transform = `scale(${1 - tweenValue * SCALE_REDUCE_FACTOR})`;
+				tweenNode.style.opacity = `${1 - tweenValue * OPACITY_REDUCE_FACTOR}`;
 			}
 		});
 	}, []);
@@ -85,7 +86,16 @@ export default function NewsCarousel({ articles }: { articles: Data.ContentType<
 			.on("reInit", tweenScale)
 			.on("scroll", tweenScale)
 			.on("slideFocus", tweenScale);
-	}, [emblaApi, tweenScale]);
+
+		return () => {
+			emblaApi
+				.off("reInit", setTweenNodes)
+				.off("reInit", setTweenFactor)
+				.off("reInit", tweenScale)
+				.off("scroll", tweenScale)
+				.off("slideFocus", tweenScale);
+		};
+	}, [emblaApi, setTweenNodes, setTweenFactor, tweenScale]);
 
 	// Handle scroll events to update current index
 	const onScroll = useCallback(() => {
