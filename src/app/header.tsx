@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -22,15 +22,10 @@ const navigation = [
 
 export default function Header() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
+
 	const pathname = usePathname();
-	const router = useRouter();
-
 	const firstPathSegment = pathname.slice(0, `${pathname}/`.indexOf("/", 1));
-
-	// Handle dictionary search button click
-	const handleDictionarySearch = () => {
-		router.push("/dictionary");
-	};
 
 	return (
 		<header className="bg-white shadow-sm">
@@ -53,12 +48,12 @@ export default function Header() {
 						</SheetTrigger>
 						<SheetContent side="right" className="w-full sm:max-w-sm">
 							<div className="flex items-center justify-between border-b border-gray-200 pb-4">
-								<Link href="/" className="-m-1.5 p-1.5" onClick={() => setMobileMenuOpen(false)}>
+								<Link href="/" className="-m-1.5 p-1.5" onClick={closeMobileMenu}>
 									<DialogTitle>
 										<Logo />
 									</DialogTitle>
 								</Link>
-								<Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
+								<Button variant="ghost" size="icon" onClick={closeMobileMenu}>
 									<span className="sr-only">關閉導覽</span>
 									<X className="h-6 w-6" aria-hidden="true" />
 								</Button>
@@ -70,7 +65,7 @@ export default function Header() {
 											<Link
 												key={item.name}
 												href={item.href}
-												onClick={() => setMobileMenuOpen(false)}
+												onClick={closeMobileMenu}
 												className={cn(
 													"block rounded-lg px-3 py-2 text-base font-medium",
 													firstPathSegment === item.href ? "bg-gray-50 text-red-800" : "text-gray-900 hover:bg-gray-50",
@@ -80,16 +75,14 @@ export default function Header() {
 										))}
 									</div>
 									<div className="py-6">
-										<Button
-											variant="outline"
-											className="w-full text-red-800 border-red-800 hover:bg-red-50"
-											onClick={() => {
-												setMobileMenuOpen(false);
-												handleDictionarySearch();
-											}}>
-											<Search className="mr-2 h-4 w-4" />
-											辭典搜尋
-										</Button>
+										<Link href="/dictionary" onClick={closeMobileMenu}>
+											<Button
+												variant="outline"
+												className="w-full text-red-800 border-red-800 hover:bg-red-50">
+												<Search className="mr-2 h-4 w-4" />
+												辭典搜尋
+											</Button>
+										</Link>
 									</div>
 								</div>
 							</div>
@@ -112,13 +105,14 @@ export default function Header() {
 					))}
 				</div>
 				<div className="hidden lg:flex lg:flex-1 lg:justify-end">
-					<Button
-						variant="outline"
-						className="text-sm font-medium text-red-800 border-red-800 hover:bg-red-50"
-						onClick={handleDictionarySearch}>
-						<Search className="mr-2 h-4 w-4" />
-						辭典搜尋
-					</Button>
+					<Link href="/dictionary">
+						<Button
+							variant="outline"
+							className="text-sm font-medium text-red-800 border-red-800 hover:bg-red-50">
+							<Search className="mr-2 h-4 w-4" />
+							辭典搜尋
+						</Button>
+					</Link>
 				</div>
 			</nav>
 		</header>
