@@ -79,7 +79,7 @@ export default function Header() {
 											<Button
 												variant="outline"
 												className="w-full text-red-800 border-red-800 hover:bg-red-50">
-												<Search className="mr-2 h-4 w-4" />
+												<Search className="h-4 w-4" />
 												辭典搜尋
 											</Button>
 										</Link>
@@ -109,7 +109,7 @@ export default function Header() {
 						<Button
 							variant="outline"
 							className="text-sm font-medium text-red-800 border-red-800 hover:bg-red-50">
-							<Search className="mr-2 h-4 w-4" />
+							<Search className="h-4 w-4" />
 							辭典搜尋
 						</Button>
 					</Link>
