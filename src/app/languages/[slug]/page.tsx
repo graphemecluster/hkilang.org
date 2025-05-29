@@ -47,7 +47,7 @@ export default async function LanguageDetailPage({ params }: PageProps<"slug">) 
 	const coverImageUrl = getStrapiMedia(heading.coverImage?.url);
 
 	return (
-		<div className="bg-white">
+		<div>
 			{/* Hero Section */}
 			<div className="relative isolate overflow-hidden bg-gradient-to-b from-red-50 to-white">
 				<div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">

@@ -29,7 +29,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps<"
 	const month = typeof search["month"] === "string" ? search["month"] : null;
 
 	return (
-		<div className="bg-white">
+		<div>
 			<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
 				<div className="mx-auto max-w-2xl text-center">
 					<h1 className="text-4xl font-serif font-bold tracking-tight text-gray-900 sm:text-5xl">最新消息</h1>

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
 	return (
-		<div className="bg-white">
+		<div>
 			{/* Hero Section with Background Image */}
 			<div className="relative w-full h-[500px] bg-gray-900">
 				<div

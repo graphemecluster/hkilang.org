@@ -40,7 +40,7 @@ export default function PageContent({ wordOfTheDayComponent }: { wordOfTheDayCom
 	}, [searchParams]);
 
 	return (
-		<div className="bg-white">
+		<div>
 			<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
 				<div className="mx-auto max-w-2xl text-center">
 					<h1 className="text-4xl font-serif font-bold tracking-tight text-gray-900 sm:text-5xl">語言辭典</h1>

@@ -51,7 +51,7 @@ export default async function ArticleDetailPage({ params }: PageProps<"slug">) {
 	const relatedArticles = await getRelatedArticles(article.id, tags.map(tag => tag.id));
 
 	return (
-		<div className="bg-white">
+		<div>
 			<div className="mx-auto max-w-4xl px-6 py-16 sm:py-24 lg:px-8">
 				<div className="mb-8">
 					<Link href="/news">
