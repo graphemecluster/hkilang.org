@@ -4,27 +4,27 @@ import { cn } from "@/lib/utils";
 
 import type { Data } from "@strapi/strapi";
 
-interface CategoryFilterProps {
-	categories: Pick<Data.ContentType<"api::category.category">, "slug" | "name">[];
-	selectedCategory: string | null;
-	onChange: (category: string | null) => void;
+interface TagFilterProps {
+	tags: Pick<Data.ContentType<"api::tag.tag">, "slug" | "name">[];
+	selectedTag: string | null;
+	onChange: (tag: string | null) => void;
 }
 
-export default function CategoryFilter({ categories, selectedCategory, onChange }: CategoryFilterProps) {
+export default function TagFilter({ tags, selectedTag, onChange }: TagFilterProps) {
 	return (
 		<div className="border-b border-gray-200">
 			<div className="flex overflow-x-auto hide-scrollbar">
-				{categories.map(category => (
+				{tags.map(tag => (
 					<button
-						key={category.slug}
+						key={tag.slug}
 						className={cn(
 							"px-4 py-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors",
-							selectedCategory === category.slug
+							selectedTag === tag.slug
 								? "border-red-800 text-red-800"
 								: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
 						)}
-						onClick={() => onChange(category.slug)}>
-						{category.name}
+						onClick={() => onChange(tag.slug)}>
+						{tag.name}
 					</button>
 				))}
 			</div>

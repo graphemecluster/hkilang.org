@@ -391,16 +391,3 @@ export async function getLexicalItemsByDomain(domainId: number, page = 1, pageSi
 		},
 	});
 }
-
-export async function getNewsCategories() {
-	return strapiClient.collection("categories").find({
-		filters: {
-			slug: {
-				$eq: "news",
-			},
-		},
-		pagination: {
-			limit: 100,
-		},
-	});
-}

@@ -5,32 +5,29 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import NewsFilters from "@/components/news/news-filters";
 import NewsList from "@/components/news/news-list";
 import Pagination from "@/components/pagination";
-import { getNewsArticles, getAllTags, getNewsCategories } from "@/lib/strapi";
-import { Search, X } from "lucide-react";
+import { getAllTags, getNewsArticles } from "@/lib/strapi";
+import { Search } from "lucide-react";
 import DatePicker from "./date-picker";
-// import CategoryFilter from "./category-filter";
+import TagFilter from "./tag-filter";
 
 import type { Data } from "@strapi/strapi";
 
 interface NewsPageContentProps {
 	initialQuery?: string;
 	initialPage?: number;
-	initialTags?: string[];
+	initialTag?: string | null;
 	initialStartDate?: string | null;
 	initialEndDate?: string | null;
-	initialCategory?: string | null;
 }
 
 export default function NewsPageContent({
 	initialQuery = "",
 	initialPage = 1,
-	initialTags = [],
+	initialTag = null,
 	initialStartDate = null,
 	initialEndDate = null,
-	initialCategory = null,
 }: NewsPageContentProps) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -40,21 +37,18 @@ export default function NewsPageContent({
 	const [searchTerm, setSearchTerm] = useState(initialQuery);
 	const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(initialQuery);
 	const [page, setPage] = useState(initialPage);
-	const [tags, setTags] = useState<string[]>(initialTags);
+	const [tag, setTag] = useState<string | null>(initialTag);
 	const [startDate, setStartDate] = useState<string | null>(initialStartDate);
 	const [endDate, setEndDate] = useState<string | null>(initialEndDate);
-	const [category, setCategory] = useState<string | null>(initialCategory);
 
 	const [articles, setArticles] = useState<Data.ContentType<"api::article.article">[]>([]);
 	const [totalArticles, setTotalArticles] = useState(0);
 	const [pageCount, setPageCount] = useState(0);
-	const [allTags, setAllTags] = useState<Pick<Data.ContentType<"api::tag.tag">, "slug" | "name">[]>([]);
-	const [categories, setCategories] = useState<Pick<Data.ContentType<"api::category.category">, "slug" | "name">[]>([]);
+	const [tags, setTags] = useState<Pick<Data.ContentType<"api::tag.tag">, "slug" | "name">[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const PAGE_SIZE = 9;
 
-	// Create a function to update URL query parameters
 	const createQueryString = useCallback((params: Record<string, string | string[] | number | null | undefined>) => {
 		const newSearchParams = new URLSearchParams();
 
@@ -76,13 +70,11 @@ export default function NewsPageContent({
 		return newSearchParams.toString();
 	}, []);
 
-	// Update URL and fetch data
-	const updateFilters = useCallback((newFilters: { query: string; page: number; tags: string[]; startDate: string | null; endDate: string | null; category: string | null }) => {
+	const updateFilters = useCallback((newFilters: { query: string; page: number; startDate: string | null; endDate: string | null; tag: string | null }) => {
 		startTransition(() => {
 			const queryString = createQueryString({
 				query: newFilters.query,
-				category: newFilters.category,
-				tags: newFilters.tags?.length ? newFilters.tags : null,
+				tag: newFilters.tag,
 				startDate: newFilters.startDate,
 				endDate: newFilters.endDate,
 				page: newFilters.page === 1 ? null : newFilters.page,
@@ -94,19 +86,16 @@ export default function NewsPageContent({
 	useEffect(() => {
 		setSearchTerm(searchParams.get("query") || "");
 		setPage(searchParams.get("page") ? Number.parseInt(searchParams.get("page")!, 10) : 1);
-		const newTags = searchParams.getAll("tags").sort();
-		if (newTags.length !== tags.length || tags.some((tag, i) => tag !== newTags[i])) setTags(newTags);
+		setTag(searchParams.get("tag"));
 		setStartDate(searchParams.get("startDate"));
 		setEndDate(searchParams.get("endDate"));
-		setCategory(searchParams.get("category"));
 	}, [searchParams]);
 
-	// Debounce search term
 	useEffect(() => {
 		const timerId = setTimeout(() => {
 			setDebouncedSearchTerm(searchTerm);
 			if (searchTerm !== debouncedSearchTerm) {
-				setPage(1); // Reset to first page when search term changes
+				setPage(1);
 			}
 		}, 500);
 
@@ -118,14 +107,7 @@ export default function NewsPageContent({
 	const handleSearch = (value: string) => {
 		setSearchTerm(value);
 		setPage(1);
-		updateFilters({ query: value, page: 1, tags, startDate, endDate, category });
-	};
-
-	const handleTagSelect = (tagId: string) => {
-		const newTags = tags.includes(tagId) ? tags.filter(id => id !== tagId) : [...tags, tagId].sort();
-		setTags(newTags);
-		setPage(1);
-		updateFilters({ query: debouncedSearchTerm, page: 1, tags: newTags, startDate, endDate, category });
+		updateFilters({ query: value, page: 1, tag, startDate, endDate });
 	};
 
 	const handleDateChange = (startDate: Date | null, endDate: Date | null) => {
@@ -134,30 +116,19 @@ export default function NewsPageContent({
 		setStartDate(newStartDate);
 		setEndDate(newEndDate);
 		setPage(1);
-		updateFilters({ query: debouncedSearchTerm, page: 1, tags, startDate: newStartDate, endDate: newEndDate, category });
+		updateFilters({ query: debouncedSearchTerm, page: 1, tag, startDate: newStartDate, endDate: newEndDate });
 	};
 
-	const handleCategoryChange = (newCategory: string) => {
-		setCategory(newCategory);
+	const handleTagChange = (newTag: string | null) => {
+		setTag(newTag);
 		setPage(1);
-		updateFilters({ query: debouncedSearchTerm, page: 1, tags, startDate, endDate, category: newCategory });
+		updateFilters({ query: debouncedSearchTerm, page: 1, tag: newTag, startDate, endDate });
 	};
 
 	const handlePageChange = (newPage: number) => {
 		setPage(newPage);
-		updateFilters({ query: debouncedSearchTerm, page: newPage, tags, startDate, endDate, category });
+		updateFilters({ query: debouncedSearchTerm, page: newPage, tag, startDate, endDate });
 		document.querySelector("input")?.scrollIntoView({ behavior: "smooth" });
-	};
-
-	const clearAllFilters = () => {
-		setSearchTerm("");
-		setDebouncedSearchTerm("");
-		setTags([]);
-		setStartDate(null);
-		setEndDate(null);
-		setCategory(null);
-		setPage(1);
-		updateFilters({ query: "", page: 1, tags: [], startDate: null, endDate: null, category: null });
 	};
 
 	const fetchArticles = useCallback(async () => {
@@ -171,16 +142,15 @@ export default function NewsPageContent({
 				dateFilters.$lte = endDate;
 			}
 
-			const categoryFilter = category ? { slug: { $eq: category } } : undefined;
+			const tagFilter = tag ? { slug: { $eq: tag } } : undefined;
 
 			const response = await getNewsArticles({
 				page,
 				pageSize: PAGE_SIZE,
 				search: debouncedSearchTerm.trim(),
-				tags,
 				filters: {
 					...(Object.keys(dateFilters).length > 0 ? { publishDate: dateFilters } : {}),
-					...(categoryFilter ? { category: categoryFilter } : {}),
+					...(tagFilter ? { tag: tagFilter } : {}),
 				},
 			});
 
@@ -194,40 +164,25 @@ export default function NewsPageContent({
 		finally {
 			setIsLoading(false);
 		}
-	}, [page, debouncedSearchTerm, tags, startDate, endDate, category]);
+	}, [page, debouncedSearchTerm, tag, startDate, endDate]);
 
 	const fetchTags = useCallback(async () => {
 		try {
 			const response = await getAllTags();
-			setAllTags(response.data);
-		}
-		catch (error) {
-			console.error("Failed to fetch tags:", error);
-		}
-	}, []);
-
-	const fetchCategories = useCallback(async () => {
-		try {
-			const response = await getNewsCategories();
-			setCategories([{ slug: null, name: "全部" }, ...response.data]);
+			setTags([{ slug: null, name: "全部" }, ...response.data]);
 		}
 		catch (error) {
 			console.error("Failed to fetch categories:", error);
 		}
 	}, []);
 
-	// Initialize data
 	useEffect(() => {
 		fetchArticles();
 	}, [fetchArticles]);
 
 	useEffect(() => {
 		fetchTags();
-		// fetchCategories();
-	}, [fetchTags, fetchCategories]);
-
-	// Check if any filters are applied
-	const hasActiveFilters = searchTerm || tags.length > 0 || startDate || endDate || category;
+	}, [fetchTags]);
 
 	return (
 		<div className="mt-12">
@@ -258,25 +213,9 @@ export default function NewsPageContent({
 				</div>
 			</div>
 
-			{/* Category Filter */}
-			{
-				/* <div className="mb-8">
-					<CategoryFilter categories={categories} selectedCategory={category} onChange={handleCategoryChange} />
-				</div> */
-			}
-
-			{/* Tag Filters */}
+			{/* Tag Filter */}
 			<div className="mb-8">
-				<div className="relative mb-4">
-					<h2 className="text-lg font-medium text-gray-900">標籤過濾</h2>
-					{hasActiveFilters && (
-						<Button variant="ghost" size="sm" onClick={clearAllFilters} className="absolute top-0 right-0 text-gray-500 hover:text-red-800">
-							清除所有過濾條件
-							<X className="ml-1 h-4 w-4" />
-						</Button>
-					)}
-				</div>
-				<NewsFilters allTags={allTags} selectedTags={tags} onTagSelect={handleTagSelect} />
+				<TagFilter tags={tags} selectedTag={tag} onChange={handleTagChange} />
 			</div>
 
 			{/* Result count */}
