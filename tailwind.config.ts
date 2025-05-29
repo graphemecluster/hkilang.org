@@ -1,5 +1,6 @@
 import tailwindCSSAnimate from "tailwindcss-animate";
 import tailwindCSSTypography from "@tailwindcss/typography";
+import plugin from "tailwindcss/plugin";
 
 import type { Config } from "tailwindcss";
 
@@ -91,5 +92,19 @@ export default {
 			},
 		},
 	},
-	plugins: [tailwindCSSAnimate, tailwindCSSTypography],
+	plugins: [
+		tailwindCSSAnimate,
+		tailwindCSSTypography,
+
+		// https://github.com/tailwindlabs/tailwindcss/discussions/5541
+		plugin(({ matchUtilities, theme }) => {
+			matchUtilities(
+				{
+					"auto-fill": value => ({ gridTemplateColumns: `repeat(auto-fill, minmax(min(${value}, 100%), 1fr))` }),
+					"auto-fit": value => ({ gridTemplateColumns: `repeat(auto-fit, minmax(min(${value}, 100%), 1fr))` }),
+				},
+				{ values: theme("width", {}) },
+			);
+		}),
+	],
 } satisfies Config;
