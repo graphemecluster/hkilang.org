@@ -14,9 +14,10 @@ import WordResult from "./word-result";
 import { Skeleton } from "@/components/ui/skeleton";
 import Pagination from "@/components/pagination";
 
+import type { ReactElement } from "react";
 import type { Data } from "@strapi/strapi";
 
-export default function SearchTab() {
+export default function SearchTab({ wordOfTheDayComponent }: { wordOfTheDayComponent: ReactElement }) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -214,6 +215,7 @@ export default function SearchTab() {
 						</Card>}
 				</div>
 			)}
+			{!totalItems && wordOfTheDayComponent}
 		</div>
 	);
 }

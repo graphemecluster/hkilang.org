@@ -48,12 +48,6 @@ export default function PageContent({ wordOfTheDayComponent }: { wordOfTheDayCom
 				</div>
 
 				<div className="mx-auto mt-12 max-w-3xl">
-					{/* Word of the Day Section */}
-					<div className="mb-12">
-						<h2 className="text-2xl font-serif font-bold text-gray-900 mb-6 text-center">每日一詞</h2>
-						{wordOfTheDayComponent}
-					</div>
-
 					{/* Dictionary Tabs */}
 					<Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
 						<TabsList className="grid w-full grid-cols-2 mb-6">
@@ -62,8 +56,14 @@ export default function PageContent({ wordOfTheDayComponent }: { wordOfTheDayCom
 						</TabsList>
 
 						<TabsContent value="search">
-							<Suspense fallback={<Skeleton className="h-12 w-full mb-6" />}>
-								<SearchTab />
+							<Suspense
+								fallback={
+									<div>
+										<Skeleton className="h-12 w-full mb-6" />
+										{wordOfTheDayComponent}
+									</div>
+								}>
+								<SearchTab wordOfTheDayComponent={wordOfTheDayComponent} />
 							</Suspense>
 						</TabsContent>
 

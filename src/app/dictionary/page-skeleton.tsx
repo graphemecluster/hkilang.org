@@ -13,12 +13,6 @@ export default function PageSkeleton({ wordOfTheDayComponent }: { wordOfTheDayCo
 				</div>
 
 				<div className="mx-auto mt-12 max-w-3xl">
-					{/* Word of the Day Section */}
-					<div className="mb-12">
-						<h2 className="text-2xl font-serif font-bold text-gray-900 mb-6 text-center">每日一詞</h2>
-						{wordOfTheDayComponent}
-					</div>
-
 					{/* Dictionary Tabs */}
 					<Tabs defaultValue="search" className="w-full">
 						<TabsList className="grid w-full grid-cols-2 mb-6">
@@ -28,6 +22,7 @@ export default function PageSkeleton({ wordOfTheDayComponent }: { wordOfTheDayCo
 
 						<TabsContent value="search">
 							<Skeleton className="h-12 w-full mb-6" />
+							{wordOfTheDayComponent}
 						</TabsContent>
 
 						<TabsContent value="categories">

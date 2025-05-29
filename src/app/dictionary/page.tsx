@@ -10,7 +10,11 @@ export const metadata: Metadata = {
 };
 
 export default function DictionaryPage() {
-	return <Suspense fallback={<PageSkeleton wordOfTheDayComponent={<WordOfTheDay />} />}>
-		<PageContent wordOfTheDayComponent={<WordOfTheDay />} />
+	const wordOfTheDayComponent = <div className="mt-12">
+		<h2 className="text-3xl font-serif font-bold text-gray-900 mb-6 text-center">每日一詞</h2>
+		{<WordOfTheDay />}
+	</div>;
+	return <Suspense fallback={<PageSkeleton wordOfTheDayComponent={wordOfTheDayComponent} />}>
+		<PageContent wordOfTheDayComponent={wordOfTheDayComponent} />
 	</Suspense>;
 }
