@@ -169,7 +169,7 @@ export default function CategoriesTab() {
 					類別：{selectedCategoryName}
 					{!!totalResults && <span className="text-gray-500 text-sm">
 						（顯示第 {(currentPage - 1) * PAGE_SIZE + 1}
-						{currentPage * PAGE_SIZE === totalResults ? "" : ` ~ ${Math.min(currentPage * PAGE_SIZE, totalResults)}`} 項，共 {totalResults} 項）
+						{(currentPage - 1) * PAGE_SIZE + 1 === totalResults ? "" : ` ~ ${Math.min(currentPage * PAGE_SIZE, totalResults)}`} 項，共 {totalResults} 項）
 					</span>}
 				</h3>
 			</div>

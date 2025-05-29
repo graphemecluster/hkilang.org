@@ -165,7 +165,7 @@ export default function SearchTab({ wordOfTheDayComponent }: { wordOfTheDayCompo
 					<h3 className="text-lg font-medium text-gray-900 mb-4">
 						搜尋結果{!!totalItems && <span className="text-gray-500 text-sm">
 							（顯示第 {(currentPage - 1) * PAGE_SIZE + 1}
-							{currentPage * PAGE_SIZE === totalItems ? "" : ` ~ ${Math.min(currentPage * PAGE_SIZE, totalItems)}`} 項，共 {totalItems} 項）
+							{(currentPage - 1) * PAGE_SIZE + 1 === totalItems ? "" : ` ~ ${Math.min(currentPage * PAGE_SIZE, totalItems)}`} 項，共 {totalItems} 項）
 						</span>}
 					</h3>
 
