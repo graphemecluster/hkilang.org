@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
-export default function FAQPageSkeleton() {
+export default function PageSkeleton() {
 	return (
 		<div className="mt-12 mx-auto max-w-3xl">
 			<Accordion type="single" collapsible className="w-full">

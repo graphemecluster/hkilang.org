@@ -1,10 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { getStrapiMedia } from "@/lib/strapi";
-import DictionaryAudioPlayer from "./dictionary-audio-player";
+import AudioPlayer from "./audio-player";
 
 import type { Data } from "@strapi/strapi";
 
-export default function DictionaryCharacterResult({ character }: { character: Data.ContentType<"api::listed-character.listed-character"> }) {
+export default function CharacterResult({ character }: { character: Data.ContentType<"api::listed-character.listed-character"> }) {
 	const { codepoint, chars, notes } = character;
 
 	const formsByLang = Object.groupBy(chars!, form => form.lang!.zhName!);
@@ -31,7 +31,7 @@ export default function DictionaryCharacterResult({ character }: { character: Da
 												</div>
 											)}
 										</div>
-										{form.audio && <DictionaryAudioPlayer src={getStrapiMedia(form.audio.url) || ""} language={langName} />}
+										{form.audio && <AudioPlayer src={getStrapiMedia(form.audio.url) || ""} language={langName} />}
 									</div>
 									{form.notes && (
 										<div className="mb-3">
@@ -51,7 +51,7 @@ export default function DictionaryCharacterResult({ character }: { character: Da
 																<span className="text-gray-600">[{example.pron}]</span>
 															</div>
 															{example.audio && (
-																<DictionaryAudioPlayer
+																<AudioPlayer
 																	src={getStrapiMedia(example.audio.url) || ""}
 																	language={langName}
 																	small />

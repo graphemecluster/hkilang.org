@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function AboutPageSkeleton() {
+export default function PageSkeleton() {
 	return (
 		<div>
 			{/* Mission Section Skeleton */}

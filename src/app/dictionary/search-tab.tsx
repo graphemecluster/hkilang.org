@@ -9,14 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Search } from "lucide-react";
 import { searchDictionary } from "@/lib/strapi";
-import DictionaryCharacterResult from "./dictionary-character-result";
-import DictionaryWordResult from "./dictionary-word-result";
+import CharacterResult from "./character-result";
+import WordResult from "./word-result";
 import { Skeleton } from "@/components/ui/skeleton";
 import Pagination from "@/components/pagination";
 
 import type { Data } from "@strapi/strapi";
 
-export default function DictionarySearch() {
+export default function SearchTab() {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -177,7 +177,7 @@ export default function DictionarySearch() {
 									</h4>
 									<div className="space-y-4">
 										{characterResults.map(character => (
-											<DictionaryCharacterResult key={character.id} character={character} />
+											<CharacterResult key={character.id} character={character} />
 										))}
 									</div>
 								</div>
@@ -190,7 +190,7 @@ export default function DictionarySearch() {
 									</h4>
 									<div className="space-y-4">
 										{wordResults.map(word => (
-											<DictionaryWordResult key={word.id} word={word} />
+											<WordResult key={word.id} word={word} />
 										))}
 									</div>
 								</div>

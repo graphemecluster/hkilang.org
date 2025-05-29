@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { getAboutData } from "@/lib/strapi";
-import AboutTimeline from "@/components/about/about-timeline";
-import AboutMembers from "@/components/about/about-members";
+import Timeline from "./timeline";
+import Members from "./members";
 import Markdown from "@/components/markdown";
 
-export default async function AboutPageContent() {
+export default async function PageContent() {
 	const aboutData = await getAboutData();
 	const data = aboutData.data;
 
@@ -45,7 +45,7 @@ export default async function AboutPageContent() {
 							<div className="w-20 h-1 bg-red-800 mb-4"></div>
 						</div>
 						<div className="md:col-span-3">
-							<AboutMembers members={data.members} />
+							<Members members={data.members} />
 						</div>
 					</div>
 				</div>
@@ -60,7 +60,7 @@ export default async function AboutPageContent() {
 							<div className="w-20 h-1 bg-red-800 mb-4"></div>
 						</div>
 						<div className="md:col-span-3">
-							<AboutTimeline timeline={data.timeline} />
+							<Timeline timeline={data.timeline} />
 						</div>
 					</div>
 				</div>

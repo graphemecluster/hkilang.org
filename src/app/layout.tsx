@@ -1,7 +1,7 @@
 import { Noto_Sans_HK, Noto_Serif_HK } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/header";
-import Footer from "@/components/layout/footer";
+import Header from "./header";
+import Footer from "./footer";
 import { ThemeProvider } from "@/components/theme-provider";
 
 import type { Metadata } from "next";

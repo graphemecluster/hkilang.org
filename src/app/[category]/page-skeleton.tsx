@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function NewsPageSkeleton() {
+export default function PageSkeleton() {
 	return (
 		<div className="mt-12">
 			{/* Search field skeleton */}

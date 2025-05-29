@@ -7,12 +7,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeft } from "lucide-react";
 import { getLexicalDomains, getLexicalItemsByDomain } from "@/lib/strapi";
-import DictionaryWordResult from "./dictionary-word-result";
+import WordResult from "./word-result";
 import Pagination from "@/components/pagination";
 
 import type { Data } from "@strapi/strapi";
 
-export default function DictionaryCategories() {
+export default function CategoriesTab() {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -184,7 +184,7 @@ export default function DictionaryCategories() {
 						? <>
 							<div className="space-y-4">
 								{wordResults.map(word => (
-									<DictionaryWordResult key={word.id} word={word} />
+									<WordResult key={word.id} word={word} />
 								))}
 							</div>
 

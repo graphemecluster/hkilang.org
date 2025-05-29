@@ -2,7 +2,7 @@ import Image from "next/image";
 import { getStrapiMedia } from "@/lib/strapi";
 import type { Data } from "@strapi/strapi";
 
-export default function AboutTimeline({ timeline }: { timeline: Data.Component<"about-page.timeline-item">[] }) {
+export default function Timeline({ timeline }: { timeline: Data.Component<"about-page.timeline-item">[] }) {
 	return (
 		<div className="relative">
 			{/* Vertical line */}

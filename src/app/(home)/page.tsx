@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import WordOfTheDay from "@/components/dictionary/word-of-the-day";
-import LanguageShowcase from "@/components/home/language-showcase";
-import NewsCarousel from "@/components/home/news-carousel";
+import WordOfTheDay from "../dictionary/word-of-the-day";
+import LanguageShowcase from "./language-showcase";
+import NewsCarousel from "./news-carousel";
 import { getPriorityNewsArticles } from "@/lib/strapi";
 
 export default async function Home() {

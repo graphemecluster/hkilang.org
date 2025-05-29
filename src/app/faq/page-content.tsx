@@ -2,7 +2,7 @@ import { getFAQData } from "@/lib/strapi";
 import Markdown from "@/components/markdown";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
-export default async function FAQPageContent() {
+export default async function PageContent() {
 	const faqData = await getFAQData();
 	const data = faqData.data;
 

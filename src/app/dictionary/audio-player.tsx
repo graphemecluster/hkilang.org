@@ -4,13 +4,13 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Pause } from "lucide-react";
 
-interface DictionaryAudioPlayerProps {
+interface AudioPlayerProps {
 	src: string;
 	language: string;
 	small?: boolean;
 }
 
-export default function DictionaryAudioPlayer({ src, language, small = false }: DictionaryAudioPlayerProps) {
+export default function AudioPlayer({ src, language, small = false }: AudioPlayerProps) {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 

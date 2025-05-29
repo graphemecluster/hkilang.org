@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import DictionaryPageContent from "@/components/dictionary/dictionary-page-content";
-import DictionaryPageSkeleton from "@/components/dictionary/dictionary-page-skeleton";
-import WordOfTheDay from "@/components/dictionary/word-of-the-day";
+import PageContent from "./page-content";
+import PageSkeleton from "./page-skeleton";
+import WordOfTheDay from "./word-of-the-day";
 
 export const metadata: Metadata = {
 	title: "語言辭典 - 香港本土語言保育協會",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function DictionaryPage() {
-	return <Suspense fallback={<DictionaryPageSkeleton wordOfTheDayComponent={<WordOfTheDay />} />}>
-		<DictionaryPageContent wordOfTheDayComponent={<WordOfTheDay />} />
+	return <Suspense fallback={<PageSkeleton wordOfTheDayComponent={<WordOfTheDay />} />}>
+		<PageContent wordOfTheDayComponent={<WordOfTheDay />} />
 	</Suspense>;
 }

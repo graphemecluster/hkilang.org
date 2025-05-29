@@ -3,7 +3,7 @@ import { getStrapiMedia } from "@/lib/strapi";
 
 import type { Data } from "@strapi/strapi";
 
-export default function AboutMembers({ members }: { members: Data.Component<"about-page.member">[] }) {
+export default function Members({ members }: { members: Data.Component<"about-page.member">[] }) {
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 			{members.map((member, index) => {

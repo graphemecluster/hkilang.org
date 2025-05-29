@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import FAQPageContent from "@/components/faq/faq-page-content";
-import FAQPageSkeleton from "@/components/faq/faq-page-skeleton";
+import PageContent from "./page-content";
+import PageSkeleton from "./page-skeleton";
 
 export const metadata: Metadata = {
 	title: "你問我答 - 香港本土語言保育協會",
@@ -17,8 +17,8 @@ export default function FAQPage() {
 					<p className="mt-4 text-lg text-gray-600">了解關於香港本土語言和香港本土語言保育協會的常見問題</p>
 				</div>
 
-				<Suspense fallback={<FAQPageSkeleton />}>
-					<FAQPageContent />
+				<Suspense fallback={<PageSkeleton />}>
+					<PageContent />
 				</Suspense>
 			</div>
 		</div>

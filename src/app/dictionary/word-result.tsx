@@ -1,10 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { getStrapiMedia } from "@/lib/strapi";
-import DictionaryAudioPlayer from "./dictionary-audio-player";
+import AudioPlayer from "./audio-player";
 import type { Data } from "@strapi/strapi";
 import { formatDate } from "@/lib/utils";
 
-export default function DictionaryWordResult({ date, word }: { date?: string; word: Data.ContentType<"api::surveyed-lexical-item.surveyed-lexical-item"> }) {
+export default function WordResult({ date, word }: { date?: string; word: Data.ContentType<"api::surveyed-lexical-item.surveyed-lexical-item"> }) {
 	const { zhGloss, enGloss, words, notes, domain } = word;
 
 	const formsByLang = Object.groupBy(words!, form => form.lang!.zhName!);
@@ -38,7 +38,7 @@ export default function DictionaryWordResult({ date, word }: { date?: string; wo
 													{form.pron && <div className="text-base">{form.pron}</div>}
 													{form.glyph && <div className="text-lg text-gray-700">{form.glyph}</div>}
 												</div>
-												{form.audio && <DictionaryAudioPlayer src={getStrapiMedia(form.audio.url) || ""} language={langName} />}
+												{form.audio && <AudioPlayer src={getStrapiMedia(form.audio.url) || ""} language={langName} />}
 											</div>
 											{form.notes && <div className="text-gray-500 text-sm mt-1">{form.notes}</div>}
 										</div>
@@ -85,7 +85,7 @@ export default function DictionaryWordResult({ date, word }: { date?: string; wo
 																			{example.pron && <span className="text-gray-600">[{example.pron}]</span>}
 																		</div>
 																		{example.audio && (
-																			<DictionaryAudioPlayer
+																			<AudioPlayer
 																				src={getStrapiMedia(example.audio.url) || ""}
 																				language={langName}
 																				small />

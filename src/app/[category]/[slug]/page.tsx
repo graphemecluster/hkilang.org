@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Calendar, Clock } from "lucide-react";
 import Markdown from "@/components/markdown";
-import ShareButtons from "@/components/news/share-buttons";
-import RelatedArticles from "@/components/news/related-articles";
+import ShareButtons from "./share-buttons";
+import RelatedArticles from "./related-articles";
 import { formatDate } from "@/lib/utils";
 import type { PageProps } from "@/lib/types";
 
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps<"slug">): Promise<M
 	};
 }
 
-export default async function NewsDetailPage({ params }: PageProps<"slug">) {
+export default async function ArticleDetailPage({ params }: PageProps<"slug">) {
 	const article = await getArticle((await params).slug);
 
 	if (!article) {

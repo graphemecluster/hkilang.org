@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { getWordOfTheDay } from "@/lib/strapi";
-import DictionaryWordResult from "./dictionary-word-result";
+import WordResult from "./word-result";
 
 export default async function WordOfTheDay() {
 	const wordOfTheDayData = await getWordOfTheDay();
@@ -18,5 +18,5 @@ export default async function WordOfTheDay() {
 
 	const { date, item } = wordOfTheDayData;
 
-	return <DictionaryWordResult date={date as string} word={item} />;
+	return <WordResult date={date as string} word={item} />;
 }

@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getLanguageIntroPage } from "@/lib/strapi";
 import { getStrapiMedia } from "@/lib/strapi";
-import PronunciationGuide from "@/components/languages/pronunciation-guide";
-import VocabularyList from "@/components/languages/vocabulary-list";
-import AudioPhrases from "@/components/languages/audio-phrases";
-import CulturalContext from "@/components/languages/cultural-context";
+import PronunciationGuide from "./pronunciation-guide";
+import VocabularyList from "./vocabulary-list";
+import AudioPhrases from "./audio-phrases";
+import CulturalContext from "./cultural-context";
 import Markdown from "@/components/markdown";
 import type { PageProps } from "@/lib/types";
 

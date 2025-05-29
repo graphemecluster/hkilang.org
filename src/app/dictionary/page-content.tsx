@@ -4,12 +4,12 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DictionarySearch from "@/components/dictionary/dictionary-search";
-import DictionaryCategories from "@/components/dictionary/dictionary-categories";
+import SearchTab from "./search-tab";
+import CategoriesTab from "./categories-tab";
 
 import type { ReactElement } from "react";
 
-export default function DictionaryPageContent({ wordOfTheDayComponent }: { wordOfTheDayComponent: ReactElement }) {
+export default function PageContent({ wordOfTheDayComponent }: { wordOfTheDayComponent: ReactElement }) {
 	const searchParams = useSearchParams();
 	const initialTab = searchParams.get("tab") === "categories" || searchParams.has("category") ? "categories" : "search";
 	const [activeTab, setActiveTab] = useState(initialTab);
@@ -63,13 +63,13 @@ export default function DictionaryPageContent({ wordOfTheDayComponent }: { wordO
 
 						<TabsContent value="search">
 							<Suspense fallback={<Skeleton className="h-12 w-full mb-6" />}>
-								<DictionarySearch />
+								<SearchTab />
 							</Suspense>
 						</TabsContent>
 
 						<TabsContent value="categories">
 							<Suspense fallback={<Skeleton className="h-12 w-full mb-6" />}>
-								<DictionaryCategories />
+								<CategoriesTab />
 							</Suspense>
 						</TabsContent>
 					</Tabs>

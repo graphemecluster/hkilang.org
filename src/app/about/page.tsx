@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import AboutPageContent from "@/components/about/about-page-content";
-import AboutPageSkeleton from "@/components/about/about-page-skeleton";
+import PageContent from "./page-content";
+import PageSkeleton from "./page-skeleton";
 
 export const metadata: Metadata = {
 	title: "關於我們 - 香港本土語言保育協會",
@@ -34,8 +34,8 @@ export default function AboutPage() {
 			</div>
 
 			<div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-				<Suspense fallback={<AboutPageSkeleton />}>
-					<AboutPageContent />
+				<Suspense fallback={<PageSkeleton />}>
+					<PageContent />
 				</Suspense>
 			</div>
 		</div>

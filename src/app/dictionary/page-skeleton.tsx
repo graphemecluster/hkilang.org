@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import type { ReactElement } from "react";
 
-export default function DictionaryPageSkeleton({ wordOfTheDayComponent }: { wordOfTheDayComponent: ReactElement }) {
+export default function PageSkeleton({ wordOfTheDayComponent }: { wordOfTheDayComponent: ReactElement }) {
 	return (
 		<div className="bg-white">
 			<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">

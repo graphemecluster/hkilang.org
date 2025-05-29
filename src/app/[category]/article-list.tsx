@@ -6,12 +6,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { formatDate } from "@/lib/utils";
 import type { Data } from "@strapi/strapi";
 
-interface NewsListProps {
+interface ArticleListProps {
 	articles: Data.ContentType<"api::article.article">[];
 	isLoading: boolean;
 }
 
-export default function NewsList({ articles, isLoading }: NewsListProps) {
+export default function ArticleList({ articles, isLoading }: ArticleListProps) {
 	if (isLoading) {
 		return (
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

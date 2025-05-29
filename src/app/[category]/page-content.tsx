@@ -5,7 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import NewsList from "@/components/news/news-list";
+import ArticleList from "./article-list";
 import Pagination from "@/components/pagination";
 import { getAllTags, getNewsArticles } from "@/lib/strapi";
 import { Search } from "lucide-react";
@@ -21,7 +21,7 @@ interface NewsPageContentProps {
 	initialMonth?: string | null;
 }
 
-export default function NewsPageContent({
+export default function PageContent({
 	initialQuery = "",
 	initialPage = 1,
 	initialTag = null,
@@ -208,7 +208,7 @@ export default function NewsPageContent({
 			</div>
 
 			{/* Article list */}
-			<NewsList articles={articles} isLoading={isLoading} />
+			<ArticleList articles={articles} isLoading={isLoading} />
 
 			{/* Pagination */}
 			{pageCount > 1 && (
