@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const STRAPI_URL = process.env["NEXT_PUBLIC_STRAPI_URL"] || "http://localhost:1337/api";
+const STRAPI_URL = process.env["STRAPI_URL"] || "http://localhost:1337/api";
 
 export default {
 	// reactStrictMode: true,
