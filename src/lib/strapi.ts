@@ -164,6 +164,7 @@ export async function getArticles({ category, page, pageSize, query, tag, month 
 			heading: {
 				populate: ["coverImage"],
 			},
+			category: true,
 			tags: true,
 		},
 	});
@@ -241,8 +242,8 @@ export async function getArticle(slug: string) {
 			heading: {
 				populate: ["coverImage"],
 			},
-			tags: true,
 			category: true,
+			tags: true,
 		},
 	});
 
@@ -276,6 +277,7 @@ export async function getRelatedArticles(articleId: string, category: string, ta
 			heading: {
 				populate: ["coverImage"],
 			},
+			category: true,
 		},
 	});
 

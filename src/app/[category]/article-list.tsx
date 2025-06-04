@@ -45,7 +45,7 @@ export default function ArticleList({ articles, isLoading }: ArticleListProps) {
 				const imageUrl = getStrapiMedia(article.heading?.coverImage?.url);
 
 				return (
-					<Link key={article.documentId} href={`/news/${article.slug}`}>
+					<Link key={article.documentId} href={`/${article.category!.slug}/${article.slug}`}>
 						<Card className="h-full overflow-hidden hover:shadow-md transition-shadow">
 							<div className="aspect-video relative">
 								{imageUrl
