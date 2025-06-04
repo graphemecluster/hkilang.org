@@ -18,8 +18,8 @@ export default function CharacterResult({ character }: { character: Data.Content
 					{Object.entries(formsByLang).map(([langName, forms]) => (
 						<div key={langName} className="border-b border-gray-200 pb-3 last:border-0 last:pb-0">
 							<h3 className="text-lg font-medium text-gray-900 mb-2">{langName}</h3>
-							{forms!.map(form =>
-								<div key={form.id}>
+							{forms!.map((form, index) =>
+								<div key={index}>
 									<div className="flex items-center mb-2">
 										<div>
 											{form.pron && <div className="text-base">{form.pron}</div>}

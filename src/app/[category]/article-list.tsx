@@ -45,7 +45,7 @@ export default function ArticleList({ articles, isLoading }: ArticleListProps) {
 				const imageUrl = getStrapiMedia(article.heading?.coverImage?.url);
 
 				return (
-					<Link key={article.id} href={`/news/${article.slug}`}>
+					<Link key={article.documentId} href={`/news/${article.slug}`}>
 						<Card className="h-full overflow-hidden hover:shadow-md transition-shadow">
 							<div className="aspect-video relative">
 								{imageUrl
@@ -62,7 +62,7 @@ export default function ArticleList({ articles, isLoading }: ArticleListProps) {
 									<div className="mt-3 flex flex-wrap gap-1">
 										{article.tags.slice(0, 3).map(tag => (
 											<span
-												key={tag.id}
+												key={tag.documentId}
 												className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
 												{tag.name}
 											</span>

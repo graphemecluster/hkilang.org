@@ -145,7 +145,7 @@ export default function Carousel({ articles }: { articles: Data.ContentType<"api
 					{articles.map(article => {
 						const imageUrl = getStrapiMedia(article.heading?.coverImage?.url);
 						return (
-							<div key={article.id} className="flex-shrink-0 basis-[calc(65%+4rem)] min-w-0">
+							<div key={article.documentId} className="flex-shrink-0 basis-[calc(65%+4rem)] min-w-0">
 								<div>
 									<Link href={`/${article.category!.slug}/${article.slug}`} className="group">
 										<Card className="h-full overflow-hidden hover:shadow-md transition-shadow duration-300 relative">

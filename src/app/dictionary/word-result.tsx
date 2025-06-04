@@ -22,8 +22,8 @@ export default function WordResult({ date, word }: { date?: string; word: Data.C
 							{Object.entries(formsByLang).map(([langName, forms]) => (
 								<div key={langName}>
 									<span className="text-sm font-medium text-gray-500">{langName}</span>
-									{forms!.map(form =>
-										<div key={form.id}>
+									{forms!.map((form, index) =>
+										<div key={index}>
 											<div className="flex items-center">
 												<div>
 													{form.pron && <div className="text-base">{form.pron}</div>}
@@ -52,9 +52,9 @@ export default function WordResult({ date, word }: { date?: string; word: Data.C
 										{Object.entries(formsByLang).map(([langName, forms]) =>
 											<div key={langName}>
 												<div className="text-sm font-medium text-gray-500 mb-1">{langName}</div>
-												{forms!.map(form =>
+												{forms!.map((form, index) =>
 													!!form?.examples?.length && (
-														<div key={form.id} className="space-y-2">
+														<div key={index} className="space-y-2">
 															{form!.examples!.map((example, idx) => (
 																<div key={idx} className="pl-3 border-l-2 border-gray-200">
 																	<div className="flex items-center">

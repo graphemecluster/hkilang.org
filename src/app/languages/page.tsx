@@ -22,7 +22,7 @@ export default async function LanguagesPage() {
 				<div className="mt-16 space-y-20">
 					{languages.map(language =>
 						<div
-							key={language.id}
+							key={language.documentId}
 							className="flex flex-col md:flex-row md:even:flex-row-reverse gap-8 items-center">
 							<div className="w-full md:w-1/2">
 								<div className="relative aspect-video rounded-lg overflow-hidden">

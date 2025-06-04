@@ -18,11 +18,11 @@ export default function CategoriesTab() {
 	const searchParams = useSearchParams();
 
 	// Get initial values from URL parameters
-	const initialCategoryId = searchParams.get("category") || "";
+	const initialCategory = searchParams.get("category") || "";
 	const initialPage = searchParams.get("page") ? Number.parseInt(searchParams.get("page")!, 10) : 1;
 
 	const [categories, setCategories] = useState<Data.ContentType<"api::surveyed-lexical-domain.surveyed-lexical-domain">[]>([]);
-	const [selectedCategoryId, setSelectedCategoryId] = useState(initialCategoryId);
+	const [selectedCategory, setSelectedCategory] = useState(initialCategory);
 	const [selectedCategoryName, setSelectedCategoryName] = useState("");
 	const [wordResults, setWordResults] = useState<Data.ContentType<"api::lexical-item.lexical-item">[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -51,16 +51,16 @@ export default function CategoriesTab() {
 	// Update URL when category or page changes
 	useEffect(() => {
 		const queryString = createQueryString({
-			tab: selectedCategoryId ? null : "categories",
-			category: selectedCategoryId || null,
-			page: selectedCategoryId && currentPage > 1 ? currentPage : null,
+			tab: selectedCategory ? null : "categories",
+			category: selectedCategory || null,
+			page: selectedCategory && currentPage > 1 ? currentPage : null,
 			// query: null,
 		});
 		router.push(`${pathname}${queryString && "?"}${queryString}`, { scroll: false });
-	}, [selectedCategoryId, currentPage, createQueryString, pathname, router]);
+	}, [selectedCategory, currentPage, createQueryString, pathname, router]);
 
 	useEffect(() => {
-		setSelectedCategoryId(searchParams.get("category") || "");
+		setSelectedCategory(searchParams.get("category") || "");
 		setCurrentPage(searchParams.get("page") ? Number.parseInt(searchParams.get("page")!, 10) : 1);
 	}, [searchParams]);
 
@@ -74,7 +74,7 @@ export default function CategoriesTab() {
 				console.error("Error fetching categories:", error);
 			}
 			finally {
-				if (!selectedCategoryId) {
+				if (!selectedCategory) {
 					setIsLoading(false);
 				}
 			}
@@ -85,14 +85,14 @@ export default function CategoriesTab() {
 
 	useEffect(() => {
 		async function fetchWordsByCategory() {
-			if (!selectedCategoryId) return;
+			if (!selectedCategory) return;
 
 			setIsLoading(true);
 			try {
-				const response = await getLexicalItemsByDomain(Number.parseInt(selectedCategoryId, 10), currentPage, PAGE_SIZE);
+				const response = await getLexicalItemsByDomain(selectedCategory, currentPage, PAGE_SIZE);
 
 				// Find the selected category name
-				const category = categories.find(cat => cat.id.toString() === selectedCategoryId);
+				const category = categories.find(({ slug }) => slug === selectedCategory);
 				if (category) {
 					setSelectedCategoryName(category.zhName || category.enName || "");
 				}
@@ -112,15 +112,15 @@ export default function CategoriesTab() {
 		}
 
 		fetchWordsByCategory();
-	}, [selectedCategoryId, categories, currentPage]);
+	}, [selectedCategory, categories, currentPage]);
 
-	const handleCategorySelect = (categoryId: string) => {
-		setSelectedCategoryId(categoryId);
+	const handleCategorySelect = (category: string) => {
+		setSelectedCategory(category);
 		setCurrentPage(1); // Reset to first page when changing category
 	};
 
 	const handleBackClick = () => {
-		setSelectedCategoryId("");
+		setSelectedCategory("");
 		setCurrentPage(1);
 	};
 
@@ -129,7 +129,7 @@ export default function CategoriesTab() {
 		document.querySelector("[role=tablist]")?.scrollIntoView({ behavior: "smooth" });
 	};
 
-	if (!selectedCategoryId) {
+	if (!selectedCategory) {
 		return (
 			<div>
 				<h3 className="text-lg font-medium text-gray-900 mb-4">按類別瀏覽</h3>
@@ -143,9 +143,9 @@ export default function CategoriesTab() {
 					: <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 						{categories.map(category => (
 							<Card
-								key={category.id}
+								key={category.documentId}
 								className="cursor-pointer hover:shadow-md transition-shadow"
-								onClick={() => handleCategorySelect(category.id.toString())}>
+								onClick={() => handleCategorySelect(category.slug!)}>
 								<CardContent className="p-4">
 									<h4 className="text-lg font-medium text-gray-900">{category.zhName || category.enName}</h4>
 									{category.enName && category.zhName && <p className="text-sm text-gray-500">{category.enName}</p>}
@@ -184,7 +184,7 @@ export default function CategoriesTab() {
 						? <>
 							<div className="space-y-4">
 								{wordResults.map(word => (
-									<WordResult key={word.id} word={word} />
+									<WordResult key={word.documentId} word={word} />
 								))}
 							</div>
 

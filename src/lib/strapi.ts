@@ -254,7 +254,7 @@ export async function getRelatedArticles(articleId: string, category: string, ta
 	// Get articles with the same tags, excluding the current article
 	const data = await strapiClient.collection("articles").find({
 		filters: {
-			id: {
+			documentId: {
 				$ne: articleId,
 			},
 			category: {
@@ -263,7 +263,7 @@ export async function getRelatedArticles(articleId: string, category: string, ta
 				},
 			},
 			tags: {
-				id: {
+				documentId: {
 					$in: tagIds,
 				},
 			},
@@ -448,12 +448,12 @@ export async function getLexicalDomains() {
 	});
 }
 
-export async function getLexicalItemsByDomain(domainId: number, page = 1, pageSize = 10) {
+export async function getLexicalItemsByDomain(domain: string, page = 1, pageSize = 10) {
 	return strapiClient.collection("lexical-items").find({
 		filters: {
 			surveyedDomain: {
-				id: {
-					$eq: domainId,
+				slug: {
+					$eq: domain,
 				},
 			},
 		},

@@ -178,7 +178,7 @@ export default function SearchTab({ wordOfTheDayComponent }: { wordOfTheDayCompo
 									</h4>
 									<div className="space-y-4">
 										{characterResults.map(character => (
-											<CharacterResult key={character.id} character={character} />
+											<CharacterResult key={character.documentId} character={character} />
 										))}
 									</div>
 								</div>
@@ -191,7 +191,7 @@ export default function SearchTab({ wordOfTheDayComponent }: { wordOfTheDayCompo
 									</h4>
 									<div className="space-y-4">
 										{wordResults.map(word => (
-											<WordResult key={word.id} word={word} />
+											<WordResult key={word.documentId} word={word} />
 										))}
 									</div>
 								</div>

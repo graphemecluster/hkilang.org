@@ -17,7 +17,7 @@ export default function RelatedArticles({ articles }: RelatedArticlesProps) {
 				const imageUrl = getStrapiMedia(article.heading?.coverImage?.url);
 
 				return (
-					<Link key={article.id} href={`/news/${article.slug}`}>
+					<Link key={article.documentId} href={`/news/${article.slug}`}>
 						<Card className="h-full overflow-hidden hover:shadow-md transition-shadow">
 							<div className="aspect-video relative">
 								<Image src={imageUrl || "/placeholder.svg"} alt={article.heading.title} width={0} height={0} className="w-full h-full object-cover" />

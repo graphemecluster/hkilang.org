@@ -8,7 +8,7 @@ export default async function LanguageShowcase() {
 	return (
 		<div className="mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-center gap-6">
 			{languages.map(language => (
-				<div key={language.id} className="flex-1 sm:min-w-60 max-w-96 md:max-w-80 group relative overflow-hidden rounded-lg">
+				<div key={language.documentId} className="flex-1 sm:min-w-60 max-w-96 md:max-w-80 group relative overflow-hidden rounded-lg">
 					<div className="aspect-video relative">
 						<Image
 							src={language.heading?.coverImage || "/placeholder.svg"}

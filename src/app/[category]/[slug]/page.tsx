@@ -58,7 +58,7 @@ export default async function ArticleDetailPage({ params }: PageProps<"category"
 	const readingTime = Math.max(1, Math.ceil(wordCount / 100));
 
 	// Get related articles
-	const relatedArticles = await getRelatedArticles(article.id, article.category.slug, tags.map(tag => tag.id));
+	const relatedArticles = await getRelatedArticles(article.documentId, article.category.slug, tags.map(tag => tag.documentId));
 
 	return (
 		<div>
@@ -101,7 +101,7 @@ export default async function ArticleDetailPage({ params }: PageProps<"category"
 						{!!tags.length && (
 							<div className="flex flex-wrap gap-2 mb-6">
 								{tags.map(tag => (
-									<Link key={tag.id} href={`/${article.category.slug}?tag=${tag.slug}`}>
+									<Link key={tag.documentId} href={`/${article.category.slug}?tag=${tag.slug}`}>
 										<Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200">{tag.name}</Badge>
 									</Link>
 								))}
