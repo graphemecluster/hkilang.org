@@ -39,6 +39,11 @@ export interface AdminApiToken extends Struct.CollectionTypeSchema {
 				minLength: 1;
 			}>
 			& Schema.Attribute.DefaultTo<"">;
+		encryptedKey:
+			& Schema.Attribute.Text
+			& Schema.Attribute.SetMinMaxLength<{
+				minLength: 1;
+			}>;
 		expiresAt: Schema.Attribute.DateTime;
 		lastUsedAt: Schema.Attribute.DateTime;
 		lifespan: Schema.Attribute.BigInteger;
@@ -575,25 +580,22 @@ export interface ApiContactSectionContactSection extends Struct.SingleTypeSchema
 	};
 }
 
-export interface ApiEventHighlightsPageEventHighlightsPage extends Struct.SingleTypeSchema {
-	collectionName: "event_highlights_pages";
+export interface ApiDictionaryPageDictionaryPage extends Struct.SingleTypeSchema {
+	collectionName: "dictionary_pages";
 	info: {
 		description: "";
-		displayName: "Event Highlights Page";
-		pluralName: "event-highlights-pages";
-		singularName: "event-highlights-page";
+		displayName: "Dictionary Page";
+		pluralName: "dictionary-pages";
+		singularName: "dictionary-page";
 	};
 	options: {
-		draftAndPublish: true;
+		draftAndPublish: false;
 	};
 	attributes: {
 		createdAt: Schema.Attribute.DateTime;
 		createdBy:
 			& Schema.Attribute.Relation<"oneToOne", "admin::user">
 			& Schema.Attribute.Private;
-		events:
-			& Schema.Attribute.Component<"event-highlights-page.event", true>
-			& Schema.Attribute.Required;
 		heading:
 			& Schema.Attribute.Component<"shared.heading", false>
 			& Schema.Attribute.Required;
@@ -601,13 +603,10 @@ export interface ApiEventHighlightsPageEventHighlightsPage extends Struct.Single
 		localizations:
 			& Schema.Attribute.Relation<
 				"oneToMany",
-				"api::event-highlights-page.event-highlights-page"
+				"api::dictionary-page.dictionary-page"
 			>
 			& Schema.Attribute.Private;
 		publishedAt: Schema.Attribute.DateTime;
-		talks:
-			& Schema.Attribute.Component<"event-highlights-page.event", true>
-			& Schema.Attribute.Required;
 		updatedAt: Schema.Attribute.DateTime;
 		updatedBy:
 			& Schema.Attribute.Relation<"oneToOne", "admin::user">
@@ -652,6 +651,89 @@ export interface ApiFaqPageFaqPage extends Struct.SingleTypeSchema {
 	};
 }
 
+export interface ApiGenreGenre extends Struct.CollectionTypeSchema {
+	collectionName: "genres";
+	info: {
+		displayName: "Genre";
+		pluralName: "genres";
+		singularName: "genre";
+	};
+	options: {
+		draftAndPublish: false;
+	};
+	attributes: {
+		createdAt: Schema.Attribute.DateTime;
+		createdBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		enName: Schema.Attribute.String & Schema.Attribute.Required;
+		items: Schema.Attribute.Relation<
+			"oneToMany",
+			"api::themed-item.themed-item"
+		>;
+		locale: Schema.Attribute.String & Schema.Attribute.Private;
+		localizations:
+			& Schema.Attribute.Relation<"oneToMany", "api::genre.genre">
+			& Schema.Attribute.Private;
+		publishedAt: Schema.Attribute.DateTime;
+		slug: Schema.Attribute.UID<"enName"> & Schema.Attribute.Required;
+		updatedAt: Schema.Attribute.DateTime;
+		updatedBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		zhName: Schema.Attribute.String & Schema.Attribute.Required;
+	};
+}
+
+export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
+	collectionName: "home_pages";
+	info: {
+		description: "";
+		displayName: "Home Page";
+		pluralName: "home-pages";
+		singularName: "home-page";
+	};
+	options: {
+		draftAndPublish: false;
+	};
+	attributes: {
+		callToActionSection:
+			& Schema.Attribute.Component<
+				"home-page.call-to-action-section",
+				false
+			>
+			& Schema.Attribute.Required;
+		createdAt: Schema.Attribute.DateTime;
+		createdBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		heading:
+			& Schema.Attribute.Component<"shared.heading", false>
+			& Schema.Attribute.Required;
+		languageShowcaseSection:
+			& Schema.Attribute.Component<
+				"shared.heading",
+				false
+			>
+			& Schema.Attribute.Required;
+		locale: Schema.Attribute.String & Schema.Attribute.Private;
+		localizations:
+			& Schema.Attribute.Relation<
+				"oneToMany",
+				"api::home-page.home-page"
+			>
+			& Schema.Attribute.Private;
+		publishedAt: Schema.Attribute.DateTime;
+		updatedAt: Schema.Attribute.DateTime;
+		updatedBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		wordOfTheDaySection:
+			& Schema.Attribute.Component<"shared.heading", false>
+			& Schema.Attribute.Required;
+	};
+}
+
 export interface ApiLanguageIntroPageLanguageIntroPage extends Struct.CollectionTypeSchema {
 	collectionName: "language_intro_pages";
 	info: {
@@ -668,16 +750,7 @@ export interface ApiLanguageIntroPageLanguageIntroPage extends Struct.Collection
 		createdBy:
 			& Schema.Attribute.Relation<"oneToOne", "admin::user">
 			& Schema.Attribute.Private;
-		culturalContext: Schema.Attribute.Component<
-			"language-intro-page.cultural-context",
-			false
-		>;
-		distribution:
-			& Schema.Attribute.Component<
-				"language-intro-page.language-map",
-				false
-			>
-			& Schema.Attribute.Required;
+		culturalContext: Schema.Attribute.RichText;
 		heading: Schema.Attribute.Component<"shared.heading", false>;
 		lang: Schema.Attribute.Relation<"oneToOne", "api::language.language">;
 		locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -687,19 +760,13 @@ export interface ApiLanguageIntroPageLanguageIntroPage extends Struct.Collection
 				"api::language-intro-page.language-intro-page"
 			>
 			& Schema.Attribute.Private;
-		overview:
-			& Schema.Attribute.Component<
-				"language-intro-page.language-intro-section",
-				true
-			>
-			& Schema.Attribute.Required;
+		overview: Schema.Attribute.RichText;
+		pronunciationGuide: Schema.Attribute.RichText;
 		publishedAt: Schema.Attribute.DateTime;
-		relatedResources:
-			& Schema.Attribute.Component<
-				"language-intro-page.related-resources",
-				false
-			>
-			& Schema.Attribute.Required;
+		relatedResources: Schema.Attribute.Component<
+			"language-intro-page.related-resources",
+			false
+		>;
 		updatedAt: Schema.Attribute.DateTime;
 		updatedBy:
 			& Schema.Attribute.Relation<"oneToOne", "admin::user">
@@ -744,6 +811,87 @@ export interface ApiLanguageLanguage extends Struct.CollectionTypeSchema {
 	};
 }
 
+export interface ApiLanguagesPageLanguagesPage extends Struct.SingleTypeSchema {
+	collectionName: "languages_pages";
+	info: {
+		description: "";
+		displayName: "Languages Page";
+		pluralName: "languages-pages";
+		singularName: "languages-page";
+	};
+	options: {
+		draftAndPublish: false;
+	};
+	attributes: {
+		createdAt: Schema.Attribute.DateTime;
+		createdBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		heading:
+			& Schema.Attribute.Component<"shared.heading", false>
+			& Schema.Attribute.Required;
+		locale: Schema.Attribute.String & Schema.Attribute.Private;
+		localizations:
+			& Schema.Attribute.Relation<
+				"oneToMany",
+				"api::languages-page.languages-page"
+			>
+			& Schema.Attribute.Private;
+		publishedAt: Schema.Attribute.DateTime;
+		relatedResources: Schema.Attribute.Component<
+			"language-intro-page.related-resources",
+			false
+		>;
+		updatedAt: Schema.Attribute.DateTime;
+		updatedBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+	};
+}
+
+export interface ApiLexicalItemLexicalItem extends Struct.CollectionTypeSchema {
+	collectionName: "lexical_items";
+	info: {
+		description: "";
+		displayName: "Lexical Item";
+		pluralName: "lexical-items";
+		singularName: "lexical-item";
+	};
+	options: {
+		draftAndPublish: false;
+	};
+	attributes: {
+		createdAt: Schema.Attribute.DateTime;
+		createdBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		enGloss: Schema.Attribute.String;
+		locale: Schema.Attribute.String & Schema.Attribute.Private;
+		localizations:
+			& Schema.Attribute.Relation<
+				"oneToMany",
+				"api::lexical-item.lexical-item"
+			>
+			& Schema.Attribute.Private;
+		notes: Schema.Attribute.String;
+		publishedAt: Schema.Attribute.DateTime;
+		showcaseDomain: Schema.Attribute.Relation<
+			"manyToOne",
+			"api::showcase-lexical-domain.showcase-lexical-domain"
+		>;
+		surveyedDomain: Schema.Attribute.Relation<
+			"manyToOne",
+			"api::surveyed-lexical-domain.surveyed-lexical-domain"
+		>;
+		updatedAt: Schema.Attribute.DateTime;
+		updatedBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		words: Schema.Attribute.Component<"dictionary.linguistic-form", true>;
+		zhGloss: Schema.Attribute.String & Schema.Attribute.Required;
+	};
+}
+
 export interface ApiListedCharacterListedCharacter extends Struct.CollectionTypeSchema {
 	collectionName: "listed_characters";
 	info: {
@@ -779,6 +927,78 @@ export interface ApiListedCharacterListedCharacter extends Struct.CollectionType
 	};
 }
 
+export interface ApiListedSyllableListedSyllable extends Struct.CollectionTypeSchema {
+	collectionName: "listed_syllables";
+	info: {
+		displayName: "Listed Syllable";
+		pluralName: "listed-syllables";
+		singularName: "listed-syllable";
+	};
+	options: {
+		draftAndPublish: false;
+	};
+	attributes: {
+		audio: Schema.Attribute.Media<"audios">;
+		createdAt: Schema.Attribute.DateTime;
+		createdBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		lang: Schema.Attribute.Relation<"oneToOne", "api::language.language">;
+		locale: Schema.Attribute.String & Schema.Attribute.Private;
+		localizations:
+			& Schema.Attribute.Relation<
+				"oneToMany",
+				"api::listed-syllable.listed-syllable"
+			>
+			& Schema.Attribute.Private;
+		notes: Schema.Attribute.String;
+		pron: Schema.Attribute.String & Schema.Attribute.Required;
+		publishedAt: Schema.Attribute.DateTime;
+		updatedAt: Schema.Attribute.DateTime;
+		updatedBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+	};
+}
+
+export interface ApiShowcaseLexicalDomainShowcaseLexicalDomain extends Struct.CollectionTypeSchema {
+	collectionName: "showcase_lexical_domains";
+	info: {
+		description: "";
+		displayName: "Showcase Lexical Domain";
+		pluralName: "showcase-lexical-domains";
+		singularName: "showcase-lexical-domain";
+	};
+	options: {
+		draftAndPublish: false;
+	};
+	attributes: {
+		createdAt: Schema.Attribute.DateTime;
+		createdBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		enName: Schema.Attribute.String & Schema.Attribute.Required;
+		items: Schema.Attribute.Relation<
+			"oneToMany",
+			"api::lexical-item.lexical-item"
+		>;
+		locale: Schema.Attribute.String & Schema.Attribute.Private;
+		localizations:
+			& Schema.Attribute.Relation<
+				"oneToMany",
+				"api::showcase-lexical-domain.showcase-lexical-domain"
+			>
+			& Schema.Attribute.Private;
+		publishedAt: Schema.Attribute.DateTime;
+		slug: Schema.Attribute.UID<"enName"> & Schema.Attribute.Required;
+		updatedAt: Schema.Attribute.DateTime;
+		updatedBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		zhName: Schema.Attribute.String & Schema.Attribute.Required;
+	};
+}
+
 export interface ApiSurveyedLexicalDomainSurveyedLexicalDomain extends Struct.CollectionTypeSchema {
 	collectionName: "surveyed_lexical_domains";
 	info: {
@@ -795,10 +1015,10 @@ export interface ApiSurveyedLexicalDomainSurveyedLexicalDomain extends Struct.Co
 		createdBy:
 			& Schema.Attribute.Relation<"oneToOne", "admin::user">
 			& Schema.Attribute.Private;
-		enName: Schema.Attribute.String;
+		enName: Schema.Attribute.String & Schema.Attribute.Required;
 		items: Schema.Attribute.Relation<
 			"oneToMany",
-			"api::surveyed-lexical-item.surveyed-lexical-item"
+			"api::lexical-item.lexical-item"
 		>;
 		locale: Schema.Attribute.String & Schema.Attribute.Private;
 		localizations:
@@ -808,50 +1028,12 @@ export interface ApiSurveyedLexicalDomainSurveyedLexicalDomain extends Struct.Co
 			>
 			& Schema.Attribute.Private;
 		publishedAt: Schema.Attribute.DateTime;
+		slug: Schema.Attribute.UID<"enName"> & Schema.Attribute.Required;
 		updatedAt: Schema.Attribute.DateTime;
 		updatedBy:
 			& Schema.Attribute.Relation<"oneToOne", "admin::user">
 			& Schema.Attribute.Private;
 		zhName: Schema.Attribute.String & Schema.Attribute.Required;
-	};
-}
-
-export interface ApiSurveyedLexicalItemSurveyedLexicalItem extends Struct.CollectionTypeSchema {
-	collectionName: "surveyed_lexical_items";
-	info: {
-		description: "";
-		displayName: "Surveyed Lexical Item";
-		pluralName: "surveyed-lexical-items";
-		singularName: "surveyed-lexical-item";
-	};
-	options: {
-		draftAndPublish: false;
-	};
-	attributes: {
-		createdAt: Schema.Attribute.DateTime;
-		createdBy:
-			& Schema.Attribute.Relation<"oneToOne", "admin::user">
-			& Schema.Attribute.Private;
-		domain: Schema.Attribute.Relation<
-			"manyToOne",
-			"api::surveyed-lexical-domain.surveyed-lexical-domain"
-		>;
-		enGloss: Schema.Attribute.String;
-		locale: Schema.Attribute.String & Schema.Attribute.Private;
-		localizations:
-			& Schema.Attribute.Relation<
-				"oneToMany",
-				"api::surveyed-lexical-item.surveyed-lexical-item"
-			>
-			& Schema.Attribute.Private;
-		notes: Schema.Attribute.String;
-		publishedAt: Schema.Attribute.DateTime;
-		updatedAt: Schema.Attribute.DateTime;
-		updatedBy:
-			& Schema.Attribute.Relation<"oneToOne", "admin::user">
-			& Schema.Attribute.Private;
-		words: Schema.Attribute.Component<"dictionary.linguistic-form", true>;
-		zhGloss: Schema.Attribute.String & Schema.Attribute.Required;
 	};
 }
 
@@ -887,9 +1069,46 @@ export interface ApiTagTag extends Struct.CollectionTypeSchema {
 	};
 }
 
+export interface ApiThemedItemThemedItem extends Struct.CollectionTypeSchema {
+	collectionName: "themed_items";
+	info: {
+		description: "";
+		displayName: "Themed Item";
+		pluralName: "themed-items";
+		singularName: "themed-item";
+	};
+	options: {
+		draftAndPublish: false;
+	};
+	attributes: {
+		createdAt: Schema.Attribute.DateTime;
+		createdBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		enTitle: Schema.Attribute.String;
+		genre: Schema.Attribute.Relation<"manyToOne", "api::genre.genre">;
+		locale: Schema.Attribute.String & Schema.Attribute.Private;
+		localizations:
+			& Schema.Attribute.Relation<
+				"oneToMany",
+				"api::themed-item.themed-item"
+			>
+			& Schema.Attribute.Private;
+		notes: Schema.Attribute.String;
+		publishedAt: Schema.Attribute.DateTime;
+		updatedAt: Schema.Attribute.DateTime;
+		updatedBy:
+			& Schema.Attribute.Relation<"oneToOne", "admin::user">
+			& Schema.Attribute.Private;
+		versions: Schema.Attribute.Component<"dictionary.scenario", true>;
+		zhTitle: Schema.Attribute.String & Schema.Attribute.Required;
+	};
+}
+
 export interface ApiWordOfTheDayWordOfTheDay extends Struct.CollectionTypeSchema {
 	collectionName: "word_of_the_days";
 	info: {
+		description: "";
 		displayName: "Word of the Day";
 		pluralName: "word-of-the-days";
 		singularName: "word-of-the-day";
@@ -905,7 +1124,7 @@ export interface ApiWordOfTheDayWordOfTheDay extends Struct.CollectionTypeSchema
 		date: Schema.Attribute.Date & Schema.Attribute.Required;
 		item: Schema.Attribute.Relation<
 			"oneToOne",
-			"api::surveyed-lexical-item.surveyed-lexical-item"
+			"api::lexical-item.lexical-item"
 		>;
 		locale: Schema.Attribute.String & Schema.Attribute.Private;
 		localizations:
@@ -1472,14 +1691,20 @@ declare module "@strapi/strapi" {
 			"api::article.article": ApiArticleArticle;
 			"api::category.category": ApiCategoryCategory;
 			"api::contact-section.contact-section": ApiContactSectionContactSection;
-			"api::event-highlights-page.event-highlights-page": ApiEventHighlightsPageEventHighlightsPage;
+			"api::dictionary-page.dictionary-page": ApiDictionaryPageDictionaryPage;
 			"api::faq-page.faq-page": ApiFaqPageFaqPage;
+			"api::genre.genre": ApiGenreGenre;
+			"api::home-page.home-page": ApiHomePageHomePage;
 			"api::language-intro-page.language-intro-page": ApiLanguageIntroPageLanguageIntroPage;
 			"api::language.language": ApiLanguageLanguage;
+			"api::languages-page.languages-page": ApiLanguagesPageLanguagesPage;
+			"api::lexical-item.lexical-item": ApiLexicalItemLexicalItem;
 			"api::listed-character.listed-character": ApiListedCharacterListedCharacter;
+			"api::listed-syllable.listed-syllable": ApiListedSyllableListedSyllable;
+			"api::showcase-lexical-domain.showcase-lexical-domain": ApiShowcaseLexicalDomainShowcaseLexicalDomain;
 			"api::surveyed-lexical-domain.surveyed-lexical-domain": ApiSurveyedLexicalDomainSurveyedLexicalDomain;
-			"api::surveyed-lexical-item.surveyed-lexical-item": ApiSurveyedLexicalItemSurveyedLexicalItem;
 			"api::tag.tag": ApiTagTag;
+			"api::themed-item.themed-item": ApiThemedItemThemedItem;
 			"api::word-of-the-day.word-of-the-day": ApiWordOfTheDayWordOfTheDay;
 			"plugin::content-releases.release": PluginContentReleasesRelease;
 			"plugin::content-releases.release-action": PluginContentReleasesReleaseAction;

@@ -29,11 +29,12 @@ export interface AboutPageMember extends Struct.ComponentSchema {
 export interface AboutPageTimelineItem extends Struct.ComponentSchema {
 	collectionName: "components_about_page_timeline_items";
 	info: {
+		description: "";
 		displayName: "Timeline Item";
 		icon: "clock";
 	};
 	attributes: {
-		summary: Schema.Attribute.String & Schema.Attribute.Required;
+		content: Schema.Attribute.RichText & Schema.Attribute.Required;
 		year: Schema.Attribute.String & Schema.Attribute.Required;
 	};
 }
@@ -70,17 +71,15 @@ export interface DictionaryLinguisticForm extends Struct.ComponentSchema {
 	};
 }
 
-export interface EventHighlightsPageEvent extends Struct.ComponentSchema {
-	collectionName: "components_event_highlights_page_events";
+export interface DictionaryScenario extends Struct.ComponentSchema {
+	collectionName: "components_dictionary_scenarios";
 	info: {
-		displayName: "Event";
-		icon: "calendar";
+		displayName: "Scenario";
 	};
 	attributes: {
-		heading:
-			& Schema.Attribute.Component<"shared.heading", false>
-			& Schema.Attribute.Required;
-		year: Schema.Attribute.Date & Schema.Attribute.Required;
+		annotatedText: Schema.Attribute.RichText;
+		audio: Schema.Attribute.Media<"audios">;
+		lang: Schema.Attribute.Relation<"oneToOne", "api::language.language">;
 	};
 }
 
@@ -93,6 +92,22 @@ export interface FaqPageFaqSection extends Struct.ComponentSchema {
 	attributes: {
 		answer: Schema.Attribute.RichText & Schema.Attribute.Required;
 		question: Schema.Attribute.String & Schema.Attribute.Required;
+	};
+}
+
+export interface HomePageCallToActionSection extends Struct.ComponentSchema {
+	collectionName: "components_home_page_call_to_action_sections";
+	info: {
+		displayName: "Call to Action Section";
+	};
+	attributes: {
+		applicationForm:
+			& Schema.Attribute.Media<"files">
+			& Schema.Attribute.Required;
+		buttonText: Schema.Attribute.String & Schema.Attribute.Required;
+		heading:
+			& Schema.Attribute.Component<"shared.heading", false>
+			& Schema.Attribute.Required;
 	};
 }
 
@@ -119,21 +134,6 @@ export interface LanguageIntroPageLanguageIntroSection extends Struct.ComponentS
 	attributes: {
 		content: Schema.Attribute.RichText & Schema.Attribute.Required;
 		subtitle: Schema.Attribute.String & Schema.Attribute.Required;
-	};
-}
-
-export interface LanguageIntroPageLanguageMap extends Struct.ComponentSchema {
-	collectionName: "components_language_intro_page_language_maps";
-	info: {
-		displayName: "Language Map";
-	};
-	attributes: {
-		heading:
-			& Schema.Attribute.Component<"shared.heading", false>
-			& Schema.Attribute.Required;
-		villages:
-			& Schema.Attribute.Component<"language-intro-page.village", true>
-			& Schema.Attribute.Required;
 	};
 }
 
@@ -171,18 +171,6 @@ export interface LanguageIntroPageResource extends Struct.ComponentSchema {
 	};
 }
 
-export interface LanguageIntroPageVillage extends Struct.ComponentSchema {
-	collectionName: "components_language_intro_page_villages";
-	info: {
-		displayName: "Village";
-		icon: "pinMap";
-	};
-	attributes: {
-		name: Schema.Attribute.String & Schema.Attribute.Required;
-		population: Schema.Attribute.String;
-	};
-}
-
 export interface SharedHeading extends Struct.ComponentSchema {
 	collectionName: "components_shared_headings";
 	info: {
@@ -204,14 +192,13 @@ declare module "@strapi/strapi" {
 			"about-page.timeline-item": AboutPageTimelineItem;
 			"dictionary.example": DictionaryExample;
 			"dictionary.linguistic-form": DictionaryLinguisticForm;
-			"event-highlights-page.event": EventHighlightsPageEvent;
+			"dictionary.scenario": DictionaryScenario;
 			"faq-page.faq-section": FaqPageFaqSection;
+			"home-page.call-to-action-section": HomePageCallToActionSection;
 			"language-intro-page.cultural-context": LanguageIntroPageCulturalContext;
 			"language-intro-page.language-intro-section": LanguageIntroPageLanguageIntroSection;
-			"language-intro-page.language-map": LanguageIntroPageLanguageMap;
 			"language-intro-page.related-resources": LanguageIntroPageRelatedResources;
 			"language-intro-page.resource": LanguageIntroPageResource;
-			"language-intro-page.village": LanguageIntroPageVillage;
 			"shared.heading": SharedHeading;
 		}
 	}
