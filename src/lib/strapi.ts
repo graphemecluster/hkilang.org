@@ -249,14 +249,6 @@ export async function getLanguageIntroPage(slug: string) {
 				populate: ["coverImage"],
 			},
 			lang: true,
-			overview: true,
-			culturalContext: {
-				populate: {
-					sections: {
-						populate: ["coverImage"],
-					},
-				},
-			},
 			relatedResources: {
 				populate: {
 					heading: {
@@ -291,7 +283,7 @@ export async function getWordOfTheDay() {
 		populate: {
 			item: {
 				populate: {
-					domain: true,
+					surveyedDomain: true,
 					words: {
 						populate: ["lang", "audio", "examples"],
 					},
@@ -339,7 +331,7 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 	});
 
 	// Then search for words
-	const wordsData = await strapiClient.collection("surveyed-lexical-items").find({
+	const wordsData = await strapiClient.collection("lexical-items").find({
 		filters: {
 			$or: [
 				{ zhGloss: { $containsi: query } },
@@ -361,7 +353,7 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 			pageSize: wordPageSize,
 		},
 		populate: {
-			domain: true,
+			surveyedDomain: true,
 			words: {
 				populate: ["lang", "audio", "examples"],
 			},
@@ -384,9 +376,9 @@ export async function getLexicalDomains() {
 }
 
 export async function getLexicalItemsByDomain(domainId: number, page = 1, pageSize = 10) {
-	return strapiClient.collection("surveyed-lexical-items").find({
+	return strapiClient.collection("lexical-items").find({
 		filters: {
-			domain: {
+			surveyedDomain: {
 				id: {
 					$eq: domainId,
 				},
@@ -397,7 +389,7 @@ export async function getLexicalItemsByDomain(domainId: number, page = 1, pageSi
 			pageSize,
 		},
 		populate: {
-			domain: true,
+			surveyedDomain: true,
 			words: {
 				populate: ["lang", "audio", "examples"],
 			},
