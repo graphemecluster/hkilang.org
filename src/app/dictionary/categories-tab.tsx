@@ -24,7 +24,7 @@ export default function CategoriesTab() {
 	const [categories, setCategories] = useState<Data.ContentType<"api::surveyed-lexical-domain.surveyed-lexical-domain">[]>([]);
 	const [selectedCategoryId, setSelectedCategoryId] = useState(initialCategoryId);
 	const [selectedCategoryName, setSelectedCategoryName] = useState("");
-	const [wordResults, setWordResults] = useState<Data.ContentType<"api::surveyed-lexical-item.surveyed-lexical-item">[]>([]);
+	const [wordResults, setWordResults] = useState<Data.ContentType<"api::lexical-item.lexical-item">[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(1);

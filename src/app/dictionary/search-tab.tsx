@@ -31,7 +31,7 @@ export default function SearchTab({ wordOfTheDayComponent }: { wordOfTheDayCompo
 	const [isSearching, setIsSearching] = useState(false);
 	const [hasSearched, setHasSearched] = useState(!!initialQuery);
 	const [characterResults, setCharacterResults] = useState<Data.ContentType<"api::listed-character.listed-character">[]>([]);
-	const [wordResults, setWordResults] = useState<Data.ContentType<"api::surveyed-lexical-item.surveyed-lexical-item">[]>([]);
+	const [wordResults, setWordResults] = useState<Data.ContentType<"api::lexical-item.lexical-item">[]>([]);
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(1);
 	const [totalResults, setTotalResults] = useState({ characters: 0, words: 0 });

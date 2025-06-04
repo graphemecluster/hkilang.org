@@ -4,8 +4,8 @@ import AudioPlayer from "./audio-player";
 import type { Data } from "@strapi/strapi";
 import { formatDate } from "@/lib/utils";
 
-export default function WordResult({ date, word }: { date?: string; word: Data.ContentType<"api::surveyed-lexical-item.surveyed-lexical-item"> }) {
-	const { zhGloss, enGloss, words, notes, domain } = word;
+export default function WordResult({ date, word }: { date?: string; word: Data.ContentType<"api::lexical-item.lexical-item"> }) {
+	const { zhGloss, enGloss, words, notes, surveyedDomain } = word;
 
 	const formsByLang = Object.groupBy(words!, form => form.lang!.zhName!);
 
@@ -20,7 +20,7 @@ export default function WordResult({ date, word }: { date?: string; word: Data.C
 		<Card className="overflow-hidden border-2 border-red-100">
 			<div className="bg-red-800 px-4 py-2 text-white flex justify-between items-center">
 				{date ? <div className="text-sm">{formatDate(date)}</div> : <div className="text-lg font-medium">{zhGloss}</div>}
-				{domain && <div className="text-sm bg-white/20 px-2 py-0.5 rounded">{domain.zhName}</div>}
+				{surveyedDomain && <div className="text-sm bg-white/20 px-2 py-0.5 rounded">{surveyedDomain.zhName}</div>}
 			</div>
 			<CardContent className="p-6">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
