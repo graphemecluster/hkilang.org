@@ -7,11 +7,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SearchTab from "./search-tab";
 import CategoriesTab from "./categories-tab";
 
-import type { ReactElement } from "react";
+import type { Dispatch, ReactElement } from "react";
+import type { Data } from "@strapi/strapi";
+import Heading from "@/components/heading";
 
-export default function PageContent({ wordOfTheDayComponent }: { wordOfTheDayComponent: ReactElement }) {
+export default function PageContent({ heading, initialTab, wordOfTheDayComponent }: {
+	heading: Data.Component<"shared.heading">;
+	initialTab: "categories" | "search";
+	wordOfTheDayComponent: ReactElement;
+}) {
 	const searchParams = useSearchParams();
-	const initialTab = searchParams.get("tab") === "categories" || searchParams.has("category") ? "categories" : "search";
 	const [activeTab, setActiveTab] = useState(initialTab);
 
 	// Parameter updates are handled individually in <DictionarySearch> and <DictionaryCategories>, no need to handle it here
@@ -42,14 +47,10 @@ export default function PageContent({ wordOfTheDayComponent }: { wordOfTheDayCom
 	return (
 		<div>
 			<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
-				<div className="mx-auto max-w-2xl text-center">
-					<h1 className="text-4xl font-serif font-bold text-gray-900 sm:text-5xl">語言辭典</h1>
-					<p className="mt-4 text-lg text-gray-600">探索香港本土語言的豐富詞彙，包括圍頭話、客家話、汀角話及東平洲話</p>
-				</div>
-
+				<Heading>{heading}</Heading>
 				<div className="mx-auto mt-12 max-w-3xl">
 					{/* Dictionary Tabs */}
-					<Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+					<Tabs value={activeTab} onValueChange={setActiveTab as Dispatch<string>} className="w-full">
 						<TabsList className="grid w-full grid-cols-2 mb-6">
 							<TabsTrigger value="search">字詞搜尋</TabsTrigger>
 							<TabsTrigger value="categories">按類別瀏覽</TabsTrigger>

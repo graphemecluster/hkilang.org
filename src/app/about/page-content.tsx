@@ -1,15 +1,13 @@
 import Image from "next/image";
-import { getAboutData } from "@/lib/strapi";
 import Timeline from "./timeline";
 import Members from "./members";
 import Markdown from "@/components/markdown";
 
-export default async function PageContent() {
-	const aboutData = await getAboutData();
-	const data = aboutData.data;
+import type { getAboutPageData } from "@/lib/strapi";
 
+export default function PageContent({ data }: { data: Awaited<ReturnType<typeof getAboutPageData>>["data"] }) {
 	return (
-		<div>
+		<div className="mt-12">
 			{data.sections && data.sections.map(section => (
 				<div key={section.id} className="mb-16">
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">

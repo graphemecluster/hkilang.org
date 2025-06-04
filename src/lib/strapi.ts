@@ -18,8 +18,32 @@ export function getStrapiMedia(url: string | null) {
 	// return `${new URL(url, STRAPI_URL)}`;
 }
 
-export async function getAboutData() {
-	const data = await strapiClient.single("about-page").find({
+export async function getHomePageData() {
+	return strapiClient.single("home-page").find({
+		populate: {
+			heading: {
+				populate: ["coverImage"],
+			},
+			wordOfTheDaySection: {
+				populate: ["coverImage"],
+			},
+			languageShowcaseSection: {
+				populate: ["coverImage"],
+			},
+			callToActionSection: {
+				populate: {
+					heading: {
+						populate: ["coverImage"],
+					},
+					applicationForm: true,
+				},
+			},
+		},
+	});
+}
+
+export async function getAboutPageData() {
+	return strapiClient.single("about-page").find({
 		populate: {
 			heading: {
 				populate: ["coverImage"],
@@ -31,17 +55,54 @@ export async function getAboutData() {
 			timeline: true,
 		},
 	});
-
-	return data;
 }
 
-export async function getFAQData() {
-	return strapiClient.single("faq-page").find({
-		populate: ["heading", "questions"],
+export async function getLanguagesPageData() {
+	return strapiClient.single("languages-page").find({
+		populate: {
+			heading: {
+				populate: ["coverImage"],
+			},
+			relatedResources: {
+				populate: {
+					heading: {
+						populate: ["coverImage"],
+					},
+					resources: {
+						populate: {
+							heading: {
+								populate: ["coverImage"],
+							},
+						},
+					},
+				},
+			},
+		},
 	});
 }
 
-export async function getContactData() {
+export async function getDictionaryPageData() {
+	return strapiClient.single("dictionary-page").find({
+		populate: {
+			heading: {
+				populate: ["coverImage"],
+			},
+		},
+	});
+}
+
+export async function getFAQPageData() {
+	return strapiClient.single("faq-page").find({
+		populate: {
+			heading: {
+				populate: ["coverImage"],
+			},
+			questions: true,
+		},
+	});
+}
+
+export async function getContactSectionData() {
 	return strapiClient.single("contact-section").find();
 }
 
@@ -115,8 +176,7 @@ export async function getCarouselArticles() {
 				$notNull: true,
 			},
 			priority: {
-				// TODO uncomment after demo
-				// $gt: 0,
+				$gt: 0,
 			},
 		},
 		sort: ["priority:desc", "publishDate:desc"],
@@ -232,6 +292,7 @@ export async function getLanguageIntroPages() {
 				fields: ["slug"],
 			},
 		},
+		sort: ["lang.zhName:asc"],
 	});
 }
 
@@ -330,6 +391,18 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 		},
 	});
 
+	// TODO handle within Strapi
+	for (const { chars } of charactersData.data) {
+		if (chars) {
+			for (const form of chars) {
+				if (form.lang?.slug && form.pron) {
+					const pron = form.lang.slug === "hakka" ? form.pron.replace("5", "3").replace("6", "4") : form.pron;
+					form.audio ||= await getSyllableAudio(form.lang.slug, pron);
+				}
+			}
+		}
+	}
+
 	// Then search for words
 	const wordsData = await strapiClient.collection("lexical-items").find({
 		filters: {
@@ -394,5 +467,59 @@ export async function getLexicalItemsByDomain(domainId: number, page = 1, pageSi
 				populate: ["lang", "audio", "examples"],
 			},
 		},
+	});
+}
+
+export async function getSyllableAudio(language: string, pron: string) {
+	const data = await strapiClient.collection("listed-syllables").find({
+		filters: {
+			lang: {
+				slug: {
+					$eq: language,
+				},
+			},
+			pron: {
+				$eq: pron,
+			},
+		},
+		populate: ["audio"],
+	});
+
+	return data?.data?.[0]?.audio || null;
+}
+
+export async function getShowcaseLexicalDomains() {
+	return strapiClient.collection("showcase-lexical-domains").find({
+		pagination: {
+			limit: 100,
+		},
+		populate: {
+			items: {
+				populate: {
+					words: {
+						populate: ["lang", "audio", "examples"],
+					},
+				},
+			},
+		},
+		sort: ["slug:asc"],
+	});
+}
+
+export async function getGenres() {
+	return strapiClient.collection("genres").find({
+		pagination: {
+			limit: 100,
+		},
+		populate: {
+			items: {
+				populate: {
+					versions: {
+						populate: ["lang", "audio"],
+					},
+				},
+			},
+		},
+		sort: ["slug:asc"],
 	});
 }

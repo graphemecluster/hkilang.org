@@ -6,6 +6,8 @@ import type { PageProps } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { getCategory } from "@/lib/strapi";
 import { articleCategories } from "@/lib/consts";
+import Heading from "@/components/heading";
+import { getMetadataFromHeading } from "@/lib/utils";
 
 export async function generateMetadata({ params }: PageProps<"category">): Promise<Metadata> {
 	const { category: categorySlug } = await params;
@@ -20,14 +22,7 @@ export async function generateMetadata({ params }: PageProps<"category">): Promi
 		throw new Error("Category not found in CMS");
 	}
 
-	return {
-		title: `${category.name} - 香港本土語言保育協會`,
-		description: category.description || "",
-		openGraph: {
-			title: category.name || "",
-			description: category.description || "",
-		},
-	};
+	return getMetadataFromHeading(category);
 }
 
 export default async function ArticlesPage({ params, searchParams }: PageProps<"category">) {
@@ -53,11 +48,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps<"
 	return (
 		<div>
 			<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
-				<div className="mx-auto max-w-2xl text-center">
-					<h1 className="text-4xl font-serif font-bold text-gray-900 sm:text-5xl">{category.name}</h1>
-					<p className="mt-4 text-lg text-gray-600">{category.description}</p>
-				</div>
-
+				<Heading>{category}</Heading>
 				<Suspense fallback={<PageSkeleton />}>
 					<PageContent
 						category={category!.slug!}

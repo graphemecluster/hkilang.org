@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { getStrapiMedia } from "@/lib/strapi";
-import AudioPlayer from "./audio-player";
+import AudioPlayer from "@/components/audio-player";
 
 import type { Data } from "@strapi/strapi";
 
@@ -21,7 +20,7 @@ export default function CharacterResult({ character }: { character: Data.Content
 							<h3 className="text-lg font-medium text-gray-900 mb-2">{langName}</h3>
 							{forms!.map(form =>
 								<div key={form.id}>
-									<div className="flex items-baseline justify-between mb-2">
+									<div className="flex items-center mb-2">
 										<div>
 											{form.pron && <div className="text-base">{form.pron}</div>}
 											{form.glyph && form.glyph !== codepoint && (
@@ -31,7 +30,7 @@ export default function CharacterResult({ character }: { character: Data.Content
 												</div>
 											)}
 										</div>
-										{form.audio && <AudioPlayer src={getStrapiMedia(form.audio.url) || ""} language={langName} />}
+										{form.audio && <AudioPlayer src={form.audio.url} />}
 									</div>
 									{form.notes && (
 										<div className="mb-3">
@@ -45,17 +44,12 @@ export default function CharacterResult({ character }: { character: Data.Content
 											<div className="mt-1 space-y-2">
 												{form.examples.map((example, idx) => (
 													<div key={idx} className="pl-3 border-l-2 border-gray-200">
-														<div className="flex items-center justify-between">
+														<div className="flex items-center">
 															<div>
 																{example.glyph && <span className="text-gray-900 mr-2">{example.glyph.replace(/~/g, "～")}</span>}
 																<span className="text-gray-600">[{example.pron}]</span>
 															</div>
-															{example.audio && (
-																<AudioPlayer
-																	src={getStrapiMedia(example.audio.url) || ""}
-																	language={langName}
-																	small />
-															)}
+															{example.audio && <AudioPlayer src={example.audio.url} small />}
 														</div>
 														{example.notes && <p className="text-gray-500 text-sm mt-1">{example.notes}</p>}
 													</div>

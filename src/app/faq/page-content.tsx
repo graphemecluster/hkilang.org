@@ -1,11 +1,9 @@
-import { getFAQData } from "@/lib/strapi";
 import Markdown from "@/components/markdown";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
-export default async function PageContent() {
-	const faqData = await getFAQData();
-	const data = faqData.data;
+import type { getFAQPageData } from "@/lib/strapi";
 
+export default async function PageContent({ data }: { data: Awaited<ReturnType<typeof getFAQPageData>>["data"] }) {
 	return (
 		<div className="mt-12 mx-auto max-w-3xl">
 			<Accordion type="single" collapsible className="w-full">

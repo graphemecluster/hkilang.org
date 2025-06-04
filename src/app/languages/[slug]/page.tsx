@@ -4,30 +4,21 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getLanguageIntroPage } from "@/lib/strapi";
-import { getStrapiMedia } from "@/lib/strapi";
-import PronunciationGuide from "./pronunciation-guide";
-import VocabularyList from "./vocabulary-list";
-import AudioPhrases from "./audio-phrases";
-import CulturalContext from "./cultural-context";
+import { getHomePageData, getLanguageIntroPage } from "@/lib/strapi";
+import ShowcaseItemsList from "./showcase-items-list";
+import ThemedItemsList from "./themed-items-list";
 import Markdown from "@/components/markdown";
 import type { PageProps } from "@/lib/types";
+import { getMetadataFromHeading } from "@/lib/utils";
 
 export async function generateMetadata({ params }: PageProps<"slug">): Promise<Metadata> {
 	const introPage = await getLanguageIntroPage((await params).slug);
 
 	if (!introPage) {
-		return {
-			title: "找不到語言 - 香港本土語言保育協會",
-		};
+		notFound();
 	}
 
-	const heading = introPage.heading || {} as never;
-
-	return {
-		title: `${heading.title} - 香港本土語言保育協會`,
-		description: heading.summary || "",
-	};
+	return getMetadataFromHeading(introPage.heading!);
 }
 
 export default async function LanguageDetailPage({ params }: PageProps<"slug">) {
@@ -37,154 +28,117 @@ export default async function LanguageDetailPage({ params }: PageProps<"slug">) 
 		notFound();
 	}
 
-	const lang = introPage.lang || {} as never;
-	const heading = introPage.heading || {} as never;
-	const overview = introPage.overview || {} as never;
-	const culturalContext = introPage.culturalContext || {} as never;
-	const relatedResources = introPage.relatedResources || {} as never;
-
-	// Get cover image URL
-	const coverImageUrl = getStrapiMedia(heading.coverImage?.url);
+	const { data: { callToActionSection } } = await getHomePageData();
 
 	return (
 		<div>
 			{/* Hero Section */}
 			<div className="relative isolate overflow-hidden bg-gradient-to-b from-red-50 to-white">
-				<div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+				<div className="mx-auto max-w-7xl px-6 pt-8 sm:pt-12 lg:px-8">
 					<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-3xl">
 						<h1 className="mt-2 text-4xl font-serif font-bold text-gray-900 sm:text-5xl">
-							{heading.title}
-							<span className="text-2xl ml-3 text-gray-600">{lang.enName}</span>
+							{introPage.heading?.title}
+							<span className="text-2xl ml-4 text-gray-600">{introPage.lang?.enName}</span>
 						</h1>
-						<p className="mt-6 text-lg/8 text-gray-600">{heading.summary}</p>
-						<div className="mt-10 flex items-center gap-x-6">
-							<Button className="bg-red-800 hover:bg-red-700">
-								<Link href={`/dictionary?language=${lang.slug}`}>查詢{lang.zhName}辭典</Link>
-							</Button>
-							<Link href="#pronunciation" className="text-sm font-semibold text-gray-900">
-								學習發音 <span aria-hidden="true">→</span>
-							</Link>
-						</div>
-					</div>
-				</div>
-				<div className="absolute inset-0 -z-10 overflow-hidden">
-					<div className="absolute right-0 top-0 -translate-y-12 translate-x-1/2 transform">
-						<Image
-							src={coverImageUrl || "/placeholder.svg?height=600&width=600"}
-							alt={heading.title}
-							width={600}
-							height={600}
-							className="opacity-20" />
+						<p className="mt-6 text-lg/8 text-gray-600">{introPage.heading?.summary}</p>
 					</div>
 				</div>
 			</div>
 
 			{/* Main Content */}
-			<div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+			<div className="mx-auto max-w-7xl px-6 py-10 sm:py-14 lg:px-8">
 				<Tabs defaultValue="overview" className="w-full">
-					<TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
+					<TabsList className="flex w-full *:flex-1">
 						<TabsTrigger value="overview">概述</TabsTrigger>
-						<TabsTrigger value="pronunciation" id="pronunciation">發音</TabsTrigger>
-						<TabsTrigger value="vocabulary">詞彙</TabsTrigger>
-						<TabsTrigger value="phrases">常用語句</TabsTrigger>
-						<TabsTrigger value="culture">文化背景</TabsTrigger>
+						<TabsTrigger value="pronunciation-guide">發音</TabsTrigger>
+						<TabsTrigger value="showcase-items">詞句</TabsTrigger>
+						<TabsTrigger value="themed-items">口語實例</TabsTrigger>
+						<TabsTrigger value="cultural-context">文化背景</TabsTrigger>
 					</TabsList>
 
 					{/* Overview Tab */}
 					<TabsContent value="overview" className="mt-6">
-						<div className="md:columns-2">
-							{overview.map(section => (
-								<div key={section.id} className="break-inside-avoid">
-									<h2 className="text-2xl font-serif font-bold text-gray-900 mb-4">{section.subtitle}</h2>
-									<Markdown className="mb-4">{section.content}</Markdown>
-								</div>
-							))}
-						</div>
+						<Markdown className="md:columns-2 prose-headings:break-after-avoid prose-h2:font-serif">{introPage.overview}</Markdown>
 					</TabsContent>
 
-					{/* Pronunciation Tab */}
-					<TabsContent value="pronunciation" className="mt-6">
-						<PronunciationGuide language={lang.slug} />
+					{/* Pronunciation Guide Tab */}
+					<TabsContent value="pronunciation-guide" className="mt-6">
+						<Markdown className="prose-h2:font-serif">{introPage.pronunciationGuide}</Markdown>
 					</TabsContent>
 
-					{/* Vocabulary Tab */}
-					<TabsContent value="vocabulary" className="mt-6">
-						<VocabularyList language={lang.slug} />
+					{/* Showcase Items Tab */}
+					<TabsContent value="showcase-items" className="mt-6">
+						<ShowcaseItemsList language={introPage.lang?.slug!} />
 					</TabsContent>
 
-					{/* Phrases Tab */}
-					<TabsContent value="phrases" className="mt-6">
-						<AudioPhrases language={lang.slug} />
+					{/* Themed Items Tab */}
+					<TabsContent value="themed-items" className="mt-6">
+						<ThemedItemsList language={introPage.lang?.slug!} />
 					</TabsContent>
 
-					{/* Culture Tab */}
-					<TabsContent value="culture" className="mt-6">
-						<CulturalContext language={lang.zhName} culturalContext={culturalContext} />
+					{/* Cultural Context Tab */}
+					<TabsContent value="cultural-context" className="mt-6">
+						<Markdown className="prose-h2:font-serif prose-img:rounded-lg prose-img:h-64 prose-img:float-end prose-img:ms-8 md:[&:nth-of-type(even)]:prose-img:float-start md:[&:nth-of-type(even)]:prose-img:ms-0 md:[&:nth-of-type(even)]:prose-img:me-8 prose-headings:clear-both">{introPage.culturalContext}</Markdown>
 					</TabsContent>
 				</Tabs>
 			</div>
 
 			{/* Related Resources Section */}
-			<div className="bg-gray-50 py-16">
+			{introPage.relatedResources && <div className="bg-gray-50 py-16">
 				<div className="mx-auto max-w-7xl px-6 lg:px-8">
 					<div className="mx-auto max-w-2xl text-center">
 						<h2 className="text-3xl font-serif font-bold text-gray-900 sm:text-4xl">
-							{relatedResources.heading?.title || "相關資源"}
+							{introPage.relatedResources.heading?.title}
 						</h2>
 						<p className="mt-2 text-lg/8 text-gray-600">
-							{relatedResources.heading?.summary || `探索更多關於${lang.zhName}的學習資源和研究材料`}
+							{introPage.relatedResources.heading?.summary}
 						</p>
 					</div>
 
 					<div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3">
-						{relatedResources.resources?.map((resource, index) => {
-							const resourceImageUrl = getStrapiMedia(resource.heading?.coverImage?.url);
-
-							return (
-								<div key={index} className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-									<div className="flex-shrink-0">
-										<Image
-											className="h-48 w-full object-cover"
-											src={resourceImageUrl || "/placeholder.svg?height=200&width=400"}
-											alt={resource.heading?.title || "資源圖片"}
-											width={400}
-											height={200} />
+						{introPage.relatedResources.resources?.map((resource, index) =>
+							<div key={index} className="flex flex-col overflow-hidden rounded-lg shadow-lg">
+								<div className="flex-shrink-0">
+									<Image
+										className="h-48 w-full object-cover"
+										src={resource.heading?.coverImage?.url || "/placeholder.svg?height=200&width=400"}
+										alt={resource.heading?.title}
+										width={400}
+										height={200} />
+								</div>
+								<div className="flex flex-1 flex-col justify-between bg-white p-6">
+									<div className="flex-1">
+										<h3 className="text-xl font-semibold text-gray-900">{resource.heading?.title}</h3>
+										<p className="mt-3 text-base text-gray-500">{resource.heading?.summary}</p>
 									</div>
-									<div className="flex flex-1 flex-col justify-between bg-white p-6">
-										<div className="flex-1">
-											<h3 className="text-xl font-semibold text-gray-900">{resource.heading?.title || "資源標題"}</h3>
-											<p className="mt-3 text-base text-gray-500">{resource.heading?.summary || "資源描述"}</p>
-										</div>
-										<div className="mt-6">
+									<div className="mt-6">
+										<Link href={resource.buttonUrl!}>
 											<Button variant="outline" className="text-red-800 border-red-800 hover:bg-red-50">
-												{resource.buttonText || "查看資源"}
+												{resource.buttonText}
 											</Button>
-										</div>
+										</Link>
 									</div>
 								</div>
-							);
-						})}
+							</div>
+						)}
 					</div>
 				</div>
-			</div>
+			</div>}
 
 			{/* CTA Section */}
 			<div className="bg-red-800">
 				<div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
 					<div className="mx-auto max-w-2xl text-center">
 						<h2 className="text-3xl font-serif font-bold text-white sm:text-4xl">
-							參與{lang.zhName}保育工作
+							參與{introPage.lang?.zhName}保育工作
 						</h2>
 						<p className="mx-auto mt-6 max-w-xl text-lg/8 text-red-100">
 							無論您是語言學者、本土語言使用者，還是對香港本土文化感興趣的人士，都歡迎加入我們的行列，共同保育
-							{lang.zhName}這一珍貴的語言遺產。
+							{introPage.lang?.zhName}這一珍貴的語言遺產。
 						</p>
 						<div className="mt-10 flex items-center justify-center gap-x-6">
-							<Button className="bg-white text-red-800 hover:bg-red-50">
-								<Link href="https://www.hkilang.org/v2/wp-content/uploads/2015/01/%E9%A6%99%E6%B8%AF%E6%9C%AC%E5%9C%9F%E8%AA%9E%E8%A8%80%E4%BF%9D%E8%82%B2%E5%8D%94%E6%9C%83_%E5%85%A5%E6%9C%83%E7%94%B3%E8%AB%8B%E8%A1%A81.docx">加入我們</Link>
-							</Button>
-							<Link href="/news" className="text-sm font-semibold text-white">
-								參加活動 <span aria-hidden="true">→</span>
+							<Link href={callToActionSection?.applicationForm?.url}>
+								<Button className="bg-white text-red-800 hover:bg-red-50">{callToActionSection?.buttonText}</Button>
 							</Link>
 						</div>
 					</div>

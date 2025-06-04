@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { Facebook, Youtube, Mail, MapPin, Phone } from "lucide-react";
-import { getContactData } from "@/lib/strapi";
+import { getContactSectionData } from "@/lib/strapi";
 import Logo from "@/components/logo";
 import { navigationItems } from "@/lib/consts";
 
 export default async function Footer() {
-	const contactData = await getContactData();
-	const contactInfo = contactData?.data;
+	const { data: contactInfo } = await getContactSectionData();
 
 	return (
 		<footer className="bg-gray-50 border-t border-gray-200" id="contact">

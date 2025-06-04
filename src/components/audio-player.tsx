@@ -6,11 +6,10 @@ import { Play, Pause } from "lucide-react";
 
 interface AudioPlayerProps {
 	src: string;
-	language: string;
 	small?: boolean;
 }
 
-export default function AudioPlayer({ src, language, small = false }: AudioPlayerProps) {
+export default function AudioPlayer({ src, small = false }: AudioPlayerProps) {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 

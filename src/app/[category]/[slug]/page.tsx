@@ -9,7 +9,7 @@ import { ChevronLeft, Calendar, Clock } from "lucide-react";
 import Markdown from "@/components/markdown";
 import ShareButtons from "./share-buttons";
 import RelatedArticles from "./related-articles";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getMetadataFromHeading } from "@/lib/utils";
 import type { PageProps } from "@/lib/types";
 import { articleCategories } from "@/lib/consts";
 
@@ -30,15 +30,7 @@ export async function generateMetadata({ params }: PageProps<"category" | "slug"
 		permanentRedirect(`/${article.category?.slug}/${article.slug}`);
 	}
 
-	return {
-		title: `${article.heading.title} - 香港本土語言保育協會`,
-		description: article.heading.summary || "",
-		openGraph: {
-			title: article.heading.title,
-			description: article.heading.summary || "",
-			images: article.heading.coverImage?.url ? [getStrapiMedia(article.heading.coverImage.url) || ""] : [],
-		},
-	};
+	return getMetadataFromHeading(article.heading!);
 }
 
 export default async function ArticleDetailPage({ params }: PageProps<"category" | "slug">) {

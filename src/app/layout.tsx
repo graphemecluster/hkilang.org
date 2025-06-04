@@ -20,8 +20,11 @@ const notoSerif = Noto_Serif_HK({
 });
 
 export const metadata: Metadata = {
-	title: "香港本土語言保育協會",
-	description: "致力於保育香港本土語言，包括圍頭話、客家話、汀角話及東平洲話",
+	title: {
+		template: "%s – 香港本土語言保育協會",
+		default: "香港本土語言保育協會",
+	},
+	description: "致力於保育香港本土語言",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

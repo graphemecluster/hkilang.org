@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function PageSkeleton() {
 	return (
-		<div>
+		<div className="mt-12">
 			{/* Introduction Section Skeleton */}
 			<div className="mb-16">
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
