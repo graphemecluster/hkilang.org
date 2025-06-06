@@ -347,7 +347,7 @@ export async function getWordOfTheDay() {
 			item: {
 				populate: {
 					surveyedDomain: true,
-					words: {
+					forms: {
 						populate: ["lang", "audio", "examples"],
 					},
 				},
@@ -370,7 +370,7 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 			$or: [
 				{ codepoint: { $containsi: query } },
 				{
-					chars: {
+					forms: {
 						$or: [
 							{ glyph: { $containsi: query } },
 							{ pron: { $containsi: query } },
@@ -386,7 +386,7 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 			pageSize: characterPageSize,
 		},
 		populate: {
-			chars: {
+			forms: {
 				populate: ["lang", "audio", "examples"],
 			},
 			collocation: true,
@@ -394,9 +394,9 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 	});
 
 	// TODO handle within Strapi
-	for (const { chars } of charactersData.data) {
-		if (chars) {
-			for (const form of chars) {
+	for (const { forms } of charactersData.data) {
+		if (forms) {
+			for (const form of forms) {
 				if (form.lang?.slug && form.pron) {
 					const pron = form.lang.slug === "hakka" ? form.pron.replace("5", "3").replace("6", "4") : form.pron;
 					form.audio ||= await getSyllableAudio(form.lang.slug, pron);
@@ -412,7 +412,7 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 				{ zhGloss: { $containsi: query } },
 				{ enGloss: { $containsi: query } },
 				{
-					words: {
+					forms: {
 						$or: [
 							{ glyph: { $containsi: query } },
 							{ pron: { $containsi: query } },
@@ -429,7 +429,7 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 		},
 		populate: {
 			surveyedDomain: true,
-			words: {
+			forms: {
 				populate: ["lang", "audio", "examples"],
 			},
 		},
@@ -465,7 +465,7 @@ export async function getLexicalItemsByDomain(domain: string, page = 1, pageSize
 		},
 		populate: {
 			surveyedDomain: true,
-			words: {
+			forms: {
 				populate: ["lang", "audio", "examples"],
 			},
 		},
@@ -498,7 +498,7 @@ export async function getShowcaseLexicalDomains() {
 		populate: {
 			items: {
 				populate: {
-					words: {
+					forms: {
 						populate: ["lang", "audio", "examples"],
 					},
 				},

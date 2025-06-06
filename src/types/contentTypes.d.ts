@@ -866,6 +866,7 @@ export interface ApiLexicalItemLexicalItem extends Struct.CollectionTypeSchema {
 			& Schema.Attribute.Relation<"oneToOne", "admin::user">
 			& Schema.Attribute.Private;
 		enGloss: Schema.Attribute.String;
+		forms: Schema.Attribute.Component<"dictionary.linguistic-form", true>;
 		locale: Schema.Attribute.String & Schema.Attribute.Private;
 		localizations:
 			& Schema.Attribute.Relation<
@@ -887,7 +888,6 @@ export interface ApiLexicalItemLexicalItem extends Struct.CollectionTypeSchema {
 		updatedBy:
 			& Schema.Attribute.Relation<"oneToOne", "admin::user">
 			& Schema.Attribute.Private;
-		words: Schema.Attribute.Component<"dictionary.linguistic-form", true>;
 		zhGloss: Schema.Attribute.String & Schema.Attribute.Required;
 	};
 }
@@ -904,13 +904,13 @@ export interface ApiListedCharacterListedCharacter extends Struct.CollectionType
 		draftAndPublish: false;
 	};
 	attributes: {
-		chars: Schema.Attribute.Component<"dictionary.linguistic-form", true>;
 		codepoint: Schema.Attribute.String & Schema.Attribute.Required;
 		collocation: Schema.Attribute.Component<"dictionary.example", true>;
 		createdAt: Schema.Attribute.DateTime;
 		createdBy:
 			& Schema.Attribute.Relation<"oneToOne", "admin::user">
 			& Schema.Attribute.Private;
+		forms: Schema.Attribute.Component<"dictionary.linguistic-form", true>;
 		locale: Schema.Attribute.String & Schema.Attribute.Private;
 		localizations:
 			& Schema.Attribute.Relation<

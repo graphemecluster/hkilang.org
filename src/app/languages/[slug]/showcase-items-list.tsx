@@ -6,8 +6,8 @@ import { getShowcaseLexicalDomains } from "@/lib/strapi";
 export default async function ShowcaseItemsList({ language }: { language: string }) {
 	const data = (await getShowcaseLexicalDomains()).data.flatMap(domain => {
 		const newItems = domain.items?.flatMap(item => {
-			const newWords = item.words?.filter(({ lang }) => lang?.slug === language);
-			return newWords?.length ? [{ ...item, words: newWords }] : [];
+			const newForms = item.forms?.filter(({ lang }) => lang?.slug === language);
+			return newForms?.length ? [{ ...item, forms: newForms }] : [];
 		});
 		return newItems?.length ? [{ ...domain, items: newItems }] : [];
 	});
@@ -34,11 +34,11 @@ export default async function ShowcaseItemsList({ language }: { language: string
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							{domain.items?.map(item => (
 								<Card key={item.documentId} className="md:col-span-2">
-									{item.words.some(({ glyph }) => [...(glyph || "")].length > 6)
+									{item.forms.some(({ glyph }) => [...(glyph || "")].length > 6)
 										? <CardContent className="p-4">
 											<div className="flex items-baseline justify-between">
 												<div className="flex-1">
-													{item.words.map((form, index) =>
+													{item.forms.map((form, index) =>
 														<div key={index}>
 															<div className="flex items-center">
 																{form.glyph && <span className="text-lg font-medium text-gray-900">{form.glyph}</span>}
@@ -55,7 +55,7 @@ export default async function ShowcaseItemsList({ language }: { language: string
 											</div>
 										</CardContent>
 										: <CardContent className="p-4">
-											{item.words.map((form, index) =>
+											{item.forms.map((form, index) =>
 												<div key={index} className="flex items-center">
 													<div>
 														{form.glyph && <span className="text-lg font-medium text-gray-900">{form.glyph}</span>}

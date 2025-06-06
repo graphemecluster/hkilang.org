@@ -4,9 +4,9 @@ import type { Data } from "@strapi/strapi";
 import { formatDate } from "@/lib/utils";
 
 export default function WordResult({ date, word }: { date?: string; word: Data.ContentType<"api::lexical-item.lexical-item"> }) {
-	const { zhGloss, enGloss, words, notes, surveyedDomain } = word;
+	const { zhGloss, enGloss, forms, notes, surveyedDomain } = word;
 
-	const formsByLang = Object.groupBy(words!, form => form.lang!.zhName!);
+	const formsByLang = Object.groupBy(forms!, form => form.lang!.zhName!);
 
 	return (
 		<Card className="overflow-hidden border-2 border-red-100">
@@ -45,7 +45,7 @@ export default function WordResult({ date, word }: { date?: string; word: Data.C
 								<div>{enGloss}</div>
 							</div>}
 
-							{words?.some(form => form?.examples?.length) && (
+							{forms?.some(form => form?.examples?.length) && (
 								<div>
 									<h3 className="text-lg font-medium text-gray-900 mb-2">例句</h3>
 									<div className="space-y-4">

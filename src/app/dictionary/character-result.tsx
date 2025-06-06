@@ -4,9 +4,9 @@ import AudioPlayer from "@/components/audio-player";
 import type { Data } from "@strapi/strapi";
 
 export default function CharacterResult({ character }: { character: Data.ContentType<"api::listed-character.listed-character"> }) {
-	const { codepoint, chars, notes } = character;
+	const { codepoint, forms, notes } = character;
 
-	const formsByLang = Object.groupBy(chars!, form => form.lang!.zhName!);
+	const formsByLang = Object.groupBy(forms!, form => form.lang!.zhName!);
 
 	return (
 		<Card className="overflow-hidden border-2 border-red-100">
