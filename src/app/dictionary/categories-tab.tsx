@@ -149,7 +149,7 @@ export default function CategoriesTab() {
 								<CardContent className="p-4">
 									<h4 className="text-lg font-medium text-gray-900">{category.zhName || category.enName}</h4>
 									{category.enName && category.zhName && <p className="text-sm text-gray-500">{category.enName}</p>}
-									{/* <p className="text-sm text-gray-500 mt-2">{category.items?.data?.length || 0} 個詞條</p> */}
+									<p className="text-sm text-gray-500 mt-2">{category.items?.count || 0} 個詞條</p>
 								</CardContent>
 							</Card>
 						))}

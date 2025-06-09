@@ -434,7 +434,11 @@ export async function getLexicalDomains() {
 		pagination: {
 			limit: 100,
 		},
-		populate: ["items"],
+		populate: {
+			items: {
+				count: true,
+			},
+		},
 	});
 }
 
