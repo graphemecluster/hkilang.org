@@ -393,18 +393,6 @@ export async function searchDictionary(query: string, page = 1, pageSize = 10) {
 		},
 	});
 
-	// TODO handle within Strapi
-	for (const { forms } of charactersData.data) {
-		if (forms) {
-			for (const form of forms) {
-				if (form.lang?.slug && form.pron) {
-					const pron = form.lang.slug === "hakka" ? form.pron.replace("5", "3").replace("6", "4") : form.pron;
-					form.audio ||= await getSyllableAudio(form.lang.slug, pron);
-				}
-			}
-		}
-	}
-
 	// Then search for words
 	const wordsData = await strapiClient.collection("lexical-items").find({
 		filters: {
