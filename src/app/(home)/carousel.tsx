@@ -160,7 +160,7 @@ export default function Carousel({ articles }: { articles: Data.ContentType<"api
 												<div className="absolute inset-0 bg-translucent-gradient flex flex-col justify-end gap-1 lg:gap-2 p-6">
 													<div className="text-sm lg:text-base xl:text-lg text-white/80">{formatDate(article.publishDate)}</div>
 													<h3 className="text-xl lg:text-2xl xl:text-3xl font-medium text-white">{article.heading.title}</h3>
-													<p className="text-white/80 text-sm lg:text-base xl:text-lg line-clamp-2">{article.heading.summary || "香港本土語言保育協會"}</p>
+													<p className="text-white/80 text-sm lg:text-base xl:text-lg line-clamp-2">{article.heading.summary}</p>
 												</div>
 											</div>
 										</Card>
