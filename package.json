@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
+		"//": "# This must be run with `bun --bun run build` such that `inject-polyfill-loader.ts` is loaded correctly.",
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
@@ -21,6 +22,7 @@
 		"@strapi/client": "^1.4.0",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
+		"core-js": "^3.43.0",
 		"embla-carousel-autoplay": "^8.6.0",
 		"embla-carousel-react": "^8.6.0",
 		"lucide-react": "^0.511.0",
@@ -44,6 +46,10 @@
 		"tailwindcss-animate": "^1.0.7"
 	},
 	"devDependencies": {
+		"@babel/core": "8.0.0-beta.0",
+		"@babel/plugin-syntax-jsx": "8.0.0-beta.0",
+		"@babel/plugin-syntax-typescript": "8.0.0-beta.0",
+		"@babel/preset-env": "8.0.0-beta.0",
 		"@eslint/eslintrc": "^3.3.1",
 		"@strapi/strapi": "^5.13.1",
 		"@tailwindcss/typography": "^0.5.16",
@@ -73,6 +79,12 @@
 		"markdown-it-cjk-friendly": "patches/markdown-it-cjk-friendly+1.2.0.patch"
 	},
 	"trustedDependencies": [
+		"@swc/core",
+		"core-js",
+		"core-js-pure",
+		"dprint",
+		"esbuild",
+		"sharp",
 		"unrs-resolver"
 	]
 }
